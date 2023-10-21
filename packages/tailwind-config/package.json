@@ -1,0 +1,9 @@
+{
+    "name": "tailwind-config",
+    "version": "1.0.0",
+    "private": true,
+    "exports": {
+        "./postcss": "./postcss.config.js",
+        "./tailwind": "./tailwind.config.js"
+    }
+}
