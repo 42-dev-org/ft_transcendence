@@ -1,11 +1,11 @@
-
+import { Title } from "ui";
 import _styles from "./page.module.css";
-
 
 export default function HomePage(): JSX.Element {
   return (
-    <main>
-      HomePage
-    </main>
+    <>
+      <Title />
+      <main className="bg-red-500">HomePage</main>
+    </>
   );
 }
