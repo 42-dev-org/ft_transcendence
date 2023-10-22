@@ -1,0 +1,11 @@
+{
+  "extends": ["//"],
+  "pipeline": {
+    "generate": {
+      "cache": false
+    },
+    "push": {
+      "cache": false
+    }
+  }
+}
