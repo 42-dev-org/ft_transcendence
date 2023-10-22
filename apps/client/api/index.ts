@@ -3,6 +3,7 @@ import { Manager, type Socket } from "socket.io-client";
 import type { ServerToClientEvents, ClientToServerEvents } from "io-types";
 import axios from "axios";
 import { constants } from "../constants/contsnts";
+import { exampleLib } from "../lib/api/example/index";
 
 class Api {
   private httpClient: AxiosInstance;
@@ -40,8 +41,16 @@ class Api {
     };
   }
 
+  api = () => ({
+    example: {
+      getExample: () => exampleLib.getExample(this.httpClient),
+      saveExample: (example: { data: string }) =>
+        exampleLib.saveExample(this.httpClient, example),
+    },
+  });
+
   io: () => { a: "" };
-  api: () => { a: "" };
+  
 }
 
 export const api = new Api("");
