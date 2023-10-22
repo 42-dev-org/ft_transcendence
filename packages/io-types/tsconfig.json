@@ -1,0 +1,10 @@
+{
+    "extends": "tsconfig/io-types.json",
+    "compilerOptions": {
+        "outDir": "./dist",
+        "baseUrl": "./src",
+
+    },
+    "exclude": ["dist", "node_modules"],
+    "include": ["src"]
+}

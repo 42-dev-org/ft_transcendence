@@ -1,0 +1,3 @@
+.main-container {
+    @apply flex-1 flex justify-center items-center text-lg bg-blue-300;
+}
