@@ -3,7 +3,6 @@
     "compilerOptions": {
         "outDir": "./dist",
         "baseUrl": "./src",
-        "incremental": true
     },
     "exclude": ["dist", "node_modules"],
     "include": ["src"]
