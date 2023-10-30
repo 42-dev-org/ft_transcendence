@@ -12,7 +12,7 @@
     - in any location run command `sudo npm i -g pnpm turbo`
     #### in 1337 hosts
     - in root (homedir | ~) run command `mkdir ~/.npm-global`
-    - in any location run command `npm config set prefix '~/.npm-global`
+    - in any location run command `npm config set prefix '~/.npm-global'`
     - in any location run command `echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.zshrc`
     - in any location run command `source ~/.zshrc`
     - in any location run command `npm install -g pnpm turbo`
