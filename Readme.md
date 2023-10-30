@@ -16,10 +16,11 @@
     - in any location run command `echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.zshrc`
     - in any location run command `source ~/.zshrc`
     - in any location run command `npm install -g pnpm turbo`
-2. go to projrct folder `cd xxxxxx/ft_transcendence`
-3. install dependecies by running `pnpm i` in project root level
-4. then go to client folder by runnig `xxxxxxx/ft_transcendence/apps/client`
-5. run client by running `turbo dev`
+2. clone the repo by running `git clone git@github.com:Anasjaidi/ft_transcendence.git` in case of ssh is configured else use `git clone https://github.com/Anasjaidi/ft_transcendence.git`
+3. go to projrct folder `cd xxxxxx/ft_transcendence`
+4. install dependecies by running `pnpm i` in project root level
+5. then go to client folder by runnig `xxxxxxx/ft_transcendence/apps/client`
+6. run client by running `turbo dev`
 
 ## desclaimer 
 
