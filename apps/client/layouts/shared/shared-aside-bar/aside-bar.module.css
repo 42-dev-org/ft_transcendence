@@ -1,0 +1,41 @@
+
+
+
+.page {
+    @apply h-[90%]  w-full justify-around flex flex-row;
+
+}
+
+.main {
+    @apply h-full w-1/4 flex items-end;
+    @media (max-width: 765px) {
+        display: none;
+      }
+}
+
+.barel {
+    @apply w-full h-full flex flex-col justify-between;
+
+}
+
+.btng {
+    @apply flex flex-col h-96  w-full mt-10;
+}
+
+.btnd {
+    /* flex  items-center   justify-start rounded-full m-1 bg-black h-1/6 w-full */ 
+    @apply flex  items-center   justify-start rounded-full m-1 bg-black h-1/6 w-full;
+}
+
+    .btnm {
+        @apply flex flex-row w-full focus:border-[#B2F35F] focus:border-solid focus:border-2 items-center hover:bg-[#252525] rounded-full h-10  py-2 px-4;
+    }
+
+.prof {
+    @apply flex justify-around items-center rounded-full  w-full h-16;
+    background-color: #1B1B1B;
+}
+.body {
+    @apply m-2 flex items-center justify-center md:mt-10 rounded-xl w-11/12;
+    background-color: #1B1B1B;
+}
