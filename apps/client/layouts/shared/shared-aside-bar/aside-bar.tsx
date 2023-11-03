@@ -5,9 +5,9 @@ import styles from "./aside-bar.module.css";
 
 function AsideBar(): JSX.Element {
   return (
-    // <div className={styles["page"]}>
-      <div className={styles["main"]}>
-        <div className={styles["barel"]}>
+    <div className={styles["page"]}>
+      <div className={styles["aside-bar"]}>
+        <div className={styles["bare-navigation-links-container"]}>
           <AsideBarLinks />
           <AsideBarProfile
             imageUrl="https://avatars.githubusercontent.com/u/78473554?v=4"
@@ -15,8 +15,8 @@ function AsideBar(): JSX.Element {
           />
         </div>
       </div>
-    //   <div className={styles["body"]}>body</div>
-    // </div>
+       <div className={styles["body"]}>body</div>
+     </div>
   );
 }
 

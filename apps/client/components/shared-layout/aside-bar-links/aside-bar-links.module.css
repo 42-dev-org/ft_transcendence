@@ -1,0 +1,4 @@
+.links-group {
+        @apply flex flex-col h-96  w-full mt-10 text-white;
+}
+
