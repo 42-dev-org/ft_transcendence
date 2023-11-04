@@ -1,0 +1,144 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Roles Enum
+enum Roles {
+  User
+}
+
+// User Account Status Enum
+enum Status {
+  Accepted
+}
+
+enum ConversationTypes {
+  Group
+  Single
+}
+
+model Media {
+  // auto generated values
+  uid       String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // BASIC INFOS
+  mimtype String
+  size    Float
+  url     String @unique
+  name    String
+
+  // User Relation
+  uploader    User   @relation(fields: [uploaderUid], references: [uid])
+  uploaderUid String @map("uploader_uid")
+
+  // Messages Relation
+  message Message?
+
+  @@index([uid])
+  @@map("medias")
+}
+
+model User {
+  // auto generated values
+  uid       String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // login infos
+  email    String @unique
+  password String
+
+  // Passowrd related fields
+  passwordChangedAt            DateTime? @map("password_changed_at")
+  passwordResetToken           String?   @map("reset_token")
+  passwordResetTokenExpireDate DateTime? @map("reset_token_expires_in")
+
+  // Profile and Cover Images
+  profileImage String  @default("https://upload.wikimedia.org/wikipedia/commons/7/72/Default-welcomer.png")
+  coverImage   String?
+
+  // BASIC INFOS
+  firstName   String  @map("first_name")
+  lastName    String  @map("last_name")
+  country     String
+  state       String?
+  roles       Roles[] @default([User])
+  status      Status  @default(Accepted)
+  ip          String
+  phoneNumber String? @map("phone_name")
+
+  // Media Relation
+  media Media[]
+
+  // Messages Relation
+  messages Message[]
+
+  // Conversations Relations
+  conversations      Conversation[] @relation("conversations")
+  ownedConversations Conversation[] @relation("owned-conversations")
+
+  @@index([uid])
+  @@map("users")
+}
+
+model Conversation {
+  uid          String            @id @default(uuid())
+  name         String
+  description  String            @default("")
+  tags         String[]
+  type         ConversationTypes
+  participants User[]            @relation("conversations")
+  admins       User[]            @relation("owned-conversations")
+  profileImage String?
+  messages Message[]
+}
+
+model Message {
+  // attributes
+  uid     String  @id @default(uuid())
+  content String?
+
+  // user realtion
+  sender    User?   @relation(fields: [senderUid], references: [uid])
+  senderUid String? @map("sender_uid")
+
+  // media relation
+  media    Media?  @relation(fields: [mediaUid], references: [uid])
+  mediaUid String? @unique @map("media_uid")
+
+  // conversation relation
+  conversation    Conversation? @relation(fields: [conversationUid], references: [uid])
+  conversationUid String?       @map("conversation_uid")
+
+  // metadata
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("messages")
+}
+
+model Achivement {
+  uid String @id @default(uuid())
+
+  name String
+  rule String
+  grade 
+}
+
+
+enum AchivementGrade {
+  Bronze
+  Silver
+  Gold
+  Platnium
+}
