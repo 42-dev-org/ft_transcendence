@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "tailwind-config/styles";
+import AsideBar from "../layouts/shared-aside-bar/aside-bar";
+import Header from "../layouts/shared-haeder/header";
 import StoreProvider from "../providers/store-provider";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <StoreProvider>{children}</StoreProvider>
+        <StoreProvider>
+          {/* {children} */}
+          <Header />
+          <AsideBar />
+          </StoreProvider>
       </body>
     </html>
   );

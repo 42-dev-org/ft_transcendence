@@ -1,0 +1,15 @@
+.page {
+    @apply flex  h-[90%]  w-full  justify-start flex flex-row;
+}
+
+.aside-bar {
+    @apply h-full w-1/4 flex items-end;
+    @media (max-width: 765px) {
+        display: none;
+      }
+}
+
+.bare-navigation-links-container {
+    @apply w-full h-full flex flex-col justify-between;
+
+}
