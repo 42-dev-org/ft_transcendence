@@ -1,0 +1,3 @@
+.chat-aside-container {
+    @apply bg-gray-200   flex flex-col w-[20%] h-full;
+}
