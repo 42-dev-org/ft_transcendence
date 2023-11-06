@@ -1,0 +1,3 @@
+.chat-nav-container {
+    @apply bg-blue-300 px-4 py-4 text-center;
+}
