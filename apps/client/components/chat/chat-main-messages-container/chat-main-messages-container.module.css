@@ -1,0 +1,3 @@
+.chat-messages-container {
+    @apply flex-1 bg-pink-300 px-4 py-4 text-center;
+}
