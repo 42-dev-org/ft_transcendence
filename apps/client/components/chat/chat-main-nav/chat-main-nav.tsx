@@ -29,14 +29,14 @@ export default function ChatMainNav({
   return (
     <div className={`${styles["chat-nav-container"]}`}>
       <div className="flex gap-3">
-        <div className="max-w-16 max-h-16 rounded-full overflow-hidden my-auto">
+        <div className={`${styles["chat-nav-image"]}`}>
           <Image alt="profile" src={image} />
         </div>
-        <div className="flex flex-col">
-          <p className="font-semibold text-xl capitalize text-white tracking-wider">
+        <div className={`${styles["chat-nav-main-container"]}`}>
+          <p className={`${styles["chat-nav-name"]}`}>
             {name}
           </p>
-          <p className="text-xs opacity-70 capitalize text-[#FFF] font-light">
+          <p className={`${styles["chat-nav-username"]}`}>
             {username}
           </p>
           <p
