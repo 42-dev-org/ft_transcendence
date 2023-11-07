@@ -42,7 +42,7 @@ export default function ChatMainNav({
           <p
             className={`${
               status === "online" ? "text-green-400" : "text-red"
-            } text-xs font-medium`}
+            } ${styles['chat-nav-status-text']}`}
           >
             {status}
           </p>
