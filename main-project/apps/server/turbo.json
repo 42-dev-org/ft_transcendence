@@ -1,0 +1,20 @@
+{
+    "extends": ["//"],
+    "pipeline": {
+      "build": {
+        "dependsOn": ["db:generate", "^build"],
+        "outputs": ["dist/**"]
+      },
+      "start:dev": {
+        "dependsOn": ["^build"],
+        "cache": false,
+        "persistent": true
+      },
+      "start": {
+        "dependsOn": ["^build"],
+        "cache": false,
+        "persistent": true
+      }
+    }
+  }
+  
