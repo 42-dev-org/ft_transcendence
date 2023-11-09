@@ -13,8 +13,8 @@ interface PropsType {
 
 const links = [
   {name: 'delete', key: Math.random().toString()},
-  {name: 'fuck', key: Math.random().toString()},
-  {name: 'awdy', key: Math.random().toString()},
+  {name: 'block', key: Math.random().toString()},
+  {name: 'options', key: Math.random().toString()},
 ]
 
 
