@@ -1,0 +1,23 @@
+.chat-nav-container {
+    @apply bg-[#1B1B1B] px-4 py-4 flex justify-between items-center;
+}
+
+.chat-nav-image {
+    @layer max-w-16 max-h-16 rounded-full overflow-hidden my-auto;
+}
+
+.chat-nav-main-container {
+    @apply flex flex-col;
+}
+
+.chat-nav-name {
+    @apply font-semibold text-xl capitalize text-white tracking-wider ;
+}
+
+.chat-nav-username {
+    @apply text-xs opacity-70 capitalize text-[#FFF] font-light;
+}
+
+.chat-nav-status-text {
+    @apply text-xs font-medium;
+}
