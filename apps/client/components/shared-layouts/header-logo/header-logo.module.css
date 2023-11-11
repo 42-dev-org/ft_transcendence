@@ -5,6 +5,9 @@
 
 .logo-container {
     @apply w-1/3 p-1 flex   justify-start items-center h-full;
+    @media (max-width: 765px) {
+        width: 66.666667%;
+      }
 }
 
 .logo {   

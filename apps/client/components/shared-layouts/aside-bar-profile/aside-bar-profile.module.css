@@ -1,12 +1,15 @@
 .profile-container {
-    @apply flex justify-around items-center rounded-full  w-full h-16;
+    @apply flex  items-center rounded-full  w-full h-14;
     background-color: #1B1B1B;
 }
 
 .profile-image-container {
-    @apply w-10 rounded-full;
+    @apply w-10 mx-2 rounded-full ;
+    display: block;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
 }
 
 .profile-name-container {
- @apply text-white flex flex-col;    
+ @apply text-white ml-3 flex flex-col;    
 }

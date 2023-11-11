@@ -14,6 +14,7 @@ function AsideBar(): JSX.Element {
           <AsideBarProfile
             imageUrl="https://cdn.intra.42.fr/users/47192a7a27a46c2c714c6723e30a3cd2/zmaziane.jpg"
             name="zakaria maziane"
+            profileUrl="/profile"
           />
         </div>
       </div>

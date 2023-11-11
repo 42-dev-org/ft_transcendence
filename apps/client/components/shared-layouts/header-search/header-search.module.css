@@ -5,5 +5,5 @@
     }
   }
   .search {
-    @apply h-3/4  rounded-md w-24 sm:w-auto;
+    @apply h-3/4  rounded-md w-24 sm:w-auto bg-gray-500;
   }

@@ -1,5 +1,5 @@
 .page {
-    @apply flex  h-[90%]  w-full  justify-start flex flex-row;
+    @apply h-[90%]  w-full  justify-start flex flex-row;
 }
 
 .aside-bar {
