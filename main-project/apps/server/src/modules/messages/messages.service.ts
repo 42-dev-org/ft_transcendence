@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { MessagesRepository } from './repository/messages.repository';
-import { Media } from '@prisma/client';
+import { Media } from 'db';
 import { MediaFile } from 'src/shared/types/media';
 import { MediaService } from 'src/global/media/providers/media.service';
 import { Response } from 'express';

@@ -10,7 +10,7 @@ import { PUT_ABILITY } from 'src/shared/constants/rbac.constants';
 import { RequirementsRules } from '../decorator/rbac.decorator';
 import { Request } from 'express';
 import { ForbiddenError } from '@casl/ability';
-import { User } from '@prisma/client';
+import { User } from 'db';
 
 @Injectable()
 export class RbacGuard implements CanActivate {

@@ -18,7 +18,7 @@ import { PutAbilities } from 'src/global/rbac/decorator/rbac.decorator';
 import { Actions } from 'src/global/rbac/enum/rbac.enum';
 import { RbacGuard } from 'src/global/rbac/guard/rbac.guard';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
-import { User } from '@prisma/client';
+import { User } from 'db';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileValidatorPipe } from 'src/global/media/pipes/media.pipe';
 import { MediaFile } from 'src/shared/types/media';

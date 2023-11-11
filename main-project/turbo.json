@@ -7,6 +7,8 @@
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "lint": {},
+    "db:generate": {},
+    "db:push": {},
     "dev": {
       "cache": false,
       "persistent": true

@@ -20,6 +20,7 @@ const users_module_1 = require("../users/users.module");
 const auth_module_1 = require("../../global/auth/auth.module");
 const messages_module_1 = require("../messages/messages.module");
 const conversations_module_1 = require("../conversations/conversations.module");
+const path = require("path");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
@@ -29,7 +30,7 @@ exports.AppModule = AppModule = __decorate([
                 cache: true,
                 isGlobal: true,
                 expandVariables: true,
-                envFilePath: './../../../.env',
+                envFilePath: path.join(__dirname, "..", "..", "..", ".env"),
                 validationSchema: config_validation_1.validationSchema,
                 validationOptions: config_validation_1.validationOptions,
                 load: [(0, app_config_1.default)(process.env.NODE_ENV)],

@@ -14,6 +14,7 @@ import { UsersModule } from '../users/users.module';
 import { AuthModule } from '../../global/auth/auth.module';
 import { MessagesModule } from '../messages/messages.module';
 import { ConversationsModule } from '../conversations/conversations.module';
+import * as path from 'path';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { ConversationsModule } from '../conversations/conversations.module';
       cache: true,
       isGlobal: true,
       expandVariables: true,
-      envFilePath: './../../../.env',
+      envFilePath: path.join(__dirname, "..", "..", "..", ".env"),
       validationSchema,
       validationOptions,
       load: [appConfig(process.env.NODE_ENV)],

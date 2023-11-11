@@ -2,7 +2,7 @@
     "extends": ["//"],
     "pipeline": {
       "build": {
-        "dependsOn": ["db:generate", "^build"],
+        "dependsOn": ["^build"],
         "outputs": ["dist/**"]
       },
       "start:dev": {
@@ -11,7 +11,7 @@
         "persistent": true
       },
       "start": {
-        "dependsOn": ["^build"],
+        "dependsOn": [ "^build"],
         "cache": false,
         "persistent": true
       }

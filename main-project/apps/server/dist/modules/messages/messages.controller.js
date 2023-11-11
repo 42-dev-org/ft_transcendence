@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MessagesController = void 0;
 const common_1 = require("@nestjs/common");
@@ -20,7 +19,6 @@ const create_message_dto_1 = require("./dto/create-message.dto");
 const update_message_dto_1 = require("./dto/update-message.dto");
 const passport_1 = require("@nestjs/passport");
 const get_user_decorator_1 = require("../../shared/decorators/get-user.decorator");
-const client_1 = require("@prisma/client");
 let MessagesController = exports.MessagesController = class MessagesController {
     constructor(messagesService) {
         this.messagesService = messagesService;
@@ -47,7 +45,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, get_user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_message_dto_1.CreateMessageDto, typeof (_a = typeof client_1.User !== "undefined" && client_1.User) === "function" ? _a : Object]),
+    __metadata("design:paramtypes", [create_message_dto_1.CreateMessageDto, Object]),
     __metadata("design:returntype", void 0)
 ], MessagesController.prototype, "create", null);
 __decorate([
@@ -56,7 +54,7 @@ __decorate([
     __param(0, (0, get_user_decorator_1.GetUser)()),
     __param(1, (0, common_1.Param)('cnvId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof client_1.User !== "undefined" && client_1.User) === "function" ? _b : Object, String]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", void 0)
 ], MessagesController.prototype, "findAll", null);
 __decorate([

@@ -5,11 +5,11 @@ import * as Joi from 'joi';
  * */
 export const validationSchema = Joi.object({
   // DB VARS
-  DATABASE_URL: Joi.string().required(),
-  DATABASE_USERNAME: Joi.string().required(),
-  DATABASE_PASSWORD: Joi.string().required(),
-  DATABASE_NAME: Joi.string().required(),
-  DATABASE_SCHEMA: Joi.string().required(),
+  // DATABASE_URL: Joi.string().required(),
+  // DATABASE_USERNAME: Joi.string().required(),
+  // DATABASE_PASSWORD: Joi.string().required(),
+  // DATABASE_NAME: Joi.string().required(),
+  // DATABASE_SCHEMA: Joi.string().required(),
   // SERVER VARS
   PORT: Joi.number().required(),
   NODE_ENV: Joi.string().valid('development', 'production'),

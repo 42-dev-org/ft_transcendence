@@ -1,4 +1,4 @@
-import { ConversationTypes } from '@prisma/client';
+import { ConversationTypes } from 'db';
 import { IsOptional, IsString } from 'class-validator';
 
 export class CreateConversationDto {

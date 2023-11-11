@@ -2,7 +2,8 @@
     "extends": ["//"],
     "pipeline": {
       "build": {
-        "outputs": ["dist/**"]
+        "outputs": ["dist/**"],
+        "dependsOn": ["db#db:generate", "db#db:push"]
       }
     }
   }

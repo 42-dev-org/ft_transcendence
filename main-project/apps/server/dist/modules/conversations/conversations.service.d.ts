@@ -9,46 +9,118 @@ export declare class ConversationsService {
     constructor(repository: ConversationsRepository, media: MediaService);
     create(createConversationDto: CreateConversationDto): Promise<{
         status: string;
-        data: any;
+        data: {
+            uid: string;
+            name: string;
+            description: string;
+            tags: string[];
+            type: import("db").$Enums.ConversationTypes;
+            profileImage: string;
+        };
     }>;
     findMeAll(uid: string): Promise<{
         status: string;
-        results: any;
-        data: any;
+        results: number;
+        data: {
+            uid: string;
+            name: string;
+            description: string;
+            tags: string[];
+            type: import("db").$Enums.ConversationTypes;
+            profileImage: string;
+        }[];
     }>;
     findAll(): Promise<{
         status: string;
-        results: any;
-        data: any;
+        results: number;
+        data: {
+            uid: string;
+            name: string;
+            description: string;
+            tags: string[];
+            type: import("db").$Enums.ConversationTypes;
+            profileImage: string;
+        }[];
     }>;
     findOne(id: string): Promise<{
         status: string;
-        data: any;
+        data: {
+            uid: string;
+            name: string;
+            description: string;
+            tags: string[];
+            type: import("db").$Enums.ConversationTypes;
+            profileImage: string;
+        };
     }>;
     update(id: string, updateConversationDto: UpdateConversationDto): Promise<{
         status: string;
-        data: any;
+        data: {
+            uid: string;
+            name: string;
+            description: string;
+            tags: string[];
+            type: import("db").$Enums.ConversationTypes;
+            profileImage: string;
+        };
     }>;
     remove(id: string): Promise<void>;
     addParticipant(dto: UpdateUserMembershipInRoomDto): Promise<{
         status: string;
-        data: Promise<any>;
+        data: Promise<{
+            uid: string;
+            name: string;
+            description: string;
+            tags: string[];
+            type: import("db").$Enums.ConversationTypes;
+            profileImage: string;
+        }>;
     }>;
     deleteParticipant(dto: UpdateUserMembershipInRoomDto): Promise<{
         status: string;
-        data: Promise<any>;
+        data: Promise<{
+            uid: string;
+            name: string;
+            description: string;
+            tags: string[];
+            type: import("db").$Enums.ConversationTypes;
+            profileImage: string;
+        }>;
     }>;
     addAdmin(dto: UpdateUserMembershipInRoomDto): Promise<{
         status: string;
-        data: Promise<any>;
+        data: Promise<{
+            uid: string;
+            name: string;
+            description: string;
+            tags: string[];
+            type: import("db").$Enums.ConversationTypes;
+            profileImage: string;
+        }>;
     }>;
     deleteAdmin(dto: UpdateUserMembershipInRoomDto): Promise<{
         status: string;
-        data: Promise<any>;
+        data: Promise<{
+            uid: string;
+            name: string;
+            description: string;
+            tags: string[];
+            type: import("db").$Enums.ConversationTypes;
+            profileImage: string;
+        }>;
     }>;
     addProfileImage(file: MediaFile, cnvId: string, userId: string): Promise<{
         status: string;
-        data: any;
+        data: {
+            uid: string;
+            createdAt: Date;
+            updatedAt: Date;
+            mimtype: string;
+            size: number;
+            url: string;
+            name: string;
+            uploaderUid: string;
+        };
     }>;
     deleteProfileImage(cnvId: string): Promise<{
         status: string;

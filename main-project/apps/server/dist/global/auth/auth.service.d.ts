@@ -11,12 +11,50 @@ export declare class AuthService {
     constructor(repository: UsersRepository, jwt: JwtService, mailer: MailService, config: ConfigService);
     create(dto: CreateUserDto, ip: string): Promise<{
         status: string;
-        data: any;
+        data: {
+            uid: string;
+            createdAt: Date;
+            updatedAt: Date;
+            email: string;
+            password: string;
+            passwordChangedAt: Date;
+            passwordResetToken: string;
+            passwordResetTokenExpireDate: Date;
+            profileImage: string;
+            coverImage: string;
+            firstName: string;
+            lastName: string;
+            country: string;
+            state: string;
+            roles: "User"[];
+            status: "Accepted";
+            ip: string;
+            phoneNumber: string;
+        };
         token: string;
     }>;
     login(email: string, password: string): Promise<{
         status: string;
-        data: any;
+        data: {
+            uid: string;
+            createdAt: Date;
+            updatedAt: Date;
+            email: string;
+            password: string;
+            passwordChangedAt: Date;
+            passwordResetToken: string;
+            passwordResetTokenExpireDate: Date;
+            profileImage: string;
+            coverImage: string;
+            firstName: string;
+            lastName: string;
+            country: string;
+            state: string;
+            roles: "User"[];
+            status: "Accepted";
+            ip: string;
+            phoneNumber: string;
+        };
         token: string;
     }>;
     forgotPassword(email: string, host: string, protocol: string): Promise<any>;

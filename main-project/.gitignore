@@ -1,5 +1,8 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring fil
+**/dist/
 
+pnpm-lock.yaml
+.anas
 # dependencies
 node_modules
 .pnp

@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d, _e;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
@@ -22,7 +21,6 @@ const rbac_decorator_1 = require("../../global/rbac/decorator/rbac.decorator");
 const rbac_enum_1 = require("../../global/rbac/enum/rbac.enum");
 const rbac_guard_1 = require("../../global/rbac/guard/rbac.guard");
 const get_user_decorator_1 = require("../../shared/decorators/get-user.decorator");
-const client_1 = require("@prisma/client");
 const platform_express_1 = require("@nestjs/platform-express");
 const media_pipe_1 = require("../../global/media/pipes/media.pipe");
 let UsersController = exports.UsersController = class UsersController {
@@ -99,7 +97,7 @@ __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)(), rbac_guard_1.RbacGuard),
     __param(0, (0, get_user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_a = typeof client_1.User !== "undefined" && client_1.User) === "function" ? _a : Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "findMe", null);
 __decorate([
@@ -108,7 +106,7 @@ __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)(), rbac_guard_1.RbacGuard),
     __param(0, (0, get_user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof client_1.User !== "undefined" && client_1.User) === "function" ? _b : Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "deleteMe", null);
 __decorate([
@@ -117,7 +115,7 @@ __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)(), rbac_guard_1.RbacGuard),
     __param(0, (0, get_user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_c = typeof client_1.User !== "undefined" && client_1.User) === "function" ? _c : Object, update_user_dto_1.UpdateUserDto]),
+    __metadata("design:paramtypes", [Object, update_user_dto_1.UpdateUserDto]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "updateMe", null);
 __decorate([
@@ -129,7 +127,7 @@ __decorate([
     __param(0, (0, get_user_decorator_1.GetUser)()),
     __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_d = typeof client_1.User !== "undefined" && client_1.User) === "function" ? _d : Object, Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "changeProfileImage", null);
 __decorate([
@@ -141,7 +139,7 @@ __decorate([
     __param(0, (0, get_user_decorator_1.GetUser)()),
     __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_e = typeof client_1.User !== "undefined" && client_1.User) === "function" ? _e : Object, Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "changeCoverImage", null);
 exports.UsersController = UsersController = __decorate([

@@ -28,7 +28,6 @@
     "@nestjs/mapped-types": "^2.0.2",
     "@nestjs/passport": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
-    "@prisma/client": "5.0.0",
     "@types/joi": "^17.2.3",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
@@ -49,6 +48,7 @@
     "xss-clean": "^0.1.4"
   },
   "devDependencies": {
+    "db": "workspace:*",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
@@ -91,8 +91,5 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  },
-  "prisma": {
-    "schema": "./src/database/prisma/schema.prisma"
   }
 }

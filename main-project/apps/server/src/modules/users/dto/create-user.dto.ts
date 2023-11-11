@@ -1,4 +1,4 @@
-import { Roles, Status } from '@prisma/client';
+import { Roles, Status } from 'db';
 
 export class CreateUserDto {
   // login infos

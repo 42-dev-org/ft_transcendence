@@ -8,6 +8,25 @@ export declare class JwtStrategy extends JwtStrategy_base {
     constructor(userRepository: UsersRepository, conf: ConfigService);
     validate(payload: JwtPaylod & {
         iat: number;
-    }): Promise<any>;
+    }): Promise<{
+        uid: string;
+        createdAt: Date;
+        updatedAt: Date;
+        email: string;
+        password: string;
+        passwordChangedAt: Date;
+        passwordResetToken: string;
+        passwordResetTokenExpireDate: Date;
+        profileImage: string;
+        coverImage: string;
+        firstName: string;
+        lastName: string;
+        country: string;
+        state: string;
+        roles: "User"[];
+        status: "Accepted";
+        ip: string;
+        phoneNumber: string;
+    }>;
 }
 export {};

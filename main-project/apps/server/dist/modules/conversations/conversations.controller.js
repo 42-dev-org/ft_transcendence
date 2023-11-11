@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConversationsController = void 0;
 const common_1 = require("@nestjs/common");
@@ -22,7 +21,6 @@ const get_user_decorator_1 = require("../../shared/decorators/get-user.decorator
 const passport_1 = require("@nestjs/passport");
 const rbac_decorator_1 = require("../../global/rbac/decorator/rbac.decorator");
 const rbac_enum_1 = require("../../global/rbac/enum/rbac.enum");
-const client_1 = require("@prisma/client");
 const platform_express_1 = require("@nestjs/platform-express");
 const media_pipe_1 = require("../../global/media/pipes/media.pipe");
 let ConversationsController = exports.ConversationsController = class ConversationsController {
@@ -80,7 +78,7 @@ __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)()),
     __param(0, (0, get_user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_a = typeof client_1.User !== "undefined" && client_1.User) === "function" ? _a : Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ConversationsController.prototype, "findMeAll", null);
 __decorate([
@@ -126,7 +124,7 @@ __decorate([
     __param(1, (0, get_user_decorator_1.GetUser)()),
     __param(2, (0, common_1.Body)('uid')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, typeof (_b = typeof client_1.User !== "undefined" && client_1.User) === "function" ? _b : Object, String]),
+    __metadata("design:paramtypes", [Object, Object, String]),
     __metadata("design:returntype", Promise)
 ], ConversationsController.prototype, "addProfileImage", null);
 __decorate([

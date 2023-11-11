@@ -1,4 +1,4 @@
-import { ConversationTypes } from '@prisma/client';
+import { ConversationTypes } from 'db';
 export declare class CreateConversationDto {
     name: string;
     participants: string[];

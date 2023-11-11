@@ -18,7 +18,7 @@ import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
-import { User } from '@prisma/client';
+import { User } from 'db';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MediaFile } from 'src/shared/types/media';
 import { FileValidatorPipe } from 'src/global/media/pipes/media.pipe';

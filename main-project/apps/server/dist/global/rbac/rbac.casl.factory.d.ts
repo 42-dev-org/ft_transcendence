@@ -2,7 +2,7 @@ import { PureAbility } from '@casl/ability';
 import { Subjects } from '@casl/prisma';
 import { PrismaQuery } from '@casl/prisma';
 import { Actions } from './enum/rbac.enum';
-import { User } from '@prisma/client';
+import { User } from 'db';
 export type Subject = Subjects<{
     User: User;
 }> | 'all';

@@ -3,7 +3,7 @@ import { Subjects, createPrismaAbility } from '@casl/prisma';
 import { Injectable } from '@nestjs/common';
 import { PrismaQuery } from '@casl/prisma';
 import { Actions } from './enum/rbac.enum';
-import { User } from '@prisma/client';
+import { User } from 'db';
 
 export type Subject =
   | Subjects<{

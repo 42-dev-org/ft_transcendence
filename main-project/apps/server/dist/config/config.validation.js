@@ -3,11 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.validationOptions = exports.validationSchema = void 0;
 const Joi = require("joi");
 exports.validationSchema = Joi.object({
-    DATABASE_URL: Joi.string().required(),
-    DATABASE_USERNAME: Joi.string().required(),
-    DATABASE_PASSWORD: Joi.string().required(),
-    DATABASE_NAME: Joi.string().required(),
-    DATABASE_SCHEMA: Joi.string().required(),
     PORT: Joi.number().required(),
     NODE_ENV: Joi.string().valid('development', 'production'),
     LOG_MODE: Joi.string().valid('dev', 'combined', 'long', 'short'),

@@ -2,17 +2,20 @@
   "name": "db",
   "version": "1.0.0",
   "private": true,
-  "main": "./index.ts",
-  "types": "./index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "dependencies": {
     "@prisma/client": "5.4.2"
   },
   "scripts": {
     "db:generate": "prisma generate",
     "db:push": "prisma db push --skip-generate",
+    "build": "npx tsc",
     "test": "echo test"
   },
   "devDependencies": {
-    "prisma": "5.4.2"
+    "typescript": "^5.2.2",
+    "prisma": "5.4.2",
+    "tsconfig": "workspace:*"
   }
 }

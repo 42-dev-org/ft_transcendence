@@ -8,20 +8,61 @@ export declare class MessagesService {
     constructor(repository: MessagesRepository, mediaServices: MediaService);
     create(createMessageDto: CreateMessageDto, uid: string): Promise<{
         status: string;
-        data: any;
+        data: {
+            uid: string;
+            content: string;
+            senderUid: string;
+            mediaUid: string;
+            conversationUid: string;
+            createdAt: Date;
+            updatedAt: Date;
+        };
     }>;
     findAll(userId: string, cnvId: string): Promise<{
         status: string;
-        result: any;
-        data: any;
+        result: number;
+        data: {
+            uid: string;
+            content: string;
+            senderUid: string;
+            mediaUid: string;
+            conversationUid: string;
+            createdAt: Date;
+            updatedAt: Date;
+        }[];
     }>;
     findOne(id: string): Promise<{
         status: string;
-        data: any;
+        data: {
+            conversation: {
+                uid: string;
+                name: string;
+                description: string;
+                tags: string[];
+                type: import("db").$Enums.ConversationTypes;
+                profileImage: string;
+            };
+        } & {
+            uid: string;
+            content: string;
+            senderUid: string;
+            mediaUid: string;
+            conversationUid: string;
+            createdAt: Date;
+            updatedAt: Date;
+        };
     }>;
     update(id: string, updateMessageDto: UpdateMessageDto): Promise<{
         status: string;
-        data: any;
+        data: {
+            uid: string;
+            content: string;
+            senderUid: string;
+            mediaUid: string;
+            conversationUid: string;
+            createdAt: Date;
+            updatedAt: Date;
+        };
     }>;
     remove(id: string): Promise<{
         status: string;
