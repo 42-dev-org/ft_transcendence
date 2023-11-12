@@ -8,12 +8,12 @@ interface PropsType {
     items: {
       label: string;
       key: number;
-      icon?: React.ReactNode;
+      icon?: JSX.Element;
     }[];
   };
 }
 
-export default function OptionList({data}: PropsType) {
+export default function OptionList({ data }: PropsType): JSX.Element {
   const [selected, setSelected] = useState("");
   return (
     <div className="flex w-full flex-col justify-center items-center px-8 gap-4 ">
@@ -21,12 +21,12 @@ export default function OptionList({data}: PropsType) {
 
       {data.items.map((item) => (
         <OptionItem
-          icon={item.icon}
-          label={item.label}
           hander={() => {
             setSelected(item.label);
           }}
+          icon={item.icon}
           key={item.key}
+          label={item.label}
           selected={selected === item.label}
         />
       ))}
