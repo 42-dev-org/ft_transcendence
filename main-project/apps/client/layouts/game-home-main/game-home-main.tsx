@@ -43,7 +43,7 @@ export default function HomeGameMain(): JSX.Element {
   }, [step]);
 
   return (
-    <div className="max-w-[820px] mx-auto h-fit rounded-xl bg-neutral-600 text-white text-center p-8">
+    <div className="max-w-[820px]  mx-auto h-fit rounded-xl bg-neutral-600 text-white text-center p-8">
       <OptionList data={step ? gamesData : levelsData} />
       <div
         className="bg-purple-700 text-white py-3 px-6 rounded-lg mt-8 cursor-pointer hover:bg-purple-800 font-bold"
