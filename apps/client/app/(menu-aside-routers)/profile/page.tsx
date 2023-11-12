@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import React from 'react'
 import ProfileImage from '../../../components/profile-image/profile-image';
 

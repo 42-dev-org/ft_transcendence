@@ -3,5 +3,5 @@
 }
 .icon-container {
     /* @apply flex flex-row  w-full border border-[#252525] focus:border-[#B2F35F] items-center hover:bg-[#252525]  rounded-full h-10  py-2 px-4; */
-    @apply flex flex-row w-full focus:border-[#B2F35F] focus:border-solid focus:border-2 items-center hover:bg-[#252525] rounded-full h-10  py-2 px-4;
+    @apply flex flex-row w-full focus:border-[#B2F35F] focus:border-solid focus:border-2 items-center hover:bg-[#252525] rounded-md h-10  py-2 px-4;
 }

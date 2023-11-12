@@ -9,7 +9,7 @@ function Header(): JSX.Element {
 
     <div className={styles['header-main']}>
       <Logo />
-      <Search />
+      {/* <Search /> */}
       <HeaderSettingNotifSearchMobale />
     </div>
   )
