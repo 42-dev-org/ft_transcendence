@@ -9,6 +9,7 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 import { UsersRepository } from "./repository/users.repository";
 import { MediaService } from "src/global/media/providers/media.service";
 import { MediaFile } from "src/shared/types/media";
+import { $Enums, Prisma } from "db";
 
 @Injectable()
 export class UsersService {
@@ -72,6 +73,10 @@ export class UsersService {
     if (friendship.bannedBy !== user) throw new ForbiddenException();
 
     this.repository.unban(friendship.uid);
+  }
+
+  async getFriends(uid: string, status: $Enums.FriendStatus) {
+    return this.repository.getAllFriends(uid, status)
   }
 
   async removeFriend(uid: string, user: string) {

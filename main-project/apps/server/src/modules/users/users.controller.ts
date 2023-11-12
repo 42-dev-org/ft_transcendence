@@ -58,6 +58,23 @@ export class UsersController {
   async removeFriend(@Param('uid') uid: string, @GetUser() {uid: user}: User) {
     return this.usersService.addFriend(uid, user)
   }
+  
+  @Post(':uid/ban')
+  @UseGuards(AuthGuard())
+  async banFriend(@Param('uid') uid: string, @GetUser() {uid: user}: User) {
+    return this.usersService.ban(uid, user)
+  }
+
+  @Post(':uid/unban')
+  @UseGuards(AuthGuard())
+  async unbanFriend(@Param('uid') uid: string, @GetUser() {uid: user}: User) {
+    return this.usersService.unban(uid, user)
+  }
+  @Post(':uid/accept')
+  @UseGuards(AuthGuard())
+  async acceptFriend(@Param('uid') uid: string, @GetUser() {uid: user}: User) {
+    return this.usersService.acceptFriend(uid, user)
+  }
 
   @Get(':uid')
   @PutAbilities({ action: Actions.Manage, subject: 'User' })
