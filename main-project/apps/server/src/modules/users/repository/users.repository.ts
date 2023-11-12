@@ -5,7 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { Prisma } from "db";
+import { Prisma, $Enums } from 'db';
 import { PrismaService } from "src/global/prisma/prisma.service";
 
 @Injectable()
@@ -47,7 +47,7 @@ export class UsersRepository {
     });
   }
 
-  async getAllFriends(user: string, status: "Accepted" | "Banned" | "Pending") {
+  async getAllFriends(user: string, status: $Enums.FriendStatus) {
     return this.prisma.friend.findMany({
       where: {
         AND: [
