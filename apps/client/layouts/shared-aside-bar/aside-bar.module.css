@@ -1,9 +1,12 @@
 .page {
-    @apply h-[90%]  w-full  justify-start flex flex-row;
+    @apply h-full w-1/3  justify-start flex flex-row;
+    @media (max-width: 765px) {
+        width: 0px;
+    }
 }
 
 .aside-bar {
-    @apply h-full w-1/4 flex items-end;
+    @apply h-full w-full flex items-end;
     @media (max-width: 765px) {
         display: none;
       }

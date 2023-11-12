@@ -23,11 +23,11 @@ export default function RootLayout({
     <html lang="en">
       <body className="h-screen w-full flex flex-col">
         <StoreProvider>
-          <Header />
-          <AsideBar />
-          <BarMobile />
+          {/* <Header /> */}
+          {/* <AsideBar /> */}
+          {/* <BarMobile /> */}
+          {children}
           </StoreProvider>
-          {/* {children} */}
       </body>
     </html>
   );
