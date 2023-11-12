@@ -42,7 +42,7 @@ model Media {
   uploaderUid String @map("uploader_uid")
 
   // Messages Relation
-  message Message?
+  // message Message?
 
   @@index([uid])
   @@map("medias")
@@ -81,6 +81,10 @@ model User {
   conversations      Conversation[] @relation("conversations")
   ownedConversations Conversation[] @relation("owned-conversations")
 
+  ban Conversation[] @relation("banned-conversations")
+
+  muted MutedConversation[]
+
   // friendship
   myFriends Friend[] @relation("my-friends")
   friendOf  Friend[] @relation("friend-of")
@@ -89,17 +93,47 @@ model User {
   @@map("users")
 }
 
+model MutedConversation {
+  uid String @id @default(uuid())
+
+  User    User?   @relation(fields: [userUid], references: [uid])
+  userUid String?
+
+  Conversation    Conversation? @relation(fields: [conversationUid], references: [uid])
+  conversationUid String?
+
+  startDate DateTime @default(now())
+  until     DateTime
+}
+
 model Conversation {
-  uid          String            @id @default(uuid())
-  name         String
-  description  String            @default("")
-  tags         String[]
-  type         ConversationTypes
-  participants User[]            @relation("conversations")
-  admins       User[]            @relation("owned-conversations")
+  uid         String            @id @default(uuid())
+  name        String
+  description String            @default("")
+  tags        String[]
+  type        ConversationTypes
+
+  visibility ChatVisibility @default(Public)
+
+  password String?
+
+  participants User[] @relation("conversations")
+
+  mut MutedConversation[]
+
+  admins User[] @relation("owned-conversations")
+
+  ban User[] @relation("banned-conversations")
+
   profileImage String?
 
   messages Message[]
+}
+
+enum ChatVisibility {
+  Public
+  Private
+  Protected
 }
 
 model Message {
@@ -111,10 +145,9 @@ model Message {
   sender    User?   @relation(fields: [senderUid], references: [uid])
   senderUid String? @map("sender_uid")
 
-
   // media relation
-  media    Media?  @relation(fields: [mediaUid], references: [uid])
-  mediaUid String? @unique @map("media_uid")
+  // media    Media?  @relation(fields: [mediaUid], references: [uid])
+  // mediaUid String? @unique @map("media_uid")
 
   // conversation relation
   conversation    Conversation? @relation(fields: [conversationUid], references: [uid])
