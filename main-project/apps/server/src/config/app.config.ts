@@ -6,8 +6,8 @@ const CommonConfs = {
     origin: ['*'] as Array<string>,
   },
   app: {
-    port: process.env.PORT || 3001,
-    logger_format: process.env.LOG_MODE || 'combined',
+    port: process.env.PORT || 8080,
+    logger_format: process.env.LOG_MODE || 'dev',
   },
   cookieOptions: <CookieOptions>{
     maxAge: 1000 * 60 * 72,
@@ -43,7 +43,7 @@ const proConfig = {
     path: '/',
   },
   corsOption: <CorsOptions>{
-    origin: ['http://localhost:3000'] as Array<string>,
+    origin: ['http://localhost:3001/'] as Array<string>,
   },
 };
 
