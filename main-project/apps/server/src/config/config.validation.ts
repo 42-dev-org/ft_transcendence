@@ -19,14 +19,14 @@ export const validationSchema = Joi.object({
   JWT_SECRET_TOKEN: Joi.string().required().min(10).max(2048),
   JWT_TOKEN_EXPIRES_DATE: Joi.string().required(),
   // MAILER VARS
-  MAILER_HOST: Joi.string().required(),
-  MAILER_PORT: Joi.number().required(),
-  MAILER_USERNAME: Joi.string().required(),
-  MAILER_PASSWORD: Joi.string().required(),
-  MAILER_DEFAULT_SUBJECT: Joi.string().required(),
-  MAILER_DEFAULT_HEADER: Joi.string().required(),
+  // MAILER_HOST: Joi.string().required(),
+  // MAILER_PORT: Joi.number().required(),
+  // MAILER_USERNAME: Joi.string().required(),
+  // MAILER_PASSWORD: Joi.string().required(),
+  // MAILER_DEFAULT_SUBJECT: Joi.string().required(),
+  // MAILER_DEFAULT_HEADER: Joi.string().required(),
   // FORGET PASS VARS
-  FORGET_PASSWORD_EXPIRES_DATE: Joi.number().required(),
+  // FORGET_PASSWORD_EXPIRES_DATE: Joi.number().required(),
 });
 
 /**
