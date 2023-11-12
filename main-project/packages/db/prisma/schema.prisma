@@ -55,30 +55,24 @@ model User {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // login infos
-  email    String @unique
-  password String
-
-  // Passowrd related fields
-  passwordChangedAt            DateTime? @map("password_changed_at")
-  passwordResetToken           String?   @map("reset_token")
-  passwordResetTokenExpireDate DateTime? @map("reset_token_expires_in")
+  email String @unique
 
   // Profile and Cover Images
-  profileImage String  @default("https://upload.wikimedia.org/wikipedia/commons/7/72/Default-welcomer.png")
-  coverImage   String?
+  profileImage String @default("https://upload.wikimedia.org/wikipedia/commons/7/72/Default-welcomer.png")
 
   // BASIC INFOS
-  firstName   String  @map("first_name")
-  lastName    String  @map("last_name")
-  country     String
-  state       String?
-  roles       Roles[] @default([User])
-  status      Status  @default(Accepted)
-  ip          String
-  phoneNumber String? @map("phone_name")
+  firstName String  @map("first_name")
+  lastName  String  @map("last_name")
+  login     String  @unique
+  url       String
+  phone     String
+  kind      String
+  roles     Roles[] @default([User])
 
   // Media Relation
   media Media[]
+
+  status String @default("offline")
 
   // Messages Relation
   messages Message[]
@@ -86,6 +80,10 @@ model User {
   // Conversations Relations
   conversations      Conversation[] @relation("conversations")
   ownedConversations Conversation[] @relation("owned-conversations")
+
+  // friendship
+  myFriends Friend[] @relation("my-friends")
+  friendOf  Friend[] @relation("friend-of")
 
   @@index([uid])
   @@map("users")
@@ -100,6 +98,7 @@ model Conversation {
   participants User[]            @relation("conversations")
   admins       User[]            @relation("owned-conversations")
   profileImage String?
+
   messages Message[]
 }
 
@@ -111,6 +110,7 @@ model Message {
   // user realtion
   sender    User?   @relation(fields: [senderUid], references: [uid])
   senderUid String? @map("sender_uid")
+
 
   // media relation
   media    Media?  @relation(fields: [mediaUid], references: [uid])
@@ -124,17 +124,41 @@ model Message {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  // friendship
+
   @@map("messages")
+}
+
+model Friend {
+  uid String @id @default(uuid())
+
+  user1    User   @relation("my-friends", fields: [user1uid], references: [uid])
+  user1uid String
+  user2    User   @relation("friend-of", fields: [user2uid], references: [uid])
+  user2uid String
+
+  status FriendStatus @default(Pending)
+
+  bannedBy String?
+
+  @@unique([user1uid, user2uid])
+  @@unique([user2uid, user1uid])
+  @@map("friends")
+}
+
+enum FriendStatus {
+  Pending
+  Accepted
+  Banned
 }
 
 model Achivement {
   uid String @id @default(uuid())
 
-  name String
-  rule String
+  name  String
+  rule  String
   grade AchivementGrade
 }
-
 
 enum AchivementGrade {
   Bronze
