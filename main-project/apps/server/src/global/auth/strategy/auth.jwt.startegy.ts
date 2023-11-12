@@ -12,7 +12,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     // calling Base Constructor
     super({
       secretOrKey: conf.get<string>('JWT_SECRET_TOKEN'),
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest:  ExtractJwt.fromExtractors([
+        req => {
+          console.log(req.cookies)
+          let token = null;
+          if (req && req.cookies) {
+            token = req.cookies['token'];
+          }
+          return token;
+        },
+      ]),
     });
   }
 
@@ -26,13 +35,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     // check if user exists throw UnAuthorized if it not exists
     if (!user) throw new UnauthorizedException();
-
-    // Check If user Changed he's Password
-    if (user.passwordChangedAt) {
-      if (user.passwordChangedAt > new Date(iat * 1000)) {
-        throw new UnauthorizedException();
-      }
-    }
 
     // Add user To request object
     return user;

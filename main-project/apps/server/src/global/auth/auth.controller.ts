@@ -7,70 +7,27 @@ import {
   Res,
   Req,
   UseGuards,
-} from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { CreateUserDto } from '../../modules/users/dto/create-user.dto';
-import { Request, Response } from 'express';
-import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/shared/decorators/get-user.decorator';
+  Get,
+  UnauthorizedException,
+} from "@nestjs/common";
+import axios from "axios";
+import { AuthService } from "./auth.service";
+import { Request, Response } from "express";
+import { AuthGuard } from "@nestjs/passport";
+import { GetUser } from "src/shared/decorators/get-user.decorator";
+import { IntraSignInPayload, IntraTokenPayload } from "./types/auth";
+import { Auth42Guard } from "./guards/42.guard";
 
-@Controller('auth')
+@Controller("")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register')
-  register(@Body() createAuthDto: CreateUserDto, @Req() req: Request) {
-    return this.authService.create(createAuthDto, req.ip);
-  }
+  @Get("42oauth")
+  @UseGuards(Auth42Guard)
+  async callback(@Req() req: Request, @Res() res: Response) {
+    const payload = await this.authService.sign(req.user as IntraSignInPayload);
 
-  @Post('login')
-  login(@Body('email') email: string, @Body('password') password: string) {
-    return this.authService.login(email, password);
-  }
-
-  // Forgot Password handler
-  @Post('forgotPassword')
-  async forgotPassword(@Body('email') email: string, @Req() req: Request) {
-    // call Forgot password Service
-    await this.authService.forgotPassword(email, req.get('host'), req.protocol);
-
-    // return Success Result
-    return {
-      status: 'success',
-    };
-  }
-
-  // start reset password handler
-  @Post('resetPassword/:resetToken')
-  async resetPassword(
-    @Body('password') password: string,
-    @Param('resetToken') resetToken: string,
-    @Res() res: Response,
-  ) {
-    // Call Reset Password Service
-    const token = await this.authService.resetPassword(resetToken, password);
-
-    res.json({
-      status: 'success',
-      token,
-    });
-  }
-
-  @Patch('password')
-  @UseGuards(AuthGuard())
-  async updatePassword(
-    @Body() passPayload: { password: string; oldPassword: string },
-    @GetUser() { uid },
-    @Res() res: Response,
-  ) {
-    const token = await this.authService.updatePassword(
-      passPayload as any,
-      uid,
-    );
-
-    res.json({
-      status: 'success',
-      token,
-    });
+    res.cookie("token", payload.token);
+    res.status(300).redirect("http://localhost:3001");
   }
 }
