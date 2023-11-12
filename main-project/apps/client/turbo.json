@@ -5,7 +5,6 @@
             "dependsOn": ["io-types#build"]
         },
         "dev": {
-            "dependsOn": ["server#start"]
         }
     }
 
