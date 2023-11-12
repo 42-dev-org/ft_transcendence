@@ -1,11 +1,9 @@
 {
   "extends": ["//"],
   "pipeline": {
-    "generate": {
-      "cache": false
-    },
-    "push": {
-      "cache": false
+    "build": {
+      "cache": false,
+      "dependsOn": ["db:push", "db:generate"]
     }
   }
 }
