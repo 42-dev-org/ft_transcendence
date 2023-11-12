@@ -10,6 +10,7 @@ import {
   UseInterceptors,
   UsePipes,
   UploadedFile,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -22,6 +23,7 @@ import { User } from 'db';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileValidatorPipe } from 'src/global/media/pipes/media.pipe';
 import { MediaFile } from 'src/shared/types/media';
+import { Request } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -32,6 +34,29 @@ export class UsersController {
   @UseGuards(AuthGuard(), RbacGuard)
   findAll() {
     return this.usersService.findAll();
+  }
+
+
+  @Get('me')
+  // @PutAbilities({ action: Actions.Read, subject: 'User' })
+  @UseGuards(AuthGuard())
+  findMe(@GetUser() { uid }: User, @Req() req: Request) {
+    console.log(req.headers)
+    return this.usersService.findOne(uid);
+  }
+
+  @Post(':uid/add')
+  @UseGuards(AuthGuard())
+  async addFriend(@Param('uid') uid: string, @GetUser() {uid: user}: User) {
+    // console.log(uid)
+    // console.log(user)
+    return this.usersService.addFriend(uid, user)
+  }
+  
+  @Post(':uid/remove')
+  @UseGuards(AuthGuard())
+  async removeFriend(@Param('uid') uid: string, @GetUser() {uid: user}: User) {
+    return this.usersService.addFriend(uid, user)
   }
 
   @Get(':uid')
@@ -55,12 +80,6 @@ export class UsersController {
     return this.usersService.remove(uid);
   }
 
-  @Get('me')
-  @PutAbilities({ action: Actions.Read, subject: 'User' })
-  @UseGuards(AuthGuard(), RbacGuard)
-  findMe(@GetUser() { uid }: User) {
-    return this.usersService.findOne(uid);
-  }
 
   @Delete('me')
   @PutAbilities({ action: Actions.Delete, subject: 'User' })
@@ -83,14 +102,5 @@ export class UsersController {
   @UseInterceptors(FileInterceptor('image'))
   changeProfileImage(@GetUser() user: User, @UploadedFile() file: MediaFile) {
     return this.usersService.changeProfilePicture(file, user.uid);
-  }
-
-  @Post('me/cover-image')
-  @PutAbilities({ action: Actions.Update, subject: 'User' })
-  @UseGuards(AuthGuard(), RbacGuard)
-  @UsePipes(FileValidatorPipe)
-  @UseInterceptors(FileInterceptor('image'))
-  changeCoverImage(@GetUser() user: User, @UploadedFile() file: MediaFile) {
-    return this.usersService.changeCoverPicture(file, user.uid);
   }
 }

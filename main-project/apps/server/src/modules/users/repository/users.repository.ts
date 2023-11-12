@@ -1,10 +1,20 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma } from 'db';
-import { PrismaService } from 'src/global/prisma/prisma.service';
+import {
+  BadRequestException,
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
+import { Prisma } from "db";
+import { PrismaService } from "src/global/prisma/prisma.service";
 
 @Injectable()
 export class UsersRepository {
   constructor(private readonly prisma: PrismaService) {}
+
+  async findByLogin(login: string) {
+    return this.prisma.user.findUnique({ where: { login } });
+  }
 
   async create(data: Prisma.UserCreateInput) {
     return this.prisma.user.create({ data });
@@ -30,7 +40,68 @@ export class UsersRepository {
     return this.prisma.user.findFirst({ where: { email } });
   }
 
-  async findByPasswordResetToken(passwordResetToken: string) {
-    return this.prisma.user.findFirst({ where: { passwordResetToken } });
+  async acceptFriend(uid: string) {
+    return this.prisma.friend.update({
+      where: { uid },
+      data: { status: "Accepted" },
+    });
+  }
+
+  async getAllFriends(user: string, status: "Accepted" | "Banned" | "Pending") {
+    return this.prisma.friend.findMany({
+      where: {
+        AND: [
+          {
+            OR: [{ user1uid: user }, { user2uid: user }],
+          },
+          status && { status },
+        ],
+      },
+    });
+  }
+
+  async ban(uid: string, user: string) {
+    this.prisma.friend.update({
+      where: { uid },
+      data: { status: "Banned", bannedBy: user },
+    });
+  }
+
+  async unban(uid: string) {
+    this.prisma.friend.update({
+      where: { uid: uid },
+      data: { status: "Accepted", bannedBy: null },
+    });
+  }
+
+  async getFriendship(uid: string, user: string) {
+    return this.prisma.friend.findFirst({
+      where: {
+        OR: [
+          { user1uid: uid, user2uid: user },
+          { user2uid: uid, user1uid: user },
+        ],
+      },
+    });
+  }
+
+  async addFriend(uid: string, user: string) {
+    return this.prisma.friend.create({
+      data: {
+        user1uid: user,
+        user2uid: uid,
+      },
+    });
+  }
+
+  async removeFriend(uid: string, user: string) {
+    const friendship = await this.prisma.friend.deleteMany({
+      where: {
+        OR: [
+          { user1uid: user, user2uid: uid },
+          { user1uid: uid, user2uid: user },
+        ],
+      },
+    });
   }
 }
