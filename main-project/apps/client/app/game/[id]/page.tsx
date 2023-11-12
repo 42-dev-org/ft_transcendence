@@ -1,7 +1,9 @@
-'use client'
+"use client";
 import { useParams } from "next/navigation";
+import SingleGameContainer from "../../../containers/single-game/single-game-container";
 
 export default function InternalGamePage(): JSX.Element {
   const { id } = useParams();
-  return <div className="">{id}</div>;
+
+  return <SingleGameContainer _gameid={id as string} />;
 }
