@@ -1,14 +1,6 @@
-import React from 'react'
-import GameHomeContainer from '../../containers/game-home/game-home-container'
-import Test from '../../components/test'
+import React from "react";
+import GameHomeContainer from "../../containers/game-home/game-home-container";
 
-export default function Page() {
-  return (
-    <>
-    <GameHomeContainer />
-    
-    <Test />
-    </>
-    // <div className='bg-red-300 w-screen h-screen'></div>
-  )
+export default function Page(): JSX.Element {
+  return <GameHomeContainer />;
 }
