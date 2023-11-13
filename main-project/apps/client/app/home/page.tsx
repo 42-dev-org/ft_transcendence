@@ -1,9 +1,13 @@
 import React from "react";
 import "./home.css";
+import Pong from "../../components/pong";
 
 function Home(): JSX.Element {
   return (
-    <div className="w-full h-screen bg-[#1B1B1B] flex items-center  text-white py-4 px-10">
+    <div
+      className="w-full h-screen bg-[#1B1B1B] flex items-center  text-white py-4 px-10"
+     
+    >
       <div className="flex flex-col px-10 gap-10 xl:w-1/3 w-1/2 mb-40">
         <h1 className="text-5xl flex">
           PING<span className="text-[#b9ef72]">PONG</span>
@@ -18,8 +22,10 @@ function Home(): JSX.Element {
           Login with Intra
         </button>
       </div>
+      <Pong />
     </div>
   );
 }
 
 export default Home;
+// https://sketchfab.com/3d-models/table-tennis-model-a1-30-star-wars-theme-9b663e07e8944dc2ba50eef1ccaa0474#download
