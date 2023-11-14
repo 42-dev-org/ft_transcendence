@@ -1,5 +1,27 @@
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap');
+
+
+
 body {
   font-family: "Press Start 2P" !important;
+}
+
+
+/* /////////// */
+
+
+
+.logo-container {
+    @apply w-1/3 p-1 flex   justify-start items-center h-full ;
+    @media (max-width: 765px) {
+        width: 66.666667%;
+      }
+}
+
+.logo {   
+    @apply flex flex-row  normal-case  text-xl bg-black border-none text-white hover:bg-white hover:bg-opacity-10;
+    font-family: 'Nunito', sans-serif;
+
 }
