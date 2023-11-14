@@ -1,7 +1,7 @@
 import React from "react";
 import './index.css'
 
-function Pong() {
+function Pong() :JSX.Element {
   return (
     <div className="field">
       <div className="net"></div>
