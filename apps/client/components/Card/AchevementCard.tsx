@@ -1,6 +1,6 @@
 import Image, { StaticImageData } from 'next/image';
 import React from 'react'
-import IMage1 from 'assets-workspace/images/AchivementImage10.jpeg'
+
 type AchevmentProps = {
     name: string;
     url: string;
