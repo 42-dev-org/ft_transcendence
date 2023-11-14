@@ -7,7 +7,7 @@ export default function Users() {
   return (
     <div className='flex flex-col  p-4 h-full w-full gap-10'>
         <div className='flex w-full items-center justify-center gap-5 mt-10'>
-            <input className='h-10 p-1 px-3 w-1/2 rounded-md outline-none'/>
+            <input className='h-10 p-1 px-3 w-1/2 rounded-md '/>
            <Button onClick={() => console.log('xxx')} title='Search' className='w-40' />
         </div>
         <div className='grid lg:grid-cols-5  sm:grid-cols-3 grid-cols-2 gap-5  w-full'>
