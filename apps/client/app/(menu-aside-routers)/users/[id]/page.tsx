@@ -81,7 +81,7 @@ function UserProfile() {
         </div>
         <div className=' gap-3 flex flex-col'>
           <h2>Achievements</h2>
-          <div className='grid border h-full border-spacing-2 rounded-lg border-[#B2F35F] grid-cols-2 gap-5  w-full'>
+          <div className='grid  h-full rounded-lg  grid-cols-2 gap-5  w-full'>
 
           
             {dataAchevment.map((dataAchevment) => (

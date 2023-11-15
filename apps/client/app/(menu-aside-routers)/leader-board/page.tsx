@@ -13,7 +13,7 @@ function page() {
       <h2 className='h-11 w-44 mb-11 flex text-black rounded-lg justify-center items-center bg-[#B2F35F]'>Leader Board</h2>
       {
         [...Array(6)].map((_, idx) => (
-          <LeaderBoardCard name={data.name} url={data.url} key={idx} />
+          <LeaderBoardCard name={data.name} url={data.url} kay={idx} key={idx} />
         ))
       }
     </div>
