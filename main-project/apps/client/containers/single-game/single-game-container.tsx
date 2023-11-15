@@ -38,7 +38,7 @@ export default function SingleGameContainer({
       </div>
       {gamePlaying && 
         <div className="absolute w-full h-full  bg-white bg-opacity-5  backdrop-blur-sm flex justify-center items-center">
-            <div className="pop-up bg-white rounded-md ">
+            {/* <div className="pop-up bg-gray-500 rounded-md w-2/3 h-2/3 ">
               <SingleGameHeader
             player1={{
               fullName: "anas jaidi",
@@ -53,7 +53,17 @@ export default function SingleGameContainer({
               image: Profile,
             }}
           />
-            </div>
+
+                <div className="w-full flex flex-row h-full">
+
+                <div className=" h-full w-1/2">
+                    L
+                </div>
+                <div className="bg-red-100 h-full w-1/2">
+                    R
+                </div>
+                </div>
+          </div> */}
         </div>
       }
     </div>
