@@ -2,11 +2,7 @@ import { PaginationDto } from '../dto/pagination.dto';
 
 import pfg from 'prisma-filter-generator';
 
-console.log(pfg.generateFilters({ numPagesLessThan: 100 }));
-console.log(
-  '-----------------------------------------------------------------------------',
-);
-// pfg.ge
+
 
 export const getPaginationResponse = (
   query: PaginationDto,

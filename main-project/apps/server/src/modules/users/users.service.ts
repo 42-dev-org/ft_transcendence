@@ -10,6 +10,9 @@ import { UsersRepository } from "./repository/users.repository";
 import { MediaService } from "src/global/media/providers/media.service";
 import { MediaFile } from "src/shared/types/media";
 import { $Enums, Prisma } from "db";
+import { getPaginationQuery } from "src/helpers/funcs/pagination.helper";
+import { PaginationDto } from "src/helpers/dto/pagination.dto";
+import { getPaginationResponse } from "../../helpers/funcs/pagination.helper";
 
 @Injectable()
 export class UsersService {
@@ -75,8 +78,22 @@ export class UsersService {
     this.repository.unban(friendship.uid);
   }
 
+  async searchForUser(search: string, p: PaginationDto) {
+    const { skip, take } = getPaginationQuery(p);
+    const [totalCount, data] = await this.repository.searchForUser(
+      search,
+      skip,
+      take
+    );
+    const pagination = await getPaginationResponse(p, totalCount);
+    return {
+      data,
+      pagination,
+    };
+  }
+
   async getFriends(uid: string, status: $Enums.FriendStatus) {
-    return this.repository.getAllFriends(uid, status)
+    return this.repository.getAllFriends(uid, status);
   }
 
   async removeFriend(uid: string, user: string) {

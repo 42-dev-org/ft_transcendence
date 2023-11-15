@@ -96,22 +96,22 @@ model User {
 model MutedConversation {
   uid String @id @default(uuid())
 
-  User    User?   @relation(fields: [userUid], references: [uid])
-  userUid String?
+  user    User   @relation(fields: [userUid], references: [uid])
+  userUid String
 
-  Conversation    Conversation? @relation(fields: [conversationUid], references: [uid])
-  conversationUid String?
+  conversation    Conversation @relation(fields: [conversationUid], references: [uid])
+  conversationUid String
 
   startDate DateTime @default(now())
   until     DateTime
+
+  @@unique([userUid, conversationUid])
 }
 
 model Conversation {
-  uid         String            @id @default(uuid())
-  name        String
-  description String            @default("")
-  tags        String[]
-  type        ConversationTypes
+  uid  String            @id @default(uuid())
+  name String
+  type ConversationTypes
 
   visibility ChatVisibility @default(Public)
 

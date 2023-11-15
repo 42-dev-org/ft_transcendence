@@ -1,18 +1,16 @@
-import { ConversationTypes } from 'db';
-import { IsOptional, IsString } from 'class-validator';
+import { ConversationTypes, $Enums } from 'db';
+import { IsArray, IsEnum, IsOptional, IsString } from 'class-validator';
 
 export class CreateConversationDto {
-  @IsOptional()
   @IsString()
   name: string;
 
+  @IsArray()
   participants: string[];
 
-  admins: string[];
-
-  description: string;
-
-  tags: string[];
-
+  @IsEnum(ConversationTypes)
   type: ConversationTypes;
+
+  @IsEnum($Enums.ChatVisibility)
+  visibility: $Enums.ChatVisibility
 }
