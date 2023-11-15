@@ -13,7 +13,10 @@ function Profile(): JSX.Element {
     const fileReader = new FileReader();
     fileReader.readAsDataURL(file);
     fileReader.onload = () => {
-        setPicProfile(fileReader.result);
+        // setPicProfile(fileReader.result);
+        if (fileReader.result) {
+          setPicProfile(fileReader.result as string);
+        }
     };
     fileReader.onerror = (error) => {
         alert(error);
