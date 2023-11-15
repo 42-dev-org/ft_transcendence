@@ -16,7 +16,7 @@ export class ConversationsService {
   ) {}
 
   async create(createConversationDto: CreateConversationDto) {
-    const { admins, participants, description, name, tags, type } =
+    const {  participants, name, type , visibility} =
       createConversationDto;
 
     const newConversation = await this.repository.create({
@@ -25,11 +25,10 @@ export class ConversationsService {
         connect: participants.map((uid) => ({ uid })),
       },
       type,
-      description: description || '',
       admins: {
-        connect: admins.map((uid) => ({ uid })),
+        connect: {uid: ''},
       },
-      tags,
+      visibility
     });
 
     return {
@@ -67,11 +66,11 @@ export class ConversationsService {
   }
 
   async update(id: string, updateConversationDto: UpdateConversationDto) {
-    const { name, description } = updateConversationDto;
+    const { name, visibility } = updateConversationDto;
 
     const cnv = await this.repository.update(id, {
       name,
-      description,
+      visibility
     });
 
     return {

@@ -5,8 +5,9 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { Prisma, $Enums } from 'db';
+import { Prisma, $Enums } from "db";
 import { PrismaService } from "src/global/prisma/prisma.service";
+import { PaginationDto } from "../../../helpers/dto/pagination.dto";
 
 @Injectable()
 export class UsersRepository {
@@ -14,6 +15,33 @@ export class UsersRepository {
 
   async findByLogin(login: string) {
     return this.prisma.user.findUnique({ where: { login } });
+  }
+
+  async searchForUser(search: string, skip: number, take: number) {
+    const query = {
+      where: {
+        OR: [
+          { firstName: { contains: search } },
+          { lastName: { contains: search } },
+          { login: { contains: search } },
+        ],
+      },
+      skip,
+      take,
+    }
+    const getUsers =  this.prisma.user.findMany(query);
+    const getCount = this.prisma.user.count({
+      where: {
+        OR: [
+          { firstName: { contains: search } },
+          { lastName: { contains: search } },
+          { login: { contains: search } },
+        ],
+      },
+      skip,
+      take,
+    })
+    return Promise.all([getCount, getUsers])
   }
 
   async create(data: Prisma.UserCreateInput) {

@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma } from 'db';
-import { PrismaService } from 'src/global/prisma/prisma.service';
+import { Injectable } from "@nestjs/common";
+import { Prisma } from "db";
+import { PrismaService } from "src/global/prisma/prisma.service";
 
 @Injectable()
 export class ConversationsRepository {
@@ -67,6 +67,35 @@ export class ConversationsRepository {
     return this.prisma.conversation.update({
       where: { uid: cnvUid },
       data: { participants: { connect: { uid } } },
+    });
+  }
+
+  public async muted(uid: string, cnv: string, until: Date) {
+    return this.prisma.conversation.update({
+      where: { uid: cnv },
+      data: {
+        mut: {
+          create: {
+            user: { connect: { uid } },
+            until,
+          },
+        },
+      },
+    });
+  }
+
+  public async unmut(uid: string, cnv: string) {
+    return this.prisma.conversation.update({
+      where: { uid: cnv },
+      data: {
+        mut: { delete: { uid } },
+      },
+    });
+  }
+
+  public async getMut(uid: string, cnv: string) {
+    return this.prisma.mutedConversation.findFirst({
+      where: { AND: [{ userUid: uid, conversationUid: cnv }] },
     });
   }
 
