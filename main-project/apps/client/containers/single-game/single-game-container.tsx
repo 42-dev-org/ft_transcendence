@@ -26,46 +26,17 @@ export default function SingleGameContainer({
             score: 999,
           }}
           player2={{
-            fullName: "ouarsas mus",
-            username: "oursas",
+            fullName: "ouarsass mustapha",
+            username: "mouarsas",
             score: -999,
             image: Profile,
           }}
         />
 
-        <SinglegameMain />
+        <SinglegameMain isActive={gamePlaying}/>
+
 
       </div>
-      {gamePlaying && 
-        <div className="absolute w-full h-full  bg-white bg-opacity-5  backdrop-blur-sm flex justify-center items-center">
-            {/* <div className="pop-up bg-gray-500 rounded-md w-2/3 h-2/3 ">
-              <SingleGameHeader
-            player1={{
-              fullName: "anas jaidi",
-              username: "ajaidi",
-              image: Profile,
-              score: 999,
-            }}
-            player2={{
-              fullName: "ouarsas mus",
-              username: "oursas",
-              score: -999,
-              image: Profile,
-            }}
-          />
-
-                <div className="w-full flex flex-row h-full">
-
-                <div className=" h-full w-1/2">
-                    L
-                </div>
-                <div className="bg-red-100 h-full w-1/2">
-                    R
-                </div>
-                </div>
-          </div> */}
-        </div>
-      }
     </div>
   );
 }
