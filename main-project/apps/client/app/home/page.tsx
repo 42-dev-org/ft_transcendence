@@ -1,21 +1,21 @@
 import React from "react";
-import styles from "./home.css";
+import "./home.css";
 import IMAge from "assets-workspace/svg/Vector.svg";
 import Image from "next/image";
 import Pong from "../../components/pong";
 
 function Home(): JSX.Element {
   return (
-    <div className="p-8 bg-[#1B1B1B] font-family:'Nunito', sans-serif">
-      <div className={styles["logo-container"]}>
+    <div className="p-8 bg-[#1B1B1B]">
+      <div >
         <div className="flex flex-row  normal-case  text-xl bg-[#1B1B1B] border-none text-white">
           <Image alt="logo image" src={IMAge} height={28} width={39} />
           <span className="ml-4 title text-3xl">Pong Game</span>
         </div>
       </div>
 
-      <div className="w-full h-screen bg-[#1B1B1B] flex items-center  text-white py-4 px-10">
-        <div className="flex flex-col px-10 gap-10 xl:w-1/3 w-1/2 mb-40">
+      <div className="w-full h-screen  bg-[#1B1B1B] flex items-center  text-white py-4 px-2">
+        <div className="flex flex-col  gap-10 xl:w-1/3 w-1/2 mb-40">
           <h1 className="text-5xl flex ">
             PING<span className="text-[#b9ef72]">PONG</span>
           </h1>
