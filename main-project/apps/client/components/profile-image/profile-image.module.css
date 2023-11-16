@@ -1,0 +1,6 @@
+.profile-image-container {
+    @apply w-20 mx-2 rounded-full ;
+    display: block;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+}
