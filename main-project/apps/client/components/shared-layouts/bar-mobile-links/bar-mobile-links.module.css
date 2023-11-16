@@ -1,0 +1,3 @@
+.links-group {
+    @apply bg-black flex justify-between items-center  h-full;
+}

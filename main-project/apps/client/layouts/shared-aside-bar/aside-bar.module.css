@@ -1,0 +1,18 @@
+.page {
+    @apply h-full lg:w-1/5 w-1/4  justify-start flex flex-row;
+    @media (max-width: 765px) {
+        width: 0px;
+    }
+}
+
+.aside-bar {
+    @apply h-full w-full flex items-end;
+    @media (max-width: 765px) {
+        display: none;
+      }
+}
+
+.bare-navigation-links-container {
+    @apply w-full h-full flex flex-col justify-between;
+
+}

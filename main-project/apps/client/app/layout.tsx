@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "tailwind-config/styles";
 import StoreProvider from "../providers/store-provider";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +18,7 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className="h-screen w-full flex flex-col">
         <StoreProvider>{children}</StoreProvider>
       </body>
     </html>

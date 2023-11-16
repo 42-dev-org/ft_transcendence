@@ -60,11 +60,11 @@ export default function HomeGameMain(): JSX.Element {
   return (
     <div className="max-w-[820px] mx-auto h-fit rounded-xl bg-neutral-600 text-white text-center p-8">
       <div className="flex flex-col items-center">
-        <Image
+        {/* <Image
           src={Avatar}
           alt="User Avatar"
           className="rounded-full w-20 h-20 mb-4"
-        />
+        /> */}
         <p className="text-lg font-bold mb-2">Anas jaidi</p>
         <p className="text-white">Welcome! Start your game here.</p>
       </div>

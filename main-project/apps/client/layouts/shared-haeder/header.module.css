@@ -1,0 +1,3 @@
+.header-main {
+    @apply h-[5%] w-full  flex flex-row items-center justify-between;
+}
