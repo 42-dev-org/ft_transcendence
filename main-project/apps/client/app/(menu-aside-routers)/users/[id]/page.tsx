@@ -64,7 +64,7 @@ function UserProfile() {
       }} />
       <div className='w-full flex lg:flex-row flex-col gap-x-4 gap-y-14 py-2  px-4 '>
         <div className='lg:min-w-[140px]   relative'>
-          <Image width={140} height={140} className='rounded-full absolute border-4 border-[#ffffff1a] -top-24 lg:left-0 left-[40%]' alt='zakaria' src='https://cdn.intra.42.fr/users/47192a7a27a46c2c714c6723e30a3cd2/zmaziane.jpg' />
+          <Image width={140} height={140} className='rounded-full absolute border-4 border-[#ffffff1a] -top-24 lg:left-0  md:left-[40%] left-[30%]' alt='zakaria' src='https://cdn.intra.42.fr/users/47192a7a27a46c2c714c6723e30a3cd2/zmaziane.jpg' />
         </div>
         <div className='flex  md:flex-row flex-col w-full gap-4 justify-between'>
           <span className='text-white text-xl font-medium whitespace-nowrap'>Zakaria Maziane</span>
