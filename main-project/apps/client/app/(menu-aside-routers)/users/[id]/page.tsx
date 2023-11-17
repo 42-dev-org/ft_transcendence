@@ -76,16 +76,16 @@ function UserProfile() {
         </div>
       </div>
       <div className='grid lg:grid-cols-2 mt-4  gap-5 '>
-        <div className='overflow-y-auto max-h-80  flex  gap-4 flex-col'>
+        <div className='overflow-y-auto max-h-72  flex  gap-4 flex-col'>
           <h2>History</h2>
 
           {
-            [...Array(5)].map((_, idx) => (
+            [...Array(9)].map((_, idx) => (
               <HistoryCard user1={data} user2={data2} key={idx} />
             ))
           }
         </div>
-        <div className='overflow-y-auto max-h-80 gap-3 flex flex-col'>
+        <div className='overflow-y-auto max-h-72 gap-3 flex flex-col'>
           <h2>Achievements</h2>
           <div className='grid  h-full rounded-lg  grid-cols-2 gap-5  w-full'>
 
