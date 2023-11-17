@@ -71,6 +71,7 @@ function UserProfile() {
           <div className='flex gap-2 md:flex-row flex-col'>
             <Button onClick={() => null} title='Add Freind' />
             <Button onClick={() => null} title='Send Message' className='bg-[#ffffff1a] text-white' />
+            <Button onClick={() => null} title='Invite to play' className='bg-[#ffffff1a] text-white' />
           </div>
         </div>
       </div>
