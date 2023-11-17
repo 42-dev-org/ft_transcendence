@@ -55,7 +55,7 @@ const dataAchevment = [
 ]
 function UserProfile() {
   return (
-    <div className='flex flex-col p-4 w-full h-full gap-y-5' >
+    <div className=' lg:overflow-hidden md:overflow-auto flex flex-col p-4 w-full h-full gap-y-5' >
       <div className='w-full min-h-[300px] bg-[#ffffff1a] relative rounded-lg' style={{
         backgroundImage: 'url(https://cdn.intra.42.fr/coalition/cover/76/Commodore_BG.jpg)',
         objectFit : "cover",
@@ -75,8 +75,8 @@ function UserProfile() {
           </div>
         </div>
       </div>
-      <div className=' grid lg:grid-cols-2 mt-4  gap-5 '>
-        <div className='flex  gap-4 flex-col'>
+      <div className='grid lg:grid-cols-2 mt-4  gap-5 '>
+        <div className='overflow-y-auto max-h-80  flex  gap-4 flex-col'>
           <h2>History</h2>
 
           {
@@ -85,7 +85,7 @@ function UserProfile() {
             ))
           }
         </div>
-        <div className=' gap-3 flex flex-col'>
+        <div className='overflow-y-auto max-h-80 gap-3 flex flex-col'>
           <h2>Achievements</h2>
           <div className='grid  h-full rounded-lg  grid-cols-2 gap-5  w-full'>
 
