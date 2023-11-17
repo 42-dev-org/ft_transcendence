@@ -5,3 +5,7 @@
 .ltr {
     flex-direction: row;
 }
+
+.font-text {
+    font-family: "Press Start 2P" !important;
+  }

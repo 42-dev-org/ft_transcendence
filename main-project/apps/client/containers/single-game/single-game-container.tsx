@@ -26,7 +26,7 @@ export default function SingleGameContainer({
             score: 999,
           }}
           player2={{
-            fullName: "ouarsass mustapha",
+            fullName: " mustapha",
             username: "mouarsas",
             score: -999,
             image: Profile,
@@ -35,7 +35,7 @@ export default function SingleGameContainer({
 
         <SinglegameMain isActive={gamePlaying}/>
 
-
+        
       </div>
     </div>
   );
