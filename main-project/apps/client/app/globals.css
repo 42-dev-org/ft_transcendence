@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 .rtl {
     flex-direction: row-reverse;
 }
@@ -8,4 +13,24 @@
 
 .font-text {
     font-family: "Press Start 2P" !important;
+    direction: ltr;
+}
+
+
+
+body {
+
+    background-color: black;
+    height: 100%;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 0;
   }
+
+h2 {
+  color: white;
+}
+
+input {
+  outline: none;
+}

@@ -1,0 +1,9 @@
+.search-container {
+    @apply  w-1/3 flex justify-center  items-center h-full;
+    @media (max-width: 765px) {
+      display: none;
+    }
+  }
+  .search {
+    @apply h-3/4  rounded-md w-24 sm:w-auto bg-gray-500;
+  }

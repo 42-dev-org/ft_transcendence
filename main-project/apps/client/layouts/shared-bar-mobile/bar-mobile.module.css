@@ -1,0 +1,3 @@
+.link-container {
+    @apply md:hidden h-[5%] flex-1 flex-row items-end  w-full;
+}
