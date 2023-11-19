@@ -16,7 +16,7 @@ export default function SingleGamePlayerCard({
   direction,
 }: PropsTye): JSX.Element {
   return (
-    <div className={`flex gap-3 ${direction}`}>
+    <div className="flex gap-3" style={{flexDirection: direction === 'rtl' ? "row-reverse" : "row"}}>
       <div className="max-w-16 max-h-16 rounded-full overflow-hidden my-auto">
         <Image alt="profile" height={64} src={image} width={64} />
       </div>

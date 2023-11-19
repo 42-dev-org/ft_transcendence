@@ -4,10 +4,15 @@
 
 
 .rtl {
-    direction: rtl;
+    flex-direction: row-reverse;
 }
 
 .ltr {
+    flex-direction: row;
+}
+
+.font-text {
+    font-family: "Press Start 2P" !important;
     direction: ltr;
 }
 

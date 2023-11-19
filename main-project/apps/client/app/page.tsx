@@ -8,7 +8,7 @@ export default function HomePage(): JSX.Element {
     <>
       <Title />
       <main className="bg-red-500">HomePage</main>
-      <Image src={img} alt="testing asstets image" />
+      <Image alt="testing asstets image" src={img}  />
     </>
   );
 }
