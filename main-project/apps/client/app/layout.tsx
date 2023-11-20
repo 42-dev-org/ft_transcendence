@@ -18,7 +18,7 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en">
-      <body className="h-screen w-full flex flex-col">
+      <body>
         <StoreProvider>{children}</StoreProvider>
       </body>
     </html>
