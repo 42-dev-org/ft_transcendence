@@ -21,7 +21,7 @@ export default function MenuAsideroutersLayout({
 }): JSX.Element {
     return (
         <html lang="en">
-            <body className="h-screen w-full flex flex-col">
+            <body className="h-screen overflow-y-hidden w-full flex flex-col">
                 <StoreProvider>
                     <Header />
                     <BarMobile />
