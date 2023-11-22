@@ -7,9 +7,11 @@ import FriendCard from "../../../components/Card/FriendCard";
 import InviteCard from "../../../components/Card/FriendCard";
 import InvitationsCard from "../../../components/Card/InvitationsCard";
 
+type ComponeetType = "search" | "friends" | "invitations" | "banned";
+
 export default function Users(): JSX.Element {
   const [componenet, setComponent] = useState<
-    "search" | "friends" | "invitations" | "banned"
+    ComponeetType
   >("search");
   const render = () => {
     if (componenet === "banned") {
@@ -70,8 +72,8 @@ export default function Users(): JSX.Element {
       <div className="flex md:flex-row flex-col w-full items-center justify-center gap-5 mt-10">
         <input className="h-10 p-1 px-3 rounded-md w-full " />
         <Button onClick={() => {}} title="Search" className="w-full" />
-        <select value={componenet} onChange={(e) => {setComponent(e.target.value)}} className="text-black w-full">
-          {["search", "friends", "invitations", "banned"].map((el) => (
+        <select value={componenet} onChange={(e) => {setComponent(e.target.value as ComponeetType)}}  className="block w-full p-2  text-sm rounded-lg bg-[#ffffff1a] border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
+        {["search", "friends", "invitations", "banned"].map((el) => (
             <option
               key={el}
               value={el}
@@ -79,7 +81,7 @@ export default function Users(): JSX.Element {
               {el}
             </option>
           ))}
-        </select>
+</select>
       </div>
       {render()}
     </div>
