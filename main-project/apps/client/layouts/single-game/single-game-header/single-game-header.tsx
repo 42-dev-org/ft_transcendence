@@ -19,7 +19,7 @@ export default function SingleGameHeader({
   player2,
 }: PropsType): JSX.Element {
   return (
-    <div className="bg-[#1B1B1B] w-full  px-4 py-4 flex justify-between  items-center border-green-600 rounded-lg">
+    <div className="bg-[#1B1B1B] w-full  px-4 py-4 flex justify-between  items-center border border-[#B2F35F] rounded-lg">
       <SingleGamePlayerCard
         direction="ltr"
         fullName={player1.fullName}

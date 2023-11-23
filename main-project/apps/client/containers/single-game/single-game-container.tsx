@@ -23,12 +23,12 @@ export default function SingleGameContainer({
             fullName: "anas jaidi",
             username: "ajaidi",
             image: Profile,
-            score: 999,
+            score: 9,
           }}
           player2={{
             fullName: " mustapha",
             username: "mouarsas",
-            score: -999,
+            score: 5,
             image: Profile,
           }}
         />
