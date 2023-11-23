@@ -1,6 +1,7 @@
 import React from "react";
 
 import { PopupGameOver } from "./popup-gameOver/popup-gameOver";
+import { PopupWinner } from "./popup-winner/popup-winner";
 
 export default function SinglegameMain({
   isActive,
@@ -19,7 +20,8 @@ export default function SinglegameMain({
         <div className="w-full h-4 flex justify-center items-center">
           <div className="w-20 h-full bg-white"></div>
         </div>
-        {isActive && <PopupGameOver />}
+        {isActive && <PopupWinner />}
+        {/* {isActive && <PopupGameOver />} */}
       </div>
     </div>
   );
