@@ -17,7 +17,7 @@ export function PopupGameOver() {
           <div className="w-[80%] flex flex-col md:flex-row h-full items-center text-white text-sm md:justify-between gap-6">
             <SingleGameMainButton
               title="PLAY AGAIN"
-              link="#"
+              link="/game"
               ButtonIcon={TbReload}
               />
             <SingleGameMainButton
