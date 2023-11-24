@@ -42,13 +42,14 @@ const Chat = () => {
   return (
     <div className=' flex  w-full h-full bg-slate-400 '>
       <div className='flex flex-col w-1/3  text-white  bg-black h-full py-2 gap-y-2 px-1'>
+        <span className='flex justify-center items-center text-3xl  font-bold h-14' >Messages</span>
         <div>
 
           <input type="text" placeholder=' Search' className=' h-12 w-full text-black  rounded-full pl-3' />
         </div>
         <div className='flex   w-full h-12  justify-center bg-black items-center '>
-          <div className='flex w-1/3  h-10 hover:bg-[#1B1B1B] rounded-md focus:border focus:border-spacing-1 text-white justify-center items-center ' onClick={setComponent.bind(null, 'users')} >Users</div>
-          <div className='flex w-1/3  h-10 hover:bg-[#1B1B1B] rounded-md text-white justify-center items-center' onClick={setComponent.bind(null, 'channels')}>Channels</div>
+          <div className={`flex w-1/3  h-10 hover:bg-[#1B1B1B] rounded-md  text-white justify-center items-center ${component === 'users' ? ' bg-[#1B1B1B] border border-spacing-2 border-[#B2F35F]': ''} `}    onClick={setComponent.bind(null, 'users')} >Users</div>
+          <div className={`flex w-1/3  h-10 hover:bg-[#1B1B1B] rounded-md focus:border focus:border-spacing-1 text-white justify-center items-center ${component === 'channels' ? ' bg-[#1B1B1B] border border-spacing-2 border-[#B2F35F]': ''} `} onClick={setComponent.bind(null, 'channels')}>Channels</div>
         </div>
         {render()}
       </div>

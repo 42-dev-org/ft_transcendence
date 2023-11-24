@@ -12,7 +12,7 @@ type usersChat = {
 function Userschat({ msg, name, time, numberMsg, url }) {
 
     return (
-        <div className='flex  relative h-16 w-full bg-black hover:bg-slate-500'>
+        <div className='flex  relative h-16 w-full bg-black hover:bg-[#1B1B1B]'>
             <div className=''>
                 <Image width={40} height={40} className='rounded-full absolute  left-3 bottom-2 ' alt='zakaria' src={url} />
             </div>
@@ -22,7 +22,7 @@ function Userschat({ msg, name, time, numberMsg, url }) {
                     <span className=' text-[#F5F5F5] text-md font-mono'>
                         {name}
                     </span>
-                    <span className='  text-sm flex justify-star items-center font-serif text-[#707991]'>
+                    <span className='  text-sm flex justify-star items-center  font-medium text-[#707991]'>
                         You:
                         {msg}
                     </span>
