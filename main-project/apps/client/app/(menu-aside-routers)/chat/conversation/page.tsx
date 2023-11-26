@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-export default function ConversationUi() {
+export default function ConversationUi() :JSX.Element {
   const [msg, setMsg] = useState("");
   const msgRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState([
@@ -41,11 +41,11 @@ export default function ConversationUi() {
           <div className="flex gap-5 items-center h-14">
             <div className="w-11 h-11 relative">
               <Image
+                alt="user"
+                className="rounded-full"
+                height={44}
                 src="https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg"
                 width={44}
-                height={44}
-                className="rounded-full"
-                alt="user"
               />
               <div className="absolute -right-1 bottom-1">
                 <span className="relative flex h-3 w-3">
@@ -62,10 +62,10 @@ export default function ConversationUi() {
           </div>
           <div>
             <svg
-              width="24"
+              fill="none"
               height="24"
               viewBox="0 0 24 24"
-              fill="none"
+              width="24"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -88,10 +88,10 @@ export default function ConversationUi() {
           >
             {messages?.map(({ msg, userId }, index) => (
               <div
-                key={index}
-                className={`w-max max-w-[50%] p-2 flex  rounded-xl ${
+              className={`w-max max-w-[50%] p-2 flex  rounded-xl ${
                   userId === 1 ? "bg-[#b9ef72] self-end" : "bg-slate-100 "
                 }`}
+              key={index}
               >
                 <span>{msg}</span>
               </div>
@@ -102,19 +102,19 @@ export default function ConversationUi() {
             onSubmit={onSetMessage}
           >
             <input
-              value={msg}
               className="w-full h-12 bg-[#2a2a2a] text-[#F5F5F5] rounded-xl pl-3 pr-10"
               placeholder="Message"
+              value={msg}
               onChange={(e) => setMsg(e.target.value)}
             />
 
             <button type="submit">
               <svg
-                width="25"
                 className="absolute top-5 right-8"
+                fill="none"
                 height="24"
                 viewBox="0 0 25 24"
-                fill="none"
+                width="25"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
