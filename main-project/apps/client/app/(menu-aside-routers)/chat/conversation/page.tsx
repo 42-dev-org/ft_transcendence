@@ -1,8 +1,18 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import chatImage from "assets-workspace/images/bg-chat-Conversation-user.png";
 
-export default function ConversationUi() :JSX.Element {
+
+interface PropsType {
+  imageUser: string;
+  fullNmae: string;
+  online: boolean;
+}
+
+export default function ConversationUi(props: PropsType) :JSX.Element {
+  const {imageUser, fullName, online} = props
+
   const [msg, setMsg] = useState("");
   const msgRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState([
@@ -12,7 +22,7 @@ export default function ConversationUi() :JSX.Element {
       timeAt: "18:16",
     },
   ]);
-  const onSetMessage = (e) => {
+  const onSetMessage = (e) =>  {
     e.preventDefault();
     setMessages([
       ...messages,
@@ -57,7 +67,7 @@ export default function ConversationUi() :JSX.Element {
 
             <div className="flex flex-col justify-between">
               <h5 className="font-semibold">Mustapha Ouarsas</h5>
-              <span className="text-xs font-normal">Online</span>
+              <span className="text-xs font-normal text-green-400">Online</span>
             </div>
           </div>
           <div>
@@ -75,21 +85,23 @@ export default function ConversationUi() :JSX.Element {
             </svg>
           </div>
         </div>
+
         <div
-          className="flex flex-col h-full bg-white"
+          className="flex flex-col h-full"
           style={{
-            backgroundImage:
+              backgroundImage:
               "url(https://cdn2.f-cdn.com/contestentries/2046262/58571795/61f00c583e000_thumb900.jpg)",
+              // <Image alt="backgroundImage" src={chatImage} height={1000} width={800} />
           }}
         >
           <div
-            className="h-full w-full flex  overflow-y-auto flex-col  bg-green p-4 gap-4"
+            className="h-full w-full flex  overflow-y-auto flex-col  bg-green p-4 gap-4 scrollbar-hide"
             ref={msgRef}
           >
             {messages?.map(({ msg, userId }, index) => (
               <div
               className={`w-max max-w-[50%] p-2 flex  rounded-xl ${
-                  userId === 1 ? "bg-[#b9ef72] self-end" : "bg-slate-100 "
+                  userId === 1 ? "bg-[#b9ef72] self-end" : "bg-slate-300"
                 }`}
               key={index}
               >

@@ -20,8 +20,8 @@ export default function SinglegameMain({
         <div className="w-full h-4 flex justify-center items-center">
           <div className="w-20 h-full bg-white"></div>
         </div>
-        {/* {isActive && <PopupWinner />} */}
-        {isActive && <PopupGameOver />}
+        {isActive && <PopupWinner />}
+        {/* {isActive && <PopupGameOver />} */}
       </div>
     </div>
   );
