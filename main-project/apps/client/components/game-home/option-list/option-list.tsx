@@ -7,29 +7,36 @@ interface PropsType {
     label: string;
     items: {
       label: string;
+      value: string,
       key: number;
       icon?: React.ReactNode;
     }[];
   };
 }
 
-export default function OptionList({data}: PropsType) {
-  const [selected, setSelected] = useState("");
+const OptionList = ({ data, setLevelOrType}) => {
+  const [selected, setSelected] = useState('');
+
+  const handleOptionClick = (itemValue) => {
+    setSelected(itemValue);
+    setLevelOrType(itemValue);
+  };
+
   return (
-    <div className="flex w-full flex-col justify-center items-center px-8 gap-4 ">
+    <div className="flex w-full flex-col md:flex-row justify-center items-center px-8 gap-4 py-3">
       <SectionTitle label={data.label} />
 
       {data.items.map((item) => (
         <OptionItem
           icon={item.icon}
           label={item.label}
-          hander={() => {
-            setSelected(item.label);
-          }}
+          hander={() => handleOptionClick(item.value)}
           key={item.key}
-          selected={selected === item.label}
+          selected={selected === item.value}
         />
       ))}
     </div>
   );
-}
+};
+
+export default OptionList
