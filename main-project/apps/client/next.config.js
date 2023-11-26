@@ -15,6 +15,12 @@ module.exports = {
         port: '',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'api-prod-minimal-v510.vercel.app',
+        port: '',
+        pathname: '**',
+      },
     ],
   },
 };
