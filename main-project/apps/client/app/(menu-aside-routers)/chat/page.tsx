@@ -46,7 +46,7 @@ const Chat = () => {
         {
           
           [...Array(20)].map((_, idx) => (
-            <Userschat time={data.time} name={data.name} msg={data.msg} url={data.url} key={idx} />
+            <Userschat  time={data.time} name={data.name} msg={data.msg} url={data.url} key={idx} />
             ))
           }
           </>
