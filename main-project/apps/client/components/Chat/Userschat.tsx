@@ -5,11 +5,10 @@ import React from 'react'
 type usersChat = {
     name: string,
     msg: string,
-    numberMsg: number,
     url: string,
     time: string
 }
-function Userschat({ msg, name, time, numberMsg, url }) {
+function Userschat({ msg, name, time, url }) {
 
     return (
         <div className='flex  relative h-16 w-full bg-black hover:bg-[#1B1B1B]'>
@@ -27,14 +26,10 @@ function Userschat({ msg, name, time, numberMsg, url }) {
                         {msg}
                     </span>
                 </div>
-                <div className='flex flex-col  justify-between items-center'>
-                    <span className=' text-[#707991]  mt-2 justify-end text-sm'>
+                <div className='flex  items-start mt-1'>
+                    <span className=' text-[#707991]  mt-2 justify-end text-xs'>
                         {time}
                     </span>
-                    <span className=' flex justify-center items-center mb-2 text-black w-5 h-5 bg-[#B2F35F] rounded-full'>
-                        {numberMsg}
-                    </span>
-
                 </div>
             </div>
         </div>
