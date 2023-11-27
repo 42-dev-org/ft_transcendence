@@ -59,7 +59,7 @@ const Chat = () => {
         <span className='flex justify-center items-center text-3xl  font-bold h-14' >Messages</span>
         <div>
 
-          <input type="text" placeholder=' Search' className=' bg-[#dfd4d4] h-12 w-full text-black  rounded-full pl-3' />
+          <input type="text" placeholder=' Search' className=' bg-white h-10 w-full text-black  rounded-full pl-3' />
         </div>
         <div className='flex   w-full h-12  justify-center bg-black items-center '>
           <div className={`flex w-1/3  h-10 hover:bg-[#1B1B1B] rounded-md  text-white justify-center items-center ${component === 'users' ? ' bg-[#1B1B1B] border border-spacing-2 border-[#B2F35F]': ''} `}    onClick={setComponent.bind(null, 'users')} >Users</div>
