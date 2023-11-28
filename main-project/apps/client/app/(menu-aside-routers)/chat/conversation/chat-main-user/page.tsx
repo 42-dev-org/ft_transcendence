@@ -1,17 +1,21 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import type { StaticImageData } from "next/image";
 import Image from "next/image";
 import chatImage from "assets-workspace/images/bg-chat-Conversation-user.png";
 
-
 interface PropsType {
-  imageUser: string;
-  fullNmae: string;
-  online: boolean;
+  fullName: string;
+  image: string | StaticImageData;
+  status: "online" | "offline";
 }
 
-export default function ConversationUi(props: PropsType) :JSX.Element {
-  const {imageUser, fullName, online} = props
+export default function ConversationUi({
+  fullName = "mustapha ouarsas",
+  image= "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg",
+  status = "offline",
+}: PropsType): JSX.Element {
+
 
   const [msg, setMsg] = useState("");
   const msgRef = useRef<HTMLDivElement>(null);
@@ -22,7 +26,7 @@ export default function ConversationUi(props: PropsType) :JSX.Element {
       timeAt: "18:16",
     },
   ]);
-  const onSetMessage = (e) =>  {
+  const onSetMessage = (e) => {
     e.preventDefault();
     setMessages([
       ...messages,
@@ -54,7 +58,7 @@ export default function ConversationUi(props: PropsType) :JSX.Element {
                 alt="user"
                 className="rounded-full"
                 height={44}
-                src="https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg"
+                src={image}
                 width={44}
               />
               <div className="absolute -right-1 bottom-1">
@@ -66,8 +70,8 @@ export default function ConversationUi(props: PropsType) :JSX.Element {
             </div>
 
             <div className="flex flex-col justify-between">
-              <h5 className="font-semibold">Mustapha Ouarsas</h5>
-              <span className="text-xs font-normal text-green-400">Online</span>
+              <h5 className="font-semibold">{fullName}</h5>
+              <span className={`text-xs font-normal ${status === "online" ? " text-green-400" : "text-red-500"} `}>{status}</span>
             </div>
           </div>
           <div>
@@ -89,9 +93,9 @@ export default function ConversationUi(props: PropsType) :JSX.Element {
         <div
           className="flex flex-col h-full"
           style={{
-              backgroundImage:
+            backgroundImage:
               "url(https://cdn2.f-cdn.com/contestentries/2046262/58571795/61f00c583e000_thumb900.jpg)",
-              // <Image alt="backgroundImage" src={chatImage} height={1000} width={800} />
+            // <Image alt="backgroundImage" height={100} src={chatImage}  width={800} />
           }}
         >
           <div
@@ -100,10 +104,10 @@ export default function ConversationUi(props: PropsType) :JSX.Element {
           >
             {messages?.map(({ msg, userId }, index) => (
               <div
-              className={`w-max max-w-[50%] p-2 flex  rounded-xl ${
+                className={`w-max max-w-[50%] p-2 flex  rounded-xl ${
                   userId === 1 ? "bg-[#b9ef72] self-end" : "bg-slate-300"
                 }`}
-              key={index}
+                key={index}
               >
                 <span>{msg}</span>
               </div>
