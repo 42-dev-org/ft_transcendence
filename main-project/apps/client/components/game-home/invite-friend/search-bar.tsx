@@ -7,7 +7,9 @@ import { user } from "./interface/user";
 
 const SearchBar = ({setFriendsData, end, setEnd} ) => {
 const [search, setSearch] = useState<string>("")
-useEffect(() =>  {
+
+
+const handelOnClick = () =>  {
   
   const fetchData = async () => {
 
@@ -19,7 +21,9 @@ useEffect(() =>  {
   setFriendsData(result.slice(0, end))
   }
   fetchData();
-}, [search])
+}
+
+
     const handleChange =  (e: any) =>
     {
         setSearch(e.target.value);
@@ -31,7 +35,8 @@ useEffect(() =>  {
         // setFriendsData(friends.filter((friend: user) => friend.username.startsWith(e.target.value)).slice(0, end));
     }
   return (
-    <form className="flex items-center">
+    // <form className="flex items-center">
+    <div className="flex flex-row gap-2">
       <label htmlFor="game search" className="sr-only">
         Search
       </label>
@@ -48,8 +53,9 @@ useEffect(() =>  {
           required
         />
       </div>
-      <SearchButton handleChange={handleChange}/>
-    </form>
+      <SearchButton handleChange={handelOnClick}/>
+      </div>
+    // </form>
   );
 };
 

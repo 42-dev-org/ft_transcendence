@@ -40,11 +40,16 @@ const FriendItem: React.FC<user> = ({ id, fullName, username, avatar }) => {
         </div>
         <div className="flex-shrink-0">
           <button
-            type="submit"
-            className="inline-flex items-center py-2 pl-2 pr-4 text-sm font-medium text-white bg-black rounded-full  hover:bg-[#00000097] focus:ring-4 focus:outline-none focus:ring-blue-300"
+            className="inline-flex md:hidden items-center py-1 pl-2 pr-2 text-sm font-medium text-white bg-black rounded-full hover:bg-[#00000097] focus:ring-4 focus:outline-none focus:ring-blue-300"
           >
-            <svg
-              className="w-4 h-4 me-2"
+            +</button>
+
+          <button
+            type="submit"
+            className="hidden md:inline-flex items-center py-2 pl-2 pr-4 text-sm font-medium text-white bg-black rounded-full hover:bg-[#00000097] focus:ring-4 focus:outline-none focus:ring-blue-300"
+          >
+            {/* <svg
+              className="w-4 h-4 me-2 bg-black rounded-full inline-flex"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -56,7 +61,8 @@ const FriendItem: React.FC<user> = ({ id, fullName, username, avatar }) => {
                 strokeWidth="2"
                 d="M12 6v6m0 0v6m0-6h6m-6 0H6"
               />
-            </svg>
+            </svg> */}
+            <span className="inline-flex px-2">+</span>
             Invite
           </button>
         </div>
