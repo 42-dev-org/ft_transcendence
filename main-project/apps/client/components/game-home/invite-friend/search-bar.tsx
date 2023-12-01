@@ -1,5 +1,5 @@
 // SearchBar.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiSearchAlt } from "react-icons/bi";
 import SearchButton from "./search-button";
 import { friends } from "./data/friends";
@@ -7,14 +7,28 @@ import { user } from "./interface/user";
 
 const SearchBar = ({setFriendsData, end, setEnd} ) => {
 const [search, setSearch] = useState<string>("")
-    const handleChange = (e: any) =>
+useEffect(() =>  {
+  
+  const fetchData = async () => {
+
+  const res = await fetch('http://localhost:3001/api/search?key='+search, {
+    method: "GET",
+  });
+  const result = await res.json();
+  setEnd(10);
+  setFriendsData(result.slice(0, end))
+  }
+  fetchData();
+}, [search])
+    const handleChange =  (e: any) =>
     {
         setSearch(e.target.value);
+        
         // if(e.target.value == ""){
         //     setEnd(10);
         // }
-        // friends.slice(0, end)
-        setFriendsData(friends.filter((friend: user) => friend.username.startsWith(e.target.value)).slice(0, end));
+        // // friends.slice(0, end)
+        // setFriendsData(friends.filter((friend: user) => friend.username.startsWith(e.target.value)).slice(0, end));
     }
   return (
     <form className="flex items-center">
@@ -34,7 +48,7 @@ const [search, setSearch] = useState<string>("")
           required
         />
       </div>
-      <SearchButton />
+      <SearchButton handleChange={handleChange}/>
     </form>
   );
 };

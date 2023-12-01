@@ -1,9 +1,10 @@
 // SearchButton.js
 import React from "react";
 
-const SearchButton = () => {
+const SearchButton = ({handleChange}) => {
   return (
     <button
+    onClick={handleChange}
       type="submit"
       className="inline-flex items-center py-2.5 px-3 ms-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-[#00000097] focus:ring-4 focus:outline-none focus:ring-blue-300 "
     >

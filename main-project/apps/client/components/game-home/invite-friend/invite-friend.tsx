@@ -9,10 +9,10 @@ const InviteFriend = () => {
     const [end, setEnd] = useState<number>(10)
     const [friendsData, setFriendsData] = useState<user[]>(friends.slice(0, end));
     
-    useEffect(() => {
-        console.log(end);
-        setFriendsData(friends.slice(0, end))
-    }, [end])
+    // useEffect(() => {
+    //     console.log(end);
+    //     setFriendsData(friends.slice(0, end))
+    // }, [end])
 
 
     const handleMore = ()=> {
