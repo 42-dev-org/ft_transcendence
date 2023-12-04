@@ -22,7 +22,6 @@ function Profile(): JSX.Element {
         alert(error);
     };
   }
-  console.log('xxx', picProfile)
   return (
     <div className=' flex flex-col w-full gap-y-3 h-full justify-center items-center'>
         <div className='w-44 h-44 relative'>

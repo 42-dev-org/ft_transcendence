@@ -70,7 +70,7 @@ export default function Users(): JSX.Element {
   return (
     <div className="flex flex-col overflow-y-auto  whitespace-nowrap  p-4 h-full w-full gap-10">
       <div className="flex md:flex-row flex-col w-full items-center justify-center gap-5 mt-10">
-        <input className="h-10 p-1 px-3 rounded-md w-full " />
+        <input className="h-10 p-1 px-3 rounded-md w-full "  type="text" placeholder=' Search' />
         <Button onClick={() => {}} title="Search" className="w-full" />
         <select value={componenet} onChange={(e) => {setComponent(e.target.value as ComponeetType)}}  className="block w-full p-2  text-sm rounded-lg bg-[#ffffff1a] border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
         {["search", "friends", "invitations", "banned"].map((el) => (
