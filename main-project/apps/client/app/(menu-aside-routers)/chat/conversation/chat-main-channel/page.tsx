@@ -14,7 +14,7 @@ export default function ConversationUi({
   channelName = "Channel",
 }: PropsType): JSX.Element {
 
-  const [showOpstions, setshowOpstions] = useState(true);
+  const [showOpstions, setshowOpstions] = useState(false);
   const [msg, setMsg] = useState("");
   const msgRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState([
@@ -84,8 +84,14 @@ export default function ConversationUi({
           </div>
         </div>
 
-        <div className="flex flex-col h-full">
-            {/* <Image alt="backgroundImage"  height={100} src={chatImage}  width={800} /> */}
+        <div
+          className="flex flex-col h-full"
+          style={{
+            backgroundImage:
+              "url(https://cdn2.f-cdn.com/contestentries/2046262/58571795/61f00c583e000_thumb900.jpg)",
+            // <Image alt="backgroundImage" height={100} src={chatImage}  width={800} />
+          }}
+        >
           <div
             className="h-full w-full flex  overflow-y-auto flex-col  bg-green p-4 gap-4 scrollbar-hide"
             ref={msgRef}
@@ -133,3 +139,15 @@ export default function ConversationUi({
     </div>
   );
 }
+
+
+/**
+ * admins:
+ *    - should add people
+ *    - should ban kick and mute
+ *    - should change name and password if conversation locked if not he can lock channel with password
+ * users:
+ *    - can view all members
+ *    - can either view profile or invite for game
+ * ! any actions user can do ofc admin also can do'it
+*/
