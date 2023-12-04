@@ -29,6 +29,7 @@ export default function ConversationUi({
   ]);
   const onSetMessage = (e) => {
     e.preventDefault();
+    if (msg.length) {
     setMessages([
       ...messages,
       {
@@ -38,6 +39,7 @@ export default function ConversationUi({
       },
     ]);
     setMsg("");
+  }
   };
 
   useEffect(() => {
@@ -50,8 +52,8 @@ export default function ConversationUi({
   }, []);
 
   return (
-    <div className="w-full flex justify-center p-4 h-full">
-      <div className="w-1/2 flex flex-col ">
+    <div className="w-2/3 flex justify-center p-2 h-full">
+      <div className="w-full flex flex-col ">
         <div className="w-full flex bg-black p-1 text-[#F5F5F5] justify-between items-center">
           <div className="flex gap-5 items-center h-14">
             <div className="w-11 h-11 relative">
@@ -103,7 +105,7 @@ export default function ConversationUi({
         </div>
 
         <div
-          className="flex flex-col h-full"
+          className="flex flex-col h-[90%]"
           style={{
             backgroundImage:
               "url(https://cdn2.f-cdn.com/contestentries/2046262/58571795/61f00c583e000_thumb900.jpg)",
@@ -136,7 +138,7 @@ export default function ConversationUi({
               onChange={(e) => setMsg(e.target.value)}
             />
 
-            <button className="relative" type="submit" >
+            <button className="" type="submit" >
               <svg
                 className="absolute top-5 right-8"
                 fill="none"

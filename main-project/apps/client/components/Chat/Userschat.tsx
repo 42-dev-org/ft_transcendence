@@ -6,12 +6,13 @@ type usersChat = {
     name: string,
     msg: string,
     url: string,
-    time: string
+    time: string,
+    onClick: VoidFunction
 }
-function Userschat({ msg, name, time, url }) {
+function Userschat({ msg, name, time, url, onClick }) {
 
     return (
-        <div className='flex  relative h-16 w-full bg-black hover:bg-[#1B1B1B]'>
+        <div className='flex  relative h-16 w-full bg-black hover:bg-[#1B1B1B]' onClick={onClick} >
             <div className=''>
                 <Image width={40} height={40} className='rounded-full absolute  left-3 bottom-2 ' alt='zakaria' src={url} />
             </div>
