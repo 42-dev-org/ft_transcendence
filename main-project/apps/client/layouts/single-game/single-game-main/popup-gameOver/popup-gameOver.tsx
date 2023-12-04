@@ -7,6 +7,7 @@ import { FaHome } from "react-icons/fa";
 import SingleGameMainButton from "../single-game-main-button/single-game-main-button";
 import Confetti from "./popup-confetti/popup-confetti";
 
+
 export function PopupGameOver() {
   return (
       <div className="absolute w-full h-full backdrop-blur-sm top-0 flex justify-center items-center ">
@@ -14,8 +15,6 @@ export function PopupGameOver() {
         <div className=" w-3/4 z-50 h-3/4 flex flex-col py-6 items-center backdrop-blur-2xl bg-white bg-opacity-25 rounded-lg text-white ">
           <Image alt="gameGif" height={200} src={gameover} width={400} />
           <div className="w-[80%] flex flex-col md:flex-row h-full items-center text-white text-sm md:justify-between gap-6">
-            {/* Add the Confetti component here */}
-            <Confetti />
             <SingleGameMainButton
               title="PLAY AGAIN"
               link="#"
