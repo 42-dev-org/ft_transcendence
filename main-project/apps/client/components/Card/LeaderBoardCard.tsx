@@ -19,7 +19,7 @@ type usersLeaderBoardProrps = {
 
 function LeaderBoardCard({ name, url, kay }: usersLeaderBoardProrps) {
 
-  const [tag, setTag] = useState<string | StaticImport>(First);
+  const [tag, setTag] = useState<string | StaticImport | number>(First);
 
   const getAssets = () => {
     switch (kay) {

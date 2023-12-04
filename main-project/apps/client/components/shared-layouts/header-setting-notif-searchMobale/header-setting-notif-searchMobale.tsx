@@ -72,8 +72,8 @@ function HeaderSettingNotifSearchMobale(): JSX.Element {
                         IsOpenSett &&
                         <div className=' dropdown-content md:w-64 w-64 z-20 flex rounded-md  h-24 overflow-hidden absolute lg:right-2 right-0  bg-[#1B1B1B] top-7' ref={settRef}>
                             <ul className='flex flex-col  items-center w-full overflow-y-auto' >
-                                <Link href='/profile' onClick={closeMenus} className='text-white h-11 flex justify-center items-center w-full hover:bg-[#302d2d] rounded-md mb-1' > Profile</Link>
-                                <button onClick={closeMenus} className='w-[80%] flex justify-center items-center h-11 bg-[#B2F35F] rounded-full'>Logout</button>
+                                <Link href='/profile' onClick={closeMenus} className='text-white h-11 flex justify-center items-center w-full hover:bg-[#302d2d] rounded-md mb-1 hover:underline' > Profile</Link>
+                                <button onClick={closeMenus} className='w-[80%] flex justify-center items-center h-9 bg-[#B2F35F] rounded-full'>Logout</button>
                             </ul>
                         </div>
                     }
