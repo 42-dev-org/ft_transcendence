@@ -19,33 +19,43 @@ import { PutAbilities } from "src/global/rbac/decorator/rbac.decorator";
 import { Actions } from "src/global/rbac/enum/rbac.enum";
 import { RbacGuard } from "src/global/rbac/guard/rbac.guard";
 import { GetUser } from "src/shared/decorators/get-user.decorator";
-import { User } from "db";
+import { User, $Enums } from "db";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { FileValidatorPipe } from "src/global/media/pipes/media.pipe";
 import { MediaFile } from "src/shared/types/media";
 import { Request } from "express";
+import { PaginationDto } from "src/helpers/dto/pagination.dto";
 
 @Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @PutAbilities({ action: Actions.Manage, subject: "User" })
-  @UseGuards(AuthGuard(), RbacGuard)
-  findAll() {
-    return this.usersService.findAll();
+  // @PutAbilities({ action: Actions.Manage, subject: "User" })
+  // @UseGuards(AuthGuard(), RbacGuard)
+  @UseGuards(AuthGuard())
+  findAll(
+    @GetUser() { uid }: User,
+    @Param("type") type: $Enums.FriendStatus,
+    @Param("page") page: number,
+    @Param("limit") limit: number
+  ) {
+    return this.usersService.getFriends(uid, type || "Pending", new PaginationDto(page, limit));
   }
 
   @Get("search")
-  async searchForFriend(@Param("search") s: string) {
-    return this.usersService.searchForUser(s);
+  async searchForFriend(
+    @Param("search") s: string,
+    @Param("page") page: number,
+    @Param("page") limit: number
+  ) {
+    return this.usersService.searchForUser(s, new PaginationDto(page, limit));
   }
 
   @Get("me")
   // @PutAbilities({ action: Actions.Read, subject: 'User' })
   @UseGuards(AuthGuard())
   findMe(@GetUser() { uid }: User, @Req() req: Request) {
-    console.log(req.headers);
     return this.usersService.findOne(uid);
   }
 

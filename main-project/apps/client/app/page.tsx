@@ -3,6 +3,7 @@ import "./home.css";
 import IMAge from "assets-workspace/svg/Vector.svg";
 import Image from "next/image";
 import Pong from "../components/pong";
+import Link from "next/link";
 
 function Home(): JSX.Element {
   return (
@@ -22,9 +23,14 @@ function Home(): JSX.Element {
             create a team, win championships. Meet GAMEPLAYERS and have fun
             playing for real!
           </p>
-          <button className="w-52 bg-[#b9ef72] rounded-md text-black text-xs whitespace-nowrap px-3 py-3 flex justify-center items-center hover:opacity-75 ">
+          <Link
+            href={
+              "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-88d559b4c7e2bb3c3f1870258b38607b99ab7ac557cafe7e9a5f0431ec3f8236&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fapi%2Fv1%2Fauth%2F42&response_type=code"
+            }
+            className="w-52 bg-[#b9ef72] rounded-md text-black text-xs whitespace-nowrap px-3 py-3 flex justify-center items-center hover:opacity-75 "
+          >
             Login with Intra
-          </button>
+          </Link>
         </div>
 
         <div className="mt-16 sm:mt-24 lg:mt-0 lg:flex-shrink-0 lg:flex-grow md:rotate-90">

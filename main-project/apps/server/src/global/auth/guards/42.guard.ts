@@ -35,11 +35,11 @@ export class Auth42Guard implements CanActivate {
       {
         grant_type: "authorization_code",
         client_id:
-          "u-s4t2ud-0ba76f9d090b025cccb77b6ad010b154e1a9ca1b8b466a0c0e3f9b7101321393",
+          "u-s4t2ud-88d559b4c7e2bb3c3f1870258b38607b99ab7ac557cafe7e9a5f0431ec3f8236",
         code,
         client_secret:
-          "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",
-        redirect_uri: "http://localhost:8080/api/v1/42oauth",
+          "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",
+        redirect_uri: "http://localhost:8080/api/v1/auth/42",
       }
     );
 
