@@ -211,11 +211,12 @@ const Chat = () => {
             status="offline"
           />
         ) : conversationType === "channels" ? (
-          <ConversationUiChannel channelName="abatera" />
+          <ConversationUiChannel channelName="abatera" fullName={""} />
         ) : null}
       </div>
     </Fragment>
   );
 };
 
-export default withAuth(Chat);
+export default Chat;
+// export default withAuth(Chat);

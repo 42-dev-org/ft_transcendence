@@ -125,8 +125,9 @@ export default function ConversationUiChannel({
             <MenuItem iconBtn={
               <IoMdMore size={24} color="gray"/>
             } >
-              <button className=" hover:bg-green-300 rounded-md" onClick={() => {setIsAddOpen(true)}} >Add users</button>
-              <button className="hover:bg-green-300 rounded-md px-2" onClick={() => setshowOpstions(true)}>View Details</button>
+              <button className=" hover:bg-[#B2F35F] rounded-md" onClick={() => {setIsAddOpen(true)}} >Add users</button>
+              <button className="hover:bg-[#B2F35F] rounded-md px-2" onClick={() => setshowOpstions(true)}>View Details</button>
+              <button className="hover:bg-[#B2F35F] rounded-md px-2" >kick</button>
             </MenuItem>
           </div>
           <div className="flex w-full h-[90%]">
@@ -181,9 +182,13 @@ export default function ConversationUiChannel({
                 </button>
               </form>
             </div>
-            {showOpstions && <div className="flex w-1/3 flex-col h-full bg-red-600">
+            {showOpstions && <div className="flex w-1/3 flex-col h-full bg-[#6666] rounded-md">
               <button onClick={() => setshowOpstions(false)}>
-                <div className=""><IoIosCloseCircleOutline size={30} color="white"/></div>
+                <div className="close icon"><IoIosCloseCircleOutline size={30} color="white"/></div>
+                <div>
+                  
+                </div>
+
 
               </button>
             </div>}
