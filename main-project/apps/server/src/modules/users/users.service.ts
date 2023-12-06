@@ -92,8 +92,19 @@ export class UsersService {
     };
   }
 
-  async getFriends(uid: string, status: $Enums.FriendStatus) {
-    return this.repository.getAllFriends(uid, status);
+  async getFriends(uid: string, status: $Enums.FriendStatus, p: PaginationDto) {
+    const { take, skip } = getPaginationQuery(p);
+
+    const [data, totalCount] = await this.repository.getAllFriends(
+      uid,
+      status,
+      { skip, take }
+    );
+    const pagination = getPaginationResponse(p, totalCount);
+    return {
+      data,
+      pagination,
+    };
   }
 
   async removeFriend(uid: string, user: string) {

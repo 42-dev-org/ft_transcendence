@@ -11,13 +11,12 @@ class Api {
 
   constructor(private readonly baseUrl: string = constants.URL) {
     this.initializeHttpClient();
-    this.initializeSocketIO();
+    // this.initializeSocketIO();
   }
 
   private initializeHttpClient(): void {
-    const url = new URL(this.baseUrl);
     this.httpClient = axios.create({
-      baseURL: url.toString(),
+      baseURL: this.baseUrl,
       timeout: 10000,
       withCredentials: true,
       headers: {
@@ -28,8 +27,7 @@ class Api {
   }
 
   private initializeSocketIO(): void {
-    const url = new URL(this.baseUrl);
-    this.ioClient = new Manager(url.toString(), {
+    this.ioClient = new Manager(this.baseUrl, {
       autoConnect: true,
     }).socket("/");
   }
@@ -42,10 +40,8 @@ class Api {
   }
 
   api = () => ({
-    example: {
-      getExample: () => exampleLib.getExample(this.httpClient),
-      saveExample: (example: { data: string }) =>
-        exampleLib.saveExample(this.httpClient, example),
+    auth: {
+      me: () => this.httpClient.get('/users/me')
     },
   });
 
@@ -53,4 +49,4 @@ class Api {
   
 }
 
-export const api = new Api("");
+export const api = new Api();
