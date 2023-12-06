@@ -9,7 +9,7 @@ export default function SinglegameMain({
   isActive: boolean;
 }): JSX.Element {
   return (
-    <div className=" w-full h-[1024px] p-8">
+    <div className=" w-[70%] p-8" style={{aspectRatio: 9/16}}>
       <div className="game-canvas  bg-blue-950 w-full h-full relative border-[#B2F35F] border-[5px] flex flex-col justify-between  py-2 ">
         <div className="w-full h-4 flex justify-center items-center">
           <div className="w-20 h-full bg-white"></div>
@@ -20,7 +20,7 @@ export default function SinglegameMain({
         <div className="w-full h-4 flex justify-center items-center">
           <div className="w-20 h-full bg-white"></div>
         </div>
-        {isActive && <PopupWinner />}
+        {/* {isActive && <PopupWinner />} */}
         {/* {isActive && <PopupGameOver />} */}
       </div>
     </div>
