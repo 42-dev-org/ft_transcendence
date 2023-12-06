@@ -28,8 +28,8 @@ export class UsersRepository {
       },
       skip,
       take,
-    }
-    const getUsers =  this.prisma.user.findMany(query);
+    };
+    const getUsers = this.prisma.user.findMany(query);
     const getCount = this.prisma.user.count({
       where: {
         OR: [
@@ -40,8 +40,8 @@ export class UsersRepository {
       },
       skip,
       take,
-    })
-    return Promise.all([getCount, getUsers])
+    });
+    return Promise.all([getCount, getUsers]);
   }
 
   async create(data: Prisma.UserCreateInput) {
@@ -75,8 +75,12 @@ export class UsersRepository {
     });
   }
 
-  async getAllFriends(user: string, status: $Enums.FriendStatus) {
-    return this.prisma.friend.findMany({
+  async getAllFriends(
+    user: string,
+    status: $Enums.FriendStatus,
+    { take, skip }: { skip: number; take: number }
+  ) {
+    const query = {
       where: {
         AND: [
           {
@@ -85,7 +89,44 @@ export class UsersRepository {
           status && { status },
         ],
       },
-    });
+    };
+
+    return Promise.all([
+      this.prisma.user.findMany({
+        where: {
+          AND: [
+            {
+              OR: [
+                {
+                  friendOf: {
+                    some: {
+                      OR: [
+                        { user1uid: user, status },
+                        { user2uid: user, status },
+                      ],
+                    },
+                  },
+                },
+                {
+                  myFriends: {
+                    some: {
+                      OR: [
+                        { user1uid: user, status },
+                        { user2uid: user, status },
+                      ],
+                    },
+                  },
+                },
+              ],
+            },
+            { uid: { not: user } },
+          ],
+        },
+        take,
+        skip,
+      }),
+      this.prisma.friend.count(query),
+    ]);
   }
 
   async ban(uid: string, user: string) {
