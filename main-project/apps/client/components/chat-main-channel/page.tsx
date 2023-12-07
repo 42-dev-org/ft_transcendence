@@ -212,4 +212,7 @@ export default function ConversationUiChannel({
   muted
   memeber
   admins
+  
+  TODO
+    * add the list of members in channel
 */
