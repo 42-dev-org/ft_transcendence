@@ -211,7 +211,7 @@ const Chat = () => {
             status="offline"
           />
         ) : conversationType === "channels" ? (
-          <ConversationUiChannel channelName="abatera" fullName={""} />
+          <ConversationUiChannel fullName={""} />
         ) : null}
       </div>
     </Fragment>

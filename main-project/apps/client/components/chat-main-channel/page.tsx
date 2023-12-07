@@ -10,10 +10,11 @@ import { Fragment } from "react";
 import MenuItem from "../Menu-chat";
 import ModalUI from "../Modal";
 import Button from "../Button";
-import SenderLayout from "./senderLayout";
+import SenderLayout from "./SenderLayout";
 import RecieverLayout from "./RecieverLayout";
 import { ListUsersChat } from "../liste/ListUsersChat";
 import { IoIosCloseCircleOutline , IoMdMore} from "react-icons/io";
+import { ChangeChannelName } from "./ChangeChannelName";
 
 
 
@@ -26,15 +27,14 @@ const data = {
 }
 
 interface PropsType {
-  channelName: string;
   fullName: string;
 }
 
 export default function ConversationUiChannel({
-  channelName = "Channel",
   fullName = "mustapha ouarsass1",
 }: PropsType): JSX.Element {
   const [isAddOpen, setIsAddOpen] = useState(false)
+  const [channelName, setChannelName] = useState("Homaygat")
 
   const [showOpstions, setshowOpstions] = useState(false);
   const [msg, setMsg] = useState("");
@@ -182,16 +182,13 @@ export default function ConversationUiChannel({
                 </button>
               </form>
             </div>
-            {showOpstions && <div className="flex w-1/3 flex-col h-full bg-[#6666] rounded-md">
-              <button onClick={() => setshowOpstions(false)}>
-                <div className="close icon"><IoIosCloseCircleOutline size={30} color="white"/></div>
-                <div>
-                  
+            {showOpstions && <div className="flex w-1/3 flex-col h-full bg-[#6666] rounded-md border-2 border-zinc-400">
+              <IoIosCloseCircleOutline size={30} color="white" className="cursor-pointer self-end m-1" onClick={() => setshowOpstions(false)}/>
+                <div className="">
+                  <ChangeChannelName channelName={channelName} onSetName={(name: string) => setChannelName(name)}/>
                 </div>
-
-
-              </button>
-            </div>}
+            </div>
+            }
           </div>
         </div>
       </div>
@@ -208,4 +205,11 @@ export default function ConversationUiChannel({
  * users:
  *    - can either view profile or invite for game
  * ! any actions user can do ofc admin also can do'it
+ * 
+ * 
+ * for channel
+  baned 
+  muted
+  memeber
+  admins
 */

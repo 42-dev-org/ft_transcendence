@@ -62,35 +62,31 @@ export default function ConversationUi({
       <div className="w-full flex flex-col ">
         <div className="w-full flex bg-black p-1 text-[#F5F5F5] justify-between items-center">
           <div className="flex gap-5 items-center h-14">
-            <div className="w-11 h-11 relative">
-              <Image
-                alt="user"
-                className="rounded-full"
-                height={44}
-                src={image}
-                width={44}
-              />
-              <div className="absolute -right-1 bottom-1">
-                <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                </span>
+              <div className="w-11 h-11 relative">
+                <Image
+                  alt="user"
+                  className="rounded-full"
+                  height={44}
+                  src={image}
+                  width={44}
+                />
+                <div className="absolute -right-1 bottom-1">
+                  <span className="relative flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex flex-col justify-between">
+                <h5 className="font-semibold">{fullName}</h5>
+                <span className={`text-xs font-normal ${status === "online" ? " text-green-400" : "text-red-500"} `}>{status}</span>
               </div>
             </div>
-
-            <div className="flex flex-col justify-between">
-              <h5 className="font-semibold">{fullName}</h5>
-              <span className={`text-xs font-normal ${status === "online" ? " text-green-400" : "text-red-500"} `}>{status}</span>
-            </div>
-          </div>
-          <MenuItem  iconBtn={
-              <IoMdMore size={24} color="gray"/>
-          } >
-            <span>Block</span>
-            <Link className="hover:bg-[#B2F35F] rounded-md px-2" href="users/1">
-              View Profile
-            </Link>
-            <span>Invite Game</span>
+          <MenuItem  iconBtn={<IoMdMore size={24} color="gray"/>}>
+            <button className="hover:bg-[#B2F35F] rounded-md px-2">Block</button>
+            <Link className="hover:bg-[#B2F35F] rounded-md px-2" href="users/1">View Profile</Link>
+            <button className="hover:bg-[#B2F35F] rounded-md px-2">Invite Game</button>
           </MenuItem>
         </div>
 
