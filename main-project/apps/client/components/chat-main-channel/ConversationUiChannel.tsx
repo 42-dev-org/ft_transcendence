@@ -10,20 +10,32 @@ import { Fragment } from "react";
 import MenuItem from "../Menu-chat";
 import ModalUI from "../Modal";
 import Button from "../Button";
+import SenderLayout from "./SenderLayout";
+import RecieverLayout from "./RecieverLayout";
+import { ListUsersChat } from "../liste/ListUsersChat";
+import { IoIosCloseCircleOutline , IoMdMore} from "react-icons/io";
+import { ChangeChannelName } from "./ChangeChannelName";
+import OptionsListChannel from "./OptionsListChannel";
 
+
+
+
+const data = {
+  msg: 'how about your day',
+  name: 'ouarsass',
+  numberMsg: 2,
+  url: 'https://cdn.intra.42.fr/users/47192a7a27a46c2c714c6723e30a3cd2/mouarsas.jpg',
+}
 
 interface PropsType {
-  channelName: string;
   fullName: string;
-  image: string | StaticImageData;
 }
 
 export default function ConversationUiChannel({
-  channelName = "Channel",
   fullName = "mustapha ouarsass1",
-  image= "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg",
 }: PropsType): JSX.Element {
   const [isAddOpen, setIsAddOpen] = useState(false)
+  const [channelName, setChannelName] = useState("Homaygat")
 
   const [showOpstions, setshowOpstions] = useState(false);
   const [msg, setMsg] = useState("");
@@ -32,19 +44,38 @@ export default function ConversationUiChannel({
     {
       userId: 2,
       msg: "Hi members enybody here ?",
-      timeAt: "18:16",
+      senderName: "Abdellah",
+      imageUrl: "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg"
+    },
+    {
+      userId: 1,
+      msg: "Hi Players",
+      senderName: "mustapha",
+      imageUrl: "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg"
+    },
+    {
+      userId: 3,
+      msg: "Hi Mate",
+      senderName: "Zakaria",
+      imageUrl: "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_18.jpg"
+    },
+    {
+      userId: 4,
+      msg: "Hi Brothers",
+      senderName: "Mounach",
+      imageUrl: "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_19.jpg"
     },
   ]);
   const onSetMessage = (e) => {
     e.preventDefault();
-    if (msg.length && msg.trim()) {
-
+    if (msg.trim() && msg.length) {
       setMessages([
         ...messages,
         {
           userId: 1,
           msg,
-          timeAt: "18:16", //getTime()
+          imageUrl: "",
+          senderName: "mustapha"
         },
       ]);
       setMsg("");
@@ -64,19 +95,16 @@ export default function ConversationUiChannel({
   const onCloseAddModal = () => setIsAddOpen(false)
   return (
     <Fragment>
-      <ModalUI open={isAddOpen} onClose={onCloseAddModal} title='add Conversation'>
-        <div className='flex justify-center items-center p-3'>
+      <ModalUI open={isAddOpen} onClose={onCloseAddModal} title='Add Users'>
+        <div className='flex justify-center flex-col gap-y-5 items-center p-3'>
           <div className='flex flex-row'>
             <input type="text" className='h-7 p-1 px-3 rounded-md w-2/3 ' />
             <Button onClick={() => { }} title='Search' className=' h-7 flex justify-center items-center mx-2' ></Button>
           </div>
-          <div className=" overflow-y-auto">
+          <div className=" overflow-y-auto ">
             {
-              [...Array(5)].map((_, i) => (
-                <div className="flex flex-row justify-between w-72 rounded-lg bg-black my-1 items-center">
-                  {/* here logic zakaria */}
-
-                </div>
+              [...Array(4)].map((_, i) => (
+                <ListUsersChat name={data.name} url={data.url} key={i} className="" />
               ))
             }
           </div>
@@ -85,7 +113,7 @@ export default function ConversationUiChannel({
 
       <div className="w-2/3 flex justify-center p-2 h-full">
         <div className="w-full flex flex-col ">
-          <div className="w-full flex bg-[#2a2a2a] p-1 text-[#F5F5F5] justify-between items-center rounded-lg">
+          <div className="w-full flex bg-black p-1 text-[#F5F5F5] justify-between items-center rounded-lg">
             <div className="flex gap-5 items-center h-14">
               <div className="w-11 h-11">
                 <MdGroups2 className="rounded-full h-10 w-9" />
@@ -96,27 +124,11 @@ export default function ConversationUiChannel({
               </div>
             </div>
             <MenuItem iconBtn={
-              <svg
-                fill="none"
-                height="24"
-                viewBox="0 0 24 24"
-                width="24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12 8C11.4696 8 10.9609 7.78929 10.5858 7.41421C10.2107 7.03914 10 6.53043 10 6C10 5.46957 10.2107 4.96086 10.5858 4.58579C10.9609 4.21071 11.4696 4 12 4C12.5304 4 13.0391 4.21071 13.4142 4.58579C13.7893 4.96086 14 5.46957 14 6C14 6.53043 13.7893 7.03914 13.4142 7.41421C13.0391 7.78929 12.5304 8 12 8ZM12 14C11.4696 14 10.9609 13.7893 10.5858 13.4142C10.2107 13.0391 10 12.5304 10 12C10 11.4696 10.2107 10.9609 10.5858 10.5858C10.9609 10.2107 11.4696 10 12 10C12.5304 10 13.0391 10.2107 13.4142 10.5858C13.7893 10.9609 14 11.4696 14 12C14 12.5304 13.7893 13.0391 13.4142 13.4142C13.0391 13.7893 12.5304 14 12 14ZM10 18C10 18.5304 10.2107 19.0391 10.5858 19.4142C10.9609 19.7893 11.4696 20 12 20C12.5304 20 13.0391 19.7893 13.4142 19.4142C13.7893 19.0391 14 18.5304 14 18C14 17.4696 13.7893 16.9609 13.4142 16.5858C13.0391 16.2107 12.5304 16 12 16C11.4696 16 10.9609 16.2107 10.5858 16.5858C10.2107 16.9609 10 17.4696 10 18Z"
-                  fill="#707991"
-                />
-              </svg>
+              <IoMdMore size={24} color="gray"/>
             } >
+              <button className=" hover:bg-[#B2F35F] rounded-md" onClick={() => {setIsAddOpen(true)}} >Add users</button>
+              <button className="hover:bg-[#B2F35F] rounded-md px-2" onClick={() => setshowOpstions(true)}>View Details</button>
 
-
-
-            <div onClick={() => {setIsAddOpen(true)}}>Add users</div>
-
-
-              <span onClick={() => setshowOpstions(true)}>View Details
-              </span>
             </MenuItem>
           </div>
           <div className="flex w-full h-[90%]">
@@ -132,14 +144,15 @@ export default function ConversationUiChannel({
                 className="h-full w-full flex  overflow-y-auto flex-col  bg-green p-4 gap-4 scrollbar-hide"
                 ref={msgRef}
               >
-                {messages?.map(({ msg, userId }, index) => (
-                  <div
-                    className={`w-max max-w-[50%] p-2 flex  rounded-xl ${userId === 1 ? "bg-[#b9ef72] self-end" : "bg-slate-300"
-                      }`}
-                    key={index}
-                  >
-                    <span>{msg}</span>
-                  </div>
+                {messages?.map(({ msg, userId, imageUrl, senderName }, index) => (
+                  <Fragment key={index}>
+                  {
+                    userId === 1 ?
+                    <SenderLayout  msg={msg}/>
+                  :
+                 <RecieverLayout msg={msg} senderName={senderName} imageUrl={imageUrl} />
+                  } 
+                  </Fragment>
                 ))}
               </div>
               <form
@@ -170,9 +183,18 @@ export default function ConversationUiChannel({
                 </button>
               </form>
             </div>
-            {showOpstions && <div className="flex w-1/3 flex-col h-full bg-red-600">
-              <button onClick={() => setshowOpstions(false)}>Close</button>
-            </div>}
+            {showOpstions && <div className="flex w-1/3 flex-col h-full bg-[#6666] rounded-md border-2 border-zinc-400 gap-4">
+              <IoIosCloseCircleOutline size={30} color="white" className="cursor-pointer self-end m-1" onClick={() => setshowOpstions(false)}/>
+                <div className=" flex flex-col gap-10">
+                  <div>
+                    <ChangeChannelName channelName={channelName} onSetName={(name: string) => setChannelName(name)}/>
+                  </div>
+                    <div className="flex flex-col items-center justify-center">
+                    <OptionsListChannel/>
+                    </div>
+                </div>
+            </div>
+            }
           </div>
         </div>
       </div>
@@ -189,4 +211,14 @@ export default function ConversationUiChannel({
  * users:
  *    - can either view profile or invite for game
  * ! any actions user can do ofc admin also can do'it
+ * 
+ * 
+ * for channel
+  baned 
+  muted
+  memeber
+  admins
+  
+  TODO
+    * add the list of members in channel
 */
