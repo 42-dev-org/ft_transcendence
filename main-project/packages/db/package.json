@@ -12,11 +12,16 @@
     "db:push": "prisma db push --accept-data-loss",
     "db:dev": "prisma db push --watch",
     "build": "npx tsc",
-    "test": "echo test"
+    "test": "echo test",
+    "db:seed": "npx prisma db seed"
   },
   "devDependencies": {
-    "typescript": "^5.2.2",
     "prisma": "5.4.2",
-    "tsconfig": "workspace:*"
+    "ts-node": "^10.9.2",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.2.2"
+  },
+  "prisma": {
+    "seed": "ts-node src/seed/index.ts"
   }
 }
