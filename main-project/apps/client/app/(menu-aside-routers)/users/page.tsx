@@ -75,14 +75,14 @@ function Users(): JSX.Element {
     }
     if (componenet === "search") {
       return (
-        <div className="grid lg:grid-cols-5  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
+        // <div className="grid lg:grid-cols-5  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
           <div className="grid lg:grid-cols-5  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
             {searchMutation.isSuccess &&
               searchMutation.data?.data?.data.map((user, idx) => (
-                <BannedCArd {...user} key={idx} />
+                <Card {...user} key={idx} />
               ))}
           </div>
-        </div>
+        // </div>
       );
     }
   };
