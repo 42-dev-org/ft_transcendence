@@ -4,6 +4,7 @@ import React from 'react'
 import Button from '../../../../components/Button';
 import AchevementCard from '../../../../components/Card/AchevementCard';
 import HistoryCard from '../../../../components/Card/historyCard';
+import withAuth from '../../../../hoc/auth';
 
 
 const data = {
@@ -106,4 +107,4 @@ function UserProfile() {
   )
 }
 
-export default UserProfile
+export default withAuth(UserProfile)

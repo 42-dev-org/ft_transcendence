@@ -17,7 +17,7 @@ export class UsersRepository {
     return this.prisma.user.findUnique({ where: { login } });
   }
 
-  async searchForUser(search: string, skip: number, take: number) {
+  async searchForUser(search: string) {
     const query = {
       where: {
         OR: [
@@ -26,22 +26,10 @@ export class UsersRepository {
           { login: { contains: search } },
         ],
       },
-      skip,
-      take,
     };
-    const getUsers = this.prisma.user.findMany(query);
-    const getCount = this.prisma.user.count({
-      where: {
-        OR: [
-          { firstName: { contains: search } },
-          { lastName: { contains: search } },
-          { login: { contains: search } },
-        ],
-      },
-      skip,
-      take,
-    });
-    return Promise.all([getCount, getUsers]);
+    const getUsers = await this.prisma.user.findMany(query);
+    console.log(search);
+    return getUsers;
   }
 
   async create(data: Prisma.UserCreateInput) {
@@ -75,11 +63,7 @@ export class UsersRepository {
     });
   }
 
-  async getAllFriends(
-    user: string,
-    status: $Enums.FriendStatus,
-    { take, skip }: { skip: number; take: number }
-  ) {
+  async getAllFriends(user: string, status: $Enums.FriendStatus) {
     const query = {
       where: {
         AND: [
@@ -91,42 +75,37 @@ export class UsersRepository {
       },
     };
 
-    return Promise.all([
-      this.prisma.user.findMany({
-        where: {
-          AND: [
-            {
-              OR: [
-                {
-                  friendOf: {
-                    some: {
-                      OR: [
-                        { user1uid: user, status },
-                        { user2uid: user, status },
-                      ],
-                    },
+    return this.prisma.user.findMany({
+      where: {
+        AND: [
+          {
+            OR: [
+              {
+                friendOf: {
+                  some: {
+                    OR: [
+                      { user1uid: user, status },
+                      { user2uid: user, status },
+                    ],
                   },
                 },
-                {
-                  myFriends: {
-                    some: {
-                      OR: [
-                        { user1uid: user, status },
-                        { user2uid: user, status },
-                      ],
-                    },
+              },
+              {
+                myFriends: {
+                  some: {
+                    OR: [
+                      { user1uid: user, status },
+                      { user2uid: user, status },
+                    ],
                   },
                 },
-              ],
-            },
-            { uid: { not: user } },
-          ],
-        },
-        take,
-        skip,
-      }),
-      this.prisma.friend.count(query),
-    ]);
+              },
+            ],
+          },
+          { uid: { not: user } },
+        ],
+      },
+    });
   }
 
   async ban(uid: string, user: string) {
