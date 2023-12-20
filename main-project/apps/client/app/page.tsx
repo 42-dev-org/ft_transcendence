@@ -25,7 +25,7 @@ function Home(): JSX.Element {
           </p>
           <Link
             href={
-              "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-88d559b4c7e2bb3c3f1870258b38607b99ab7ac557cafe7e9a5f0431ec3f8236&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fapi%2Fv1%2Fauth%2F42&response_type=code"
+              "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-e9ef34cb474eec70b251774667b8102881013a0927960d2bcefe143797da568e&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fapi%2Fv1%2Fauth%2F42&response_type=code"
             }
             className="w-52 bg-[#b9ef72] rounded-md text-black text-xs whitespace-nowrap px-3 py-3 flex justify-center items-center hover:opacity-75 "
           >

@@ -78,32 +78,17 @@ export class UsersService {
     this.repository.unban(friendship.uid);
   }
 
-  async searchForUser(search: string, p: PaginationDto) {
-    const { skip, take } = getPaginationQuery(p);
-    const [totalCount, data] = await this.repository.searchForUser(
-      search,
-      skip,
-      take
-    );
-    const pagination = await getPaginationResponse(p, totalCount);
+  async searchForUser(search: string) {
+    const data = await this.repository.searchForUser(search);
     return {
       data,
-      pagination,
     };
   }
 
-  async getFriends(uid: string, status: $Enums.FriendStatus, p: PaginationDto) {
-    const { take, skip } = getPaginationQuery(p);
-
-    const [data, totalCount] = await this.repository.getAllFriends(
-      uid,
-      status,
-      { skip, take }
-    );
-    const pagination = getPaginationResponse(p, totalCount);
+  async getFriends(uid: string, status: $Enums.FriendStatus) {
+    const data = await this.repository.getAllFriends(uid, status);
     return {
       data,
-      pagination,
     };
   }
 

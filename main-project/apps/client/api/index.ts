@@ -1,13 +1,13 @@
 import type { AxiosInstance } from "axios";
 import { Manager, type Socket } from "socket.io-client";
-import type { ServerToClientEvents, ClientToServerEvents } from "io-types";
+// import type { ServerToClientEvents, ClientToServerEvents } from "io-types";
 import axios from "axios";
 import { constants } from "../constants/contsnts";
 import { exampleLib } from "../lib/api/example/index";
 
 class Api {
   private httpClient: AxiosInstance;
-  private ioClient: Socket<ServerToClientEvents, ClientToServerEvents>;
+  // private ioClient: Socket<ServerToClientEvents, ClientToServerEvents>;
 
   constructor(private readonly baseUrl: string = constants.URL) {
     this.initializeHttpClient();
@@ -26,27 +26,37 @@ class Api {
     });
   }
 
-  private initializeSocketIO(): void {
-    this.ioClient = new Manager(this.baseUrl, {
-      autoConnect: true,
-    }).socket("/");
-  }
+  // private initializeSocketIO(): void {
+  //   this.ioClient = new Manager(this.baseUrl, {
+  //     autoConnect: true,
+  //   }).socket("/");
+  // }
 
-  setHeader(token: string): void {
-    this.httpClient.defaults.headers.common.Authorization = `Bearer ${token}`;
-    this.ioClient.io.opts.extraHeaders = {
-      Authorization: `Bearer ${token}`,
-    };
-  }
+  // setHeader(token: string): void {
+  //   this.httpClient.defaults.headers.common.Authorization = `Bearer ${token}`;
+  //   // this.ioClient.io.opts.extraHeaders = {
+  //   //   Authorization: `Bearer ${token}`,
+  //   // };
+  // }
 
   api = () => ({
     auth: {
-      me: () => this.httpClient.get('/users/me')
+      me: () => this.httpClient.get("/users/me"),
+    },
+    users: {
+      ban: () => {},
+      unban: () => {},
+      search: (search: string) =>
+        this.httpClient.get(`/users/search?search=${search}`),
+      findAll: (type?: "Pending" | "Accepted" | "Banned") =>
+        this.httpClient.get(`/users?type=${type}`),
+      addFriend: (friendUid: string) =>
+        this.httpClient.post(`${friendUid}/add`),
+      acceptFriend: (friendUid: string) =>
+        this.httpClient.post(`${friendUid}/accept`),
     },
   });
-
   io: () => { a: "" };
-  
 }
 
 export const api = new Api();
