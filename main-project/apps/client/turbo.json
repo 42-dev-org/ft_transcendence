@@ -2,9 +2,10 @@
     "extends": ["//"],
     "pipeline": { 
         "build": {
-            "dependsOn": ["io-types#build"]
+            "dependsOn": ["io-types#build", "server#start:dev"]
         },
         "dev": {
+            "dependsOn": ["io-types#build"]
         }
     }
 
