@@ -21,9 +21,9 @@ export function OptionsListChannel(): JSX.Element {
         if (selected === "Members")
         {
             return (
-                <div className='flex flex-col justify-center items-center w-full'>
+                <div className='flex flex-col justify-center items-center w-full '>
                   {
-                    [...Array(5)].map((_, i) => (
+                    [...Array(10)].map((_, i) => (
                       <ListOfUsersChannal
                       name={UserData.name}
                       url={UserData.url}
@@ -85,7 +85,7 @@ export function OptionsListChannel(): JSX.Element {
     };
 
   return (
-    <div className="flex flex-col justify-center items-center gap-4 w-full" >
+    <div className="flex flex-col justify-center items-center gap-4 overflow-hidden w-full " >
     <select className=' rounded-md py-1 px-5 bg-slate-400' name="" id="" value={selected} onChange={(e) => {setSelected(e.target.value as SelecterType)}} >
       {
         ["Members", "Admins", "Muted", "Banned"].map((elm) => (
@@ -95,7 +95,9 @@ export function OptionsListChannel(): JSX.Element {
         ))
       }
     </select>
-      {render()}
+      <div className='overflow-y-scroll w-full h-96'>
+        {render()}
+      </div>
     </div>
   );
 };
