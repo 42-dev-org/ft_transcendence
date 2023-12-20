@@ -31,7 +31,7 @@ export class ConversationsController {
   constructor(private readonly conversationsService: ConversationsService) {}
 
   @Post()
-  @PutAbilities({ action: Actions.Create, subject: 'Conversation' })
+  // @PutAbilities({ action: Actions.Create, subject: 'Conversation' })
   @UseGuards(AuthGuard())
   create(@Body() createConversationDto: CreateConversationDto) {
     return this.conversationsService.create(createConversationDto);

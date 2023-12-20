@@ -3,7 +3,7 @@
   "pipeline": {
     "build": {
       "cache": false,
-      "dependsOn": ["db:push", "db:generate"]
+      "dependsOn": ["db:push", "db:generate", "db:seed"]
     }
   }
 }

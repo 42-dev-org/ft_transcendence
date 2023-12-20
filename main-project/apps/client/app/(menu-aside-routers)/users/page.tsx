@@ -1,29 +1,49 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import Card from "../../../components/Card";
 import BannedCArd from "../../../components/Card/BannedCArd";
 import FriendCard from "../../../components/Card/FriendCard";
 import InviteCard from "../../../components/Card/FriendCard";
 import InvitationsCard from "../../../components/Card/InvitationsCard";
+import withAuth from "../../../hoc/auth";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "../../../api";
 
 type ComponeetType = "search" | "friends" | "invitations" | "banned";
 
-export default function Users(): JSX.Element {
-  const [componenet, setComponent] = useState<
-    ComponeetType
-  >("search");
+function Users(): JSX.Element {
+  const [componenet, setComponent] = useState<ComponeetType>("search");
+  const [searchString, setSearchString] = useState("");
+  const searchMutation = useMutation({
+    mutationKey: ["search-mutation"],
+    mutationFn: api.api().users.search,
+    onSuccess: (data) => {
+      data.data;
+    },
+  });
+  const getMutation = useMutation({
+    mutationFn: api.api().users.findAll,
+    mutationKey: ["get-with-type"],
+  });
+
+  useEffect(() => {
+    if (componenet === "search") searchMutation.mutate(searchString);
+    else if (componenet === "friends") getMutation.mutate("Accepted");
+    else if (componenet === "invitations") getMutation.mutate("Pending");
+  }, [componenet]);
+
+  if (searchMutation.isSuccess) {
+    console.log(searchMutation.data);
+  }
   const render = () => {
     if (componenet === "banned") {
       return (
         <div className="grid lg:grid-cols-5  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
-          {[...Array(8)].map((_, idx) => (
-            <BannedCArd
-              url="https://cdn.intra.42.fr/users/9eb5fce9483da7ea041fe0d76af575bc/ajaidi.jpg"
-              username="Anas Jaidi"
-              key={idx}
-            />
-          ))}
+          {searchMutation.isSuccess &&
+            searchMutation.data.data.map((user, idx) => (
+              <BannedCArd {...user} key={idx} />
+            ))}
         </div>
       );
     }
@@ -56,13 +76,12 @@ export default function Users(): JSX.Element {
     if (componenet === "search") {
       return (
         <div className="grid lg:grid-cols-5  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
-          {[...Array(20)].map((_, idx) => (
-            <Card
-              url="https://cdn.intra.42.fr/users/ebae6bac7ffbfd12e22358678f3312eb/mbaazzy.jpg"
-              username="Mohamed Baazzy"
-              key={idx}
-            />
-          ))}
+          <div className="grid lg:grid-cols-5  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
+            {searchMutation.isSuccess &&
+              searchMutation.data?.data?.data.map((user, idx) => (
+                <BannedCArd {...user} key={idx} />
+              ))}
+          </div>
         </div>
       );
     }
@@ -70,20 +89,35 @@ export default function Users(): JSX.Element {
   return (
     <div className="flex flex-col overflow-y-auto  whitespace-nowrap  p-4 h-full w-full gap-10">
       <div className="flex md:flex-row flex-col w-full items-center justify-center gap-5 mt-10">
-        <input className="h-10 p-1 px-3 rounded-md w-full "  type="text" placeholder=' Search' />
-        <Button onClick={() => {}} title="Search" className="w-full" />
-        <select value={componenet} onChange={(e) => {setComponent(e.target.value as ComponeetType)}}  className="block w-full p-2  text-sm rounded-lg bg-[#ffffff1a] border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500">
-        {["search", "friends", "invitations", "banned"].map((el) => (
-            <option
-              key={el}
-              value={el}
-            >
+        <input
+          className="h-10 p-1 px-3 rounded-md w-full "
+          type="text"
+          placeholder=" Search"
+          value={searchString}
+          onChange={(e) => setSearchString(e.target.value)}
+        />
+        <Button
+          onClick={() => searchMutation.mutate(searchString)}
+          title="Search"
+          className="w-full"
+        />
+        <select
+          value={componenet}
+          onChange={(e) => {
+            setComponent(e.target.value as ComponeetType);
+          }}
+          className="block w-full p-2  text-sm rounded-lg bg-[#ffffff1a] border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+        >
+          {["search", "friends", "invitations", "banned"].map((el) => (
+            <option key={el} value={el}>
               {el}
             </option>
           ))}
-</select>
+        </select>
       </div>
       {render()}
     </div>
   );
 }
+
+export default withAuth(Users);

@@ -11,6 +11,7 @@ import {
   UsePipes,
   UploadedFile,
   Req,
+  Query,
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { UpdateUserDto } from "./dto/update-user.dto";
@@ -36,20 +37,17 @@ export class UsersController {
   @UseGuards(AuthGuard())
   findAll(
     @GetUser() { uid }: User,
-    @Param("type") type: $Enums.FriendStatus,
-    @Param("page") page: number,
-    @Param("limit") limit: number
+    @Query("type") type: $Enums.FriendStatus,
   ) {
-    return this.usersService.getFriends(uid, type || "Pending", new PaginationDto(page, limit));
-  }
-
+    return this.usersService.getFriends(uid, type || "Pending");
+  };
+  // param => https://localhost/api/v1/useres?type=Banned
+  // 
   @Get("search")
   async searchForFriend(
-    @Param("search") s: string,
-    @Param("page") page: number,
-    @Param("page") limit: number
+    @Query("search") s: string,
   ) {
-    return this.usersService.searchForUser(s, new PaginationDto(page, limit));
+    return this.usersService.searchForUser(s);
   }
 
   @Get("me")

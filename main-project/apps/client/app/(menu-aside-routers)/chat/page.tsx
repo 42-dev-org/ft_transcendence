@@ -8,7 +8,7 @@ import IMAgeUsers from "assets-workspace/svg/users.svg";
 import IMAgeGroups from "assets-workspace/svg/groups.svg";
 import ModalUI from "../../../components/Modal";
 import ConversationUi from "../../../components/chat-main-user/page";
-import ConversationUiChannel from "../../../components/chat-main-channel/page";
+import ConversationUiChannel from "../../../components/chat-main-channel/ConversationUiChannel";
 import { ListUsersChat } from "../../../components/liste/ListUsersChat";
 import withAuth from "../../../hoc/auth";
 
@@ -198,18 +198,19 @@ const Chat = () => {
           </div>
           <div className=" overflow-y-auto">{render()}</div>
         </div>
-
-        {
-          conversationType === "users" ?
-            <ConversationUi fullName='mustapha ouarsas' image="https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg" status='offline' />
-            : conversationType === "channels" ?
-              <ConversationUiChannel fullName='mustapha ouarsas' image='https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg' channelName='abatera' />
-              : null
-        }
+        {conversationType === "users" ? (
+          <ConversationUi
+            fullName="mustapha ouarsas"
+            image="https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg"
+            status="offline"
+          />
+        ) : conversationType === "channels" ? (
+          <ConversationUiChannel fullName={""} />
+        ) : null}
       </div>
     </Fragment>
   );
 };
 
-export default 
-Chat;
+export default Chat;
+// export default withAuth(Chat);

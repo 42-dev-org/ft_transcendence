@@ -9,6 +9,7 @@
     "lint": {},
     "db:generate": {},
     "db:push": {},
+    "db:seed": {},
     "dev": {
       "cache": false,
       "persistent": true
