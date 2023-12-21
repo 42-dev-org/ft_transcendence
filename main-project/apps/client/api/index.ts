@@ -51,9 +51,9 @@ class Api {
       findAll: (type?: "Pending" | "Accepted" | "Banned") =>
         this.httpClient.get(`/users?type=${type}`),
       addFriend: (friendUid: string) =>
-        this.httpClient.post(`${friendUid}/add`),
+        this.httpClient.post(`users/${friendUid}/add`),
       acceptFriend: (friendUid: string) =>
-        this.httpClient.post(`${friendUid}/accept`),
+        this.httpClient.post(`users/${friendUid}/accept`),
     },
   });
   io: () => { a: "" };
