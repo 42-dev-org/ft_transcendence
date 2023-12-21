@@ -30,9 +30,9 @@ export class UsersService {
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
-    const { lastName, firstName, email, phone, login, status } = updateUserDto;
+    const { lastName, firstName, login} = updateUserDto;
     return this.repository.updateOne(
-      { lastName, firstName, phone, email, login, status },
+      { lastName, firstName, login },
       id
     );
   }

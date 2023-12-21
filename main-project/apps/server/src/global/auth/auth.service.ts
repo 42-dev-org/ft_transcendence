@@ -4,6 +4,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
+import  rs from 'randomstring'
 import { UsersRepository } from "../../modules/users/repository/users.repository";
 import { JwtService } from "@nestjs/jwt";
 import { User } from "db";
@@ -16,13 +17,11 @@ import * as crypto from "crypto";
 export class AuthService {
   constructor(
     private readonly repository: UsersRepository,
-    private readonly jwt: JwtService,
-    private readonly mailer: MailService,
-    private readonly config: ConfigService
+    private readonly jwt: JwtService
   ) {}
 
   async create(data: IntraSignInPayload) {
-    const {
+    let {
       email,
       first_name: firstName,
       last_name: lastName,
@@ -32,6 +31,10 @@ export class AuthService {
       phone,
       url,
     } = data;
+    const isUser = this.repository.findByLogin(login);
+    if (isUser)
+      login += rs.generate(7);
+
 
     const user = await this.repository.create({
       email,
@@ -53,7 +56,7 @@ export class AuthService {
   }
 
   public async sign(data: IntraSignInPayload) {
-    const user = await this.repository.findByLogin(data.login);
+    const user = await this.repository.findByEmail(data.email);
     if (user)
       return {
         status: "success",
