@@ -49,11 +49,15 @@ class Api {
       search: (search: string) =>
         this.httpClient.get(`/users/search?search=${search}`),
       findAll: (type?: "Pending" | "Accepted" | "Banned") =>
-        this.httpClient.get(`/users?type=${type}`),
+        this.httpClient.get(`/users${type ? "?type=" + type : ""}`),
       addFriend: (friendUid: string) =>
         this.httpClient.post(`users/${friendUid}/add`),
+      removeFriend: (friendUid: string) =>
+        this.httpClient.post(`users/${friendUid}/remove`),
       acceptFriend: (friendUid: string) =>
         this.httpClient.post(`users/${friendUid}/accept`),
+      getFriend: (friendUid: string) =>
+      this.httpClient.get(`users/${friendUid}`),
     },
   });
   io: () => { a: "" };

@@ -32,7 +32,6 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  // @PutAbilities({ action: Actions.Manage, subject: "User" })
   // @UseGuards(AuthGuard(), RbacGuard)
   @UseGuards(AuthGuard())
   findAll(
@@ -44,10 +43,12 @@ export class UsersController {
   // param => https://localhost/api/v1/useres?type=Banned
   // 
   @Get("search")
+  @UseGuards(AuthGuard())
   async searchForFriend(
     @Query("search") s: string,
+    @GetUser() {uid}: User
   ) {
-    return this.usersService.searchForUser(s);
+    return this.usersService.searchForUser(s, uid);
   }
 
   @Get("me")
@@ -71,7 +72,7 @@ export class UsersController {
     @Param("uid") uid: string,
     @GetUser() { uid: user }: User
   ) {
-    return this.usersService.addFriend(uid, user);
+    return this.usersService.removeFriend(uid, user);
   }
 
   @Post(":uid/ban")
@@ -95,42 +96,36 @@ export class UsersController {
   }
 
   @Get(":uid")
-  @PutAbilities({ action: Actions.Manage, subject: "User" })
   @UseGuards(AuthGuard(), RbacGuard)
   findOne(@Param("uid") uid: string) {
     return this.usersService.findOne(uid);
   }
 
   @Patch(":uid")
-  @PutAbilities({ action: Actions.Manage, subject: "User" })
   @UseGuards(AuthGuard(), RbacGuard)
   update(@Param("uid") uid: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(uid, updateUserDto);
   }
 
   @Delete(":uid")
-  @PutAbilities({ action: Actions.Manage, subject: "User" })
   @UseGuards(AuthGuard(), RbacGuard)
   remove(@Param("uid") uid: string) {
     return this.usersService.remove(uid);
   }
 
   @Delete("me")
-  @PutAbilities({ action: Actions.Delete, subject: "User" })
   @UseGuards(AuthGuard(), RbacGuard)
   deleteMe(@GetUser() { uid }: User) {
     return this.usersService.remove(uid);
   }
 
   @Patch("me")
-  @PutAbilities({ action: Actions.Update, subject: "User" })
   @UseGuards(AuthGuard(), RbacGuard)
   updateMe(@GetUser() { uid }: User, dto: UpdateUserDto) {
     return this.usersService.update(uid, { ...dto });
   }
 
   @Post("me/profile-image")
-  @PutAbilities({ action: Actions.Update, subject: "User" })
   @UseGuards(AuthGuard(), RbacGuard)
   @UsePipes(FileValidatorPipe)
   @UseInterceptors(FileInterceptor("image"))

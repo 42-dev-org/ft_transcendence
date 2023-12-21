@@ -17,17 +17,30 @@ export class UsersRepository {
     return this.prisma.user.findUnique({ where: { login } });
   }
 
-  async searchForUser(search: string) {
-    const query = {
+  async searchForUser(search: string, user: string) {
+    const getUsers = await this.prisma.user.findMany({
       where: {
-        OR: [
-          { firstName: { contains: search } },
-          { lastName: { contains: search } },
-          { login: { contains: search } },
+        AND: [
+          {
+            OR: [
+              { firstName: { contains: search } },
+              { lastName: { contains: search } },
+              { login: { contains: search } },
+            ],
+          },
+          {
+            friendOf: {
+              none: { OR: [{ user1uid: user }, { user2uid: user }] },
+            },
+          },
+          {
+            uid: {
+              not: user,
+            },
+          },
         ],
       },
-    };
-    const getUsers = await this.prisma.user.findMany(query);
+    });
     console.log(search);
     return getUsers;
   }

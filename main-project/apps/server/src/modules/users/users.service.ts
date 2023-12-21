@@ -78,8 +78,8 @@ export class UsersService {
     this.repository.unban(friendship.uid);
   }
 
-  async searchForUser(search: string) {
-    const data = await this.repository.searchForUser(search);
+  async searchForUser(search: string, user: string) {
+    const data = await this.repository.searchForUser(search, user);
     return {
       data,
     };
