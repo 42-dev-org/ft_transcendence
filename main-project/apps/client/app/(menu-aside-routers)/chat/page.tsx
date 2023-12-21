@@ -212,5 +212,5 @@ const Chat = () => {
   );
 };
 
-export default Chat;
-// export default withAuth(Chat);
+// export default Chat;
+export default withAuth(Chat);

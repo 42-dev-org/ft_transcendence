@@ -11,6 +11,12 @@ module.exports = {
       },
       {
         protocol: 'https',
+        hostname: 't4.ftcdn.net',
+        port: '',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
         hostname: 'media.istockphoto.com',
         port: '',
         pathname: '**',

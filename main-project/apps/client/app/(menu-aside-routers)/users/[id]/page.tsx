@@ -56,15 +56,17 @@ const dataAchevment = [
 function UserProfile() {
   const {id} = useParams();
   console.log(id)
-
-
-
+  
+  
+  
   const query = useQuery({
     queryKey: ["get-friend", id],
     queryFn: (meta) => api.api().users.getFriend(meta.queryKey[1] as string),
   });
-
+  
   if (query.isFetched) console.log(query.data?.data);
+  const  displayName = `${query.data?.data.lastName}   ${query.data?.data.firstName}, ${query.data?.data.login}`
+
 
   return (
     <div className=" lg:overflow-hidden md:overflow-auto flex flex-col p-4 w-full h-full gap-y-5">
@@ -85,12 +87,15 @@ function UserProfile() {
             height={140}
             className="rounded-full absolute border-4 border-[#ffffff1a] -top-24 lg:left-0  md:left-[40%] left-[30%]"
             alt="zakaria"
-            src="https://cdn.intra.42.fr/users/47192a7a27a46c2c714c6723e30a3cd2/zmaziane.jpg"
+            src={query.data?.data.profileImage}
           />
         </div>
         <div className="flex  md:flex-row flex-col w-full gap-4 justify-between">
           <span className="text-white text-xl font-medium whitespace-nowrap">
-            Zakaria Maziane
+            <strong className="text-white">
+
+            {displayName} 
+            </strong>
           </span>
           <div className="flex gap-2 md:flex-row flex-col">
             <Button onClick={() => null} title="Add Freind" />

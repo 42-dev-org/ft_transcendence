@@ -33,13 +33,14 @@ function FriendCard({
       <div className="bg-[#1c1e21] w-full h-full space-y-2 flex py-2 px-5 flex-col items-center ">
         <span className="text-[#e4e6eb] capitalize">{login}</span>
         <Button
+
           title="Remove Friend"
-          className="py-1 w-full"
+          className="py-1 w-full px-0"
           onClick={() => sendMutation.mutate(uid)}
         />
         <Link
           className="py-1 w-full text-center bg-[#ffffff1a] rounded-lg text-sm font-medium hover:opacity-70 px-3  text-white"
-          href="users/1"
+          href={`users/${uid}`}
         >
           View Profil
         </Link>
