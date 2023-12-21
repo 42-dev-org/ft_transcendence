@@ -22,6 +22,12 @@ import { Auth42Guard } from "./guards/42.guard";
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Get('logout')
+  logout(@Req() req: Request, @Res() res: Response) {
+    res.clearCookie('token');
+    res.status(200).send()
+  }
+
   @Get("42")
   @UseGuards(Auth42Guard)
   async callback(@Req() req: Request, @Res() res: Response) {

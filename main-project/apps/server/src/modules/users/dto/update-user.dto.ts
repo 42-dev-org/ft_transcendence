@@ -8,13 +8,5 @@ export class UpdateUserDto {
   @IsString()
   firstName: string;
   @IsString()
-  phoneNumber: string;
-  @IsString()
-  email: string;
-  @IsString()
-  phone: string;
-  @IsString()
   login: string;
-  @IsString()
-  status: string;
 }
