@@ -185,7 +185,7 @@ export default function ConversationUiChannel({
               </form>
             </div>
             {showOpstions && <div className="flex w-1/3 flex-col h-full bg-[#6666] rounded-md border-2 border-zinc-400 gap-4">
-              <IoIosCloseCircleOutline size={30} color="white" className="cursor-pointer self-end m-1" onClick={() => setshowOpstions(false)} />
+              <IoIosCloseCircleOutline size={30} color="white" className="cursor-pointer self-end" onClick={() => setshowOpstions(false)} />
               <div className=" flex flex-col gap-9 h-full">
                 <div>
                   <ChangePasswordPrivetOrDesabled />
@@ -237,5 +237,10 @@ admin can do all owner can do except kick owner
   learn react query, axios, http 
 
 
+mandatory:
+  - update the channel sitution (private -> protected)
+  - in channels list option, the owner can make a user admine to the channerl or remove it from admine role
+feat:
+  - the user can access to other users profile from the mini profile in the chat(navbar)
 
 */

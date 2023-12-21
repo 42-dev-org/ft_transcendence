@@ -14,7 +14,7 @@ import Link from "next/link";
 interface PropsType {
   fullName: string;
   image: string | StaticImageData;
-  status: "online" | "offline";
+  status: "online" | "offline"; //  should add in game
 }
 
 export default function ConversationUi({

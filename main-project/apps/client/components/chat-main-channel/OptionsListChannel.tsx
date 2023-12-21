@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ListOfUsersChannal from './ListOfUsersChannel';
 
 
@@ -11,11 +11,29 @@ const UserData = {
   url: "https://cdn.intra.42.fr/users/47192a7a27a46c2c714c6723e30a3cd2/zmaziane.jpg",
 };
 
+enum Role{
+  user,
+  admin,
+  owner
+}
+
 export function OptionsListChannel(): JSX.Element {
 
     const [selected, setSelected] = useState<
     SelecterType
     >("Members");
+    const [menuList, setMenuList] = useState<string[]>(['View Profile', 'Invite Game'])
+
+    // change type of logged user
+    const [userType, setUserType] = useState<Role>(Role.owner)
+
+    useEffect(() => {
+        if(userType === Role.owner)
+          setMenuList(['Mute', 'Ban', 'kick', 'View Profile', 'Invite Game', 'Set as Admin'])
+        if(userType === Role.admin)
+          setMenuList(['Mute', 'Ban', 'kick', 'View Profile', 'Invite Game'])
+
+    }, [userType, menuList])
 
     const render = () => {
         if (selected === "Members")
@@ -28,6 +46,7 @@ export function OptionsListChannel(): JSX.Element {
                       name={UserData.name}
                       url={UserData.url}
                       key={i}
+                      menuList={menuList}
                       />
                     ))
                   }
@@ -44,6 +63,7 @@ export function OptionsListChannel(): JSX.Element {
                       name={UserData.name}
                       url={UserData.url}
                       key={i}
+                      menuList={menuList}
                       />
                     ))
                   }
@@ -60,6 +80,7 @@ export function OptionsListChannel(): JSX.Element {
                       name={UserData.name}
                       url={UserData.url}
                       key={i}
+                      menuList={menuList}
                       />
                     ))
                   }
@@ -76,6 +97,7 @@ export function OptionsListChannel(): JSX.Element {
                       name={UserData.name}
                       url={UserData.url}
                       key={i}
+                      menuList={menuList}
                       />
                     ))
                   }

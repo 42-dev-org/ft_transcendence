@@ -35,6 +35,7 @@ export default function ChangePasswordPrivetOrDesabled(): JSX.Element {
               >
               <option value="public">Public</option>
               <option value="private">Private</option>
+              <option value="protected">Protected</option>
             </select>
           </div>
 
