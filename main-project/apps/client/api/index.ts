@@ -42,6 +42,7 @@ class Api {
   api = () => ({
     auth: {
       me: () => this.httpClient.get("/users/me"),
+      logout: () => this.httpClient.get("/auth/logout")
     },
     users: {
       ban: () => {},
