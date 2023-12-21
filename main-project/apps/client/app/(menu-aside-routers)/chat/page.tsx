@@ -112,27 +112,21 @@ const Chat = () => {
         </div>
       </ModalUI>
 
-      {/* modal channels  */}
+      
+       {/* modal channels  */}
 
-      <ModalUI
-        open={isAddOpenChannelModal}
-        onClose={onCloseAddChannelModal}
-        title="add Conversation"
-      >
-        <div className="flex justify-center items-center p-3 flex-col  max-h-72 gap-2">
-          <div className="flex flex-row">
-            <input
-              type="text"
-              className="h-7 p-1 px-3 rounded-md w-2/3 mr-2 "
-            />
-            <select
-              name="channels"
-              id=""
-              className="rounded-md"
-              onChange={(e) => setcomponenetChannelModal(e.target.value)}
-            >
-              <option value="public">public</option>
-              <option value="private">private</option>
+      <ModalUI open={isAddOpenChannelModal} onClose={onCloseAddChannelModal} title='add Conversation'>
+        <div className='flex justify-center items-center p-3 flex-col  max-h-72 gap-2' >
+          <div className='flex flex-row' >
+            <input type="text" className='h-7 p-1 px-3 rounded-md w-2/3 mr-2 ' />
+            <select defaultValue={componenetChannelModal} name="channels" id="" className='rounded-md' onChange={(e) => setcomponenetChannelModal(e.target.value) }>
+              <option value="public">
+                public
+              </option>
+              <option value="private">
+                private
+              </option>
+
             </select>
           </div>
 
@@ -218,5 +212,5 @@ const Chat = () => {
   );
 };
 
-export default Chat;
-// export default withAuth(Chat);
+// export default Chat;
+export default withAuth(Chat);
