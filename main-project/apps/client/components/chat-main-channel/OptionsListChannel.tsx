@@ -35,6 +35,7 @@ export function OptionsListChannel({setshowOpstions}: any): JSX.Element {
         }
         if(userType === Role.admin){
           setMenuList(['Mute', 'Ban', 'kick', 'Invite Game'])
+          
         }
 
     }, [userType, menuList])

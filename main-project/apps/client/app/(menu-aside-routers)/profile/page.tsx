@@ -39,4 +39,5 @@ function Profile(): JSX.Element {
   )
 }
 
+
 export default withAuth(Profile)

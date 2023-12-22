@@ -11,12 +11,14 @@ import { PaginationDto } from "../../../helpers/dto/pagination.dto";
 
 @Injectable()
 export class UsersRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
+  // work
   async findByLogin(login: string) {
     return this.prisma.user.findUnique({ where: { login } });
   }
 
+  // work
   async searchForUser(search: string, user: string) {
     const getUsers = await this.prisma.user.findMany({
       where: {
@@ -29,9 +31,22 @@ export class UsersRepository {
             ],
           },
           {
-            friendOf: {
-              none: { OR: [{ user1uid: user }, { user2uid: user }] },
-            },
+            AND: [
+              {
+                friendOf: {
+                  none: {
+                    user1uid: user
+                  }
+                }
+              },
+              {
+                myFriends: {
+                  none: {
+                    user2uid: user
+                  }
+                }
+              }
+            ]
           },
           {
             uid: {
@@ -45,107 +60,158 @@ export class UsersRepository {
     return getUsers;
   }
 
+  // work
   async create(data: Prisma.UserCreateInput) {
     return this.prisma.user.create({ data });
   }
 
+  // work
   async findOne(uid: string) {
     return this.prisma.user.findUnique({ where: { uid } });
   }
 
+  // work
   async findAll() {
     return this.prisma.user.findMany();
   }
 
+  // work
   async updateOne(data: Prisma.UserUpdateInput, uid: string) {
     return this.prisma.user.update({ data, where: { uid } });
   }
 
+  // work
   async deleteOne(uid: string) {
     return this.prisma.user.delete({ where: { uid } });
   }
 
+  // work
   async findByEmail(email: string) {
     return this.prisma.user.findFirst({ where: { email } });
   }
 
+  // work
   async acceptFriend(uid: string) {
     return this.prisma.friend.update({
-      where: { uid },
+      where: { uid, status: 'Pending' },
       data: { status: "Accepted" },
     });
   }
 
-  async getAllFriends(user: string, status: $Enums.FriendStatus) {
-    const query = {
-      where: {
-        AND: [
-          {
-            OR: [{ user1uid: user }, { user2uid: user }],
-          },
-          status && { status },
-        ],
-      },
-    };
 
+  async getAllInvitations(user: string) {
+    return this.prisma.user.findMany({
+      where: {
+        myFriends: {
+          some: {
+            user2uid: user,
+            status: 'Pending'
+          }
+        }
+      }
+    })
+  }
+
+  async getAllUsers(user: string) {
     return this.prisma.user.findMany({
       where: {
         AND: [
+          { uid: { not: user } },
+          {
+            OR: [
+              {
+                friendOf: {
+                  none: {
+                    user1uid: user
+                  }
+                }
+              },
+              {
+                myFriends: {
+                  none: {
+                    user2uid: user
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    })
+  }
+
+
+  // work
+  async getAllFriends(user: string) {
+    return this.prisma.user.findMany({
+      where: {
+        AND: [
+          { uid: { not: user } },
           {
             OR: [
               {
                 friendOf: {
                   some: {
-                    OR: [
-                      { user1uid: user, status },
-                      { user2uid: user, status },
-                    ],
-                  },
-                },
+                    status: 'Accepted',
+                  }
+                }
               },
               {
                 myFriends: {
                   some: {
-                    OR: [
-                      { user1uid: user, status },
-                      { user2uid: user, status },
-                    ],
-                  },
-                },
-              },
-            ],
-          },
-          { uid: { not: user } },
-        ],
-      },
-    });
+                    status: 'Accepted'
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    })
   }
 
+  // work
   async ban(uid: string, user: string) {
     this.prisma.friend.update({
-      where: { uid },
+      where: { uid, status: { not: 'Banned' } },
       data: { status: "Banned", bannedBy: user },
     });
   }
 
+  // work
   async unban(uid: string) {
-    this.prisma.friend.update({
-      where: { uid: uid },
-      data: { status: "Accepted", bannedBy: null },
+    this.prisma.friend.delete({
+      where: { uid: uid, status: 'Banned' },
     });
   }
 
+  // work
+  async getInvitation(uid: string, user: string) {
+    console.log(uid)
+    console.log(user)
+    console.log(await this.prisma.friend.findMany())
+    return this.prisma.friend.findFirst({
+      where: {
+        user2uid: user,
+        user1uid: uid,
+        status: 'Pending'
+      }
+    })
+  }
+
+  // work
   async getFriendship(uid: string, user: string) {
     return this.prisma.friend.findFirst({
       where: {
         OR: [
           { user1uid: uid, user2uid: user },
-          { user2uid: uid, user1uid: user },
+          { user2uid: user, user1uid: user },
         ],
       },
     });
   }
 
+  // work
   async addFriend(uid: string, user: string) {
     return this.prisma.friend.create({
       data: {
@@ -155,6 +221,17 @@ export class UsersRepository {
     });
   }
 
+  // work
+  async getBan(user: string, uid: string) {
+    return this.prisma.friend.findFirst({
+      where: {
+        status: 'Banned',
+        user1uid: user
+      }
+    });
+  }
+
+  // work
   async removeFriend(uid: string, user: string) {
     const friendship = await this.prisma.friend.deleteMany({
       where: {
