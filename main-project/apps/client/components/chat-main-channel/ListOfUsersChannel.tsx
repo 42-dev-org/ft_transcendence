@@ -16,10 +16,10 @@ type usersInChannal = {
     uId: string,
 }
 
-function ListOfUsersChannal({ name, url, uId, menuList ,setshowOpstions}): JSX.Element {
+function ListOfUsersChannal({isAdmin, isOwner, name, url, uId, menuList ,setshowOpstions}): JSX.Element {
 
-    const isAdmin = true;
-    const isOwner = true;
+    // const isAdmin = true;
+    // const isOwner = true;
     const [isAddOpenChannelModal, setIsAddOpenChannelModal] = useState(false);
 
     const router = useRouter();

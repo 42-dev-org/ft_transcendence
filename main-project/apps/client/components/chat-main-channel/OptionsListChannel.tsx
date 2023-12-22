@@ -26,13 +26,16 @@ export function OptionsListChannel({setshowOpstions}: any): JSX.Element {
     const [menuList, setMenuList] = useState<string[]>(['Invite Game'])
 
     // change type of logged user
-    const [userType, setUserType] = useState<Role>(Role.admin)
+    const [userType, setUserType] = useState<Role>(Role.user)
 
     useEffect(() => {
         if(userType === Role.owner)
+        {
           setMenuList(['Mute', 'Ban', 'kick', 'Invite Game', 'Set as Admin'])
-        if(userType === Role.admin)
+        }
+        if(userType === Role.admin){
           setMenuList(['Mute', 'Ban', 'kick', 'Invite Game'])
+        }
 
     }, [userType, menuList])
 
@@ -50,6 +53,8 @@ export function OptionsListChannel({setshowOpstions}: any): JSX.Element {
                       key={i}
                       menuList={menuList}
                       uId={UserData.uId}
+                      isAdmin={true}
+                      isOwner={false}
                       />
                     ))
                   }
@@ -69,6 +74,8 @@ export function OptionsListChannel({setshowOpstions}: any): JSX.Element {
                       key={i}
                       menuList={menuList}
                       uId={UserData.uId}
+                      isAdmin={true}
+                      isOwner={false}
 
                       />
                     ))
@@ -89,6 +96,8 @@ export function OptionsListChannel({setshowOpstions}: any): JSX.Element {
                       key={i}
                       menuList={menuList}
                       uId={UserData.uId}
+                      isAdmin={true}
+                      isOwner={false}
                       />
                     ))
                   }
@@ -108,6 +117,8 @@ export function OptionsListChannel({setshowOpstions}: any): JSX.Element {
                       key={i}
                       menuList={menuList}
                       uId={UserData.uId}
+                      isAdmin={true}
+                      isOwner={false}
                       />
                     ))
                   }

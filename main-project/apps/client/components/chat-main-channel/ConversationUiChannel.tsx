@@ -238,9 +238,9 @@ admin can do all owner can do except kick owner
 
 
 mandatory:
-  - update the channel sitution (private -> protected)
-  - in channels list option, the owner can make a user admine to the channerl or remove it from admine role
+  - update the channel sitution (private -> protected) done
+  - in channels list option, the owner can make a user admine to the channel or remove it from admine role
 feat:
-  - the user can access to other users profile from the mini profile in the chat(navbar)
+  - the user can access to other users profile from the mini profile in the chat(navbar) done
 
 */
