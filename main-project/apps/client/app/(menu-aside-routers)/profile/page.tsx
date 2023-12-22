@@ -2,6 +2,7 @@
 import Image from 'next/image';
 import React, {useRef, useState} from 'react'
 import Input from '../../../components/Input';
+import withAuth from '../../../hoc/auth';
 
 
 function Profile(): JSX.Element {
@@ -38,4 +39,4 @@ function Profile(): JSX.Element {
   )
 }
 
-export default Profile
+export default withAuth(Profile)

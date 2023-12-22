@@ -2,6 +2,7 @@ import Image from "next/image";
 import styles from "./aside-bar-profile.module.css";
 
 interface PropsType {
+
   name: string;
   imageUrl: string;
   profileUrl: string;
