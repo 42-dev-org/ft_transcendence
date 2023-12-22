@@ -4,12 +4,12 @@
 }
 
 .profile-image-container {
-    @apply w-10 mx-2 rounded-full ;
+    @apply w-10 mx-1 rounded-full ;
     display: block;
     aspect-ratio: 1 / 1;
     overflow: hidden;
 }
 
 .profile-name-container {
- @apply text-white ml-3 flex flex-col;    
+ @apply text-white ml-3 flex flex-col whitespace-nowrap;    
 }

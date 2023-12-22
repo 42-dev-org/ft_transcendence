@@ -52,6 +52,8 @@ function Users(): JSX.Element {
     else usersQuery.refetch();
   }, [componenet]);
 
+  console.log(searchMutation.data?.data)
+
   const render = () => {
     if (componenet === "invitations") {
       return (

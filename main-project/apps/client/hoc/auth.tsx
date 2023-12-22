@@ -9,15 +9,13 @@ const withAuth = (Component) => {
   const Auth = (props) => {
     const router = useRouter();
     const isAuth = useAppSelector((s) => s.user.isAuthenticated);
-    const dispatch = useAppDispatch();
     const { mutation } = useAuthenticator();
 
     useEffect(() => {
       const authenticateUser = async () => {
         try {
           await mutation.mutateAsync();
-          dispatch(setIsAuth(true));
-          dispatch(setUser(mutation.data?.data));
+
         } catch (error) {
           router.push("/");
         }
@@ -26,7 +24,7 @@ const withAuth = (Component) => {
       if (!isAuth) {
         authenticateUser();
       }
-    }, [isAuth, mutation, dispatch, router]);
+    }, [isAuth, mutation, router]);
 
     if (isAuth) {
       return <Component {...props} />;
