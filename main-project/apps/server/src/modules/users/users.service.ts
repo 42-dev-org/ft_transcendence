@@ -19,7 +19,7 @@ export class UsersService {
   constructor(
     private readonly repository: UsersRepository,
     private readonly media: MediaService
-  ) {}
+  ) { }
 
   findAll() {
     return this.repository.findAll();
@@ -30,7 +30,7 @@ export class UsersService {
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
-    const { lastName, firstName, login} = updateUserDto;
+    const { lastName, firstName, login } = updateUserDto;
     return this.repository.updateOne(
       { lastName, firstName, login },
       id
@@ -38,14 +38,22 @@ export class UsersService {
   }
 
   async acceptFriend(uid: string, user: string) {
-    const friendship = await this.repository.getFriendship(uid, user);
+    const friendship = await this.repository.getInvitation(uid, user);
 
     if (!friendship) throw new NotFoundException();
-    if (friendship.user2uid !== uid) throw new ForbiddenException();
 
     this.repository.acceptFriend(friendship.uid);
   }
 
+  async getAllFriends(user: string) {
+    return this.repository.getAllFriends(user);
+  }
+  async getAllInvitations(user: string) {
+    return this.repository.getAllInvitations(user);
+  }
+  async getAllUsers(user: string) {
+    return this.repository.getAllUsers(user);
+  }
   async addFriend(uid: string, user: string) {
     const friendship = await this.repository.getFriendship(uid, user);
     if (friendship) throw new ConflictException();
@@ -64,8 +72,10 @@ export class UsersService {
     this.repository.ban(friendship.uid, user);
   }
 
+
+
   async unban(uid: string, user: string) {
-    const friendship = await this.repository.getFriendship(uid, user);
+    const friendship = await this.repository.getBan(user, uid);
 
     if (!friendship) throw new NotFoundException();
 
@@ -85,11 +95,8 @@ export class UsersService {
     };
   }
 
-  async getFriends(uid: string, status: $Enums.FriendStatus) {
-    const data = await this.repository.getAllFriends(uid, status);
-    return {
-      data,
-    };
+  async getFriends(uid: string) {
+    return this.repository.getAllFriends(uid);
   }
 
   async removeFriend(uid: string, user: string) {

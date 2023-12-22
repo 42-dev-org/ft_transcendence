@@ -12,6 +12,8 @@ import {
   UploadedFile,
   Req,
   Query,
+  Res,
+  BadRequestException,
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { UpdateUserDto } from "./dto/update-user.dto";
@@ -29,30 +31,37 @@ import { PaginationDto } from "src/helpers/dto/pagination.dto";
 
 @Controller("users")
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Get()
-  // @UseGuards(AuthGuard(), RbacGuard)
   @UseGuards(AuthGuard())
-  findAll(
+  async findAll(
     @GetUser() { uid }: User,
     @Query("type") type: $Enums.FriendStatus,
   ) {
-    return this.usersService.getFriends(uid, type || "Pending");
+    switch (type) {
+      case 'Accepted':
+        return { data: await this.usersService.getFriends(uid) };
+      case 'Banned':
+        break;
+      case 'Pending':
+        return { data: await this.usersService.getAllInvitations(uid) };
+      default:
+        throw new BadRequestException('type invalid')
+    }
   };
-  // param => https://localhost/api/v1/useres?type=Banned
-  // 
+
+
   @Get("search")
   @UseGuards(AuthGuard())
   async searchForFriend(
     @Query("search") s: string,
-    @GetUser() {uid}: User
+    @GetUser() { uid }: User
   ) {
     return this.usersService.searchForUser(s, uid);
   }
 
   @Get("me")
-  // @PutAbilities({ action: Actions.Read, subject: 'User' })
   @UseGuards(AuthGuard())
   findMe(@GetUser() { uid }: User, @Req() req: Request) {
     return this.usersService.findOne(uid);
@@ -61,8 +70,6 @@ export class UsersController {
   @Post(":uid/add")
   @UseGuards(AuthGuard())
   async addFriend(@Param("uid") uid: string, @GetUser() { uid: user }: User) {
-    // console.log(uid)
-    // console.log(user)
     return this.usersService.addFriend(uid, user);
   }
 
@@ -96,37 +103,37 @@ export class UsersController {
   }
 
   @Get(":uid")
-  @UseGuards(AuthGuard(), RbacGuard)
+  @UseGuards(AuthGuard())
   findOne(@Param("uid") uid: string) {
     return this.usersService.findOne(uid);
   }
 
   @Patch(":uid")
-  @UseGuards(AuthGuard(), RbacGuard)
+  @UseGuards(AuthGuard())
   update(@Param("uid") uid: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(uid, updateUserDto);
   }
 
   @Delete(":uid")
-  @UseGuards(AuthGuard(), RbacGuard)
+  @UseGuards(AuthGuard())
   remove(@Param("uid") uid: string) {
     return this.usersService.remove(uid);
   }
 
   @Delete("me")
-  @UseGuards(AuthGuard(), RbacGuard)
+  @UseGuards(AuthGuard())
   deleteMe(@GetUser() { uid }: User) {
     return this.usersService.remove(uid);
   }
 
   @Patch("me")
-  @UseGuards(AuthGuard(), RbacGuard)
+  @UseGuards(AuthGuard())
   updateMe(@GetUser() { uid }: User, dto: UpdateUserDto) {
     return this.usersService.update(uid, { ...dto });
   }
 
   @Post("me/profile-image")
-  @UseGuards(AuthGuard(), RbacGuard)
+  @UseGuards(AuthGuard())
   @UsePipes(FileValidatorPipe)
   @UseInterceptors(FileInterceptor("image"))
   changeProfileImage(@GetUser() user: User, @UploadedFile() file: MediaFile) {

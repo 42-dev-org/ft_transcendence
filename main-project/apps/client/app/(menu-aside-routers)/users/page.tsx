@@ -35,6 +35,12 @@ function Users(): JSX.Element {
 
   useEffect(() => {
     if (usersQuery.isFetched && usersQuery.data && usersQuery.data.data) {
+      console.log('------------------------------------------------')
+      console.log('------------------------------------------------')
+      console.log(usersQuery.data.data.data.data)
+      console.log('------------------------------------------------')
+      console.log('------------------------------------------------')
+      console.log('------------------------------------------------')
       setData(usersQuery.data?.data?.data);
     }
   }, [usersQuery.data]);
@@ -130,5 +136,6 @@ function Users(): JSX.Element {
     </div>
   );
 }
+
 
 export default withAuth(Users);
