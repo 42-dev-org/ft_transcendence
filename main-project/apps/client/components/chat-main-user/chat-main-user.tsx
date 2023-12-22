@@ -14,13 +14,13 @@ import Link from "next/link";
 interface PropsType {
   fullName: string;
   image: string | StaticImageData;
-  status: "online" | "offline"; //  should add in game
+  status: "online" | "offline" | "in a game"; //  should add in game
 }
 
 export default function ConversationUi({
   fullName = "mustapha ouarsas",
   image= "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg",
-  status = "offline",
+  status = "online",
 }: PropsType): JSX.Element {
 
   const [showOptions, setshowOpstions] = useState(true);
@@ -80,7 +80,7 @@ export default function ConversationUi({
 
               <div className="flex flex-col justify-between">
                 <h5 className="font-semibold">{fullName}</h5>
-                <span className={`text-xs font-normal ${status === "online" ? " text-green-400" : "text-red-500"} `}>{status}</span>
+                <span className={`text-xs font-normal ${status === "online" || status === "in a game" ? " text-green-400" : "text-red-500"} `}>{status}</span>
               </div>
             </div>
           <MenuItem  iconBtn={<IoMdMore size={24} color="gray"/>}>

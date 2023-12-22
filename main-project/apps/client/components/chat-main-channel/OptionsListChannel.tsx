@@ -9,6 +9,7 @@ type SelecterType = "Members" | "Admins" | "Muted" | "Banned";
 const UserData = {
   name: "ouarsass",
   url: "https://cdn.intra.42.fr/users/47192a7a27a46c2c714c6723e30a3cd2/zmaziane.jpg",
+  uId: "hereUId"
 };
 
 enum Role{
@@ -25,7 +26,7 @@ export function OptionsListChannel(): JSX.Element {
     const [menuList, setMenuList] = useState<string[]>(['View Profile', 'Invite Game'])
 
     // change type of logged user
-    const [userType, setUserType] = useState<Role>(Role.owner)
+    const [userType, setUserType] = useState<Role>(Role.admin)
 
     useEffect(() => {
         if(userType === Role.owner)
@@ -47,6 +48,7 @@ export function OptionsListChannel(): JSX.Element {
                       url={UserData.url}
                       key={i}
                       menuList={menuList}
+                      uId={UserData.uId}
                       />
                     ))
                   }
@@ -64,6 +66,8 @@ export function OptionsListChannel(): JSX.Element {
                       url={UserData.url}
                       key={i}
                       menuList={menuList}
+                      uId={UserData.uId}
+
                       />
                     ))
                   }
@@ -81,6 +85,7 @@ export function OptionsListChannel(): JSX.Element {
                       url={UserData.url}
                       key={i}
                       menuList={menuList}
+                      uId={UserData.uId}
                       />
                     ))
                   }
@@ -98,6 +103,7 @@ export function OptionsListChannel(): JSX.Element {
                       url={UserData.url}
                       key={i}
                       menuList={menuList}
+                      uId={UserData.uId}
                       />
                     ))
                   }

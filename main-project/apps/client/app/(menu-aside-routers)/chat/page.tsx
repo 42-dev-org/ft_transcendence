@@ -7,7 +7,7 @@ import Userschat from "../../../components/Chat/Userschat";
 import IMAgeUsers from "assets-workspace/svg/users.svg";
 import IMAgeGroups from "assets-workspace/svg/groups.svg";
 import ModalUI from "../../../components/Modal";
-import ConversationUi from "../../../components/chat-main-user/page";
+import ConversationUi from "../../../components/chat-main-user/chat-main-user";
 import ConversationUiChannel from "../../../components/chat-main-channel/ConversationUiChannel";
 import { ListUsersChat } from "../../../components/liste/ListUsersChat";
 import withAuth from "../../../hoc/auth";
