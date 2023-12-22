@@ -13,9 +13,10 @@ import Button from "../Button";
 import SenderLayout from "./SenderLayout";
 import RecieverLayout from "./RecieverLayout";
 import { ListUsersChat } from "../liste/ListUsersChat";
-import { IoIosCloseCircleOutline , IoMdMore} from "react-icons/io";
+import { IoIosCloseCircleOutline, IoMdMore } from "react-icons/io";
 import { ChangeChannelName } from "./ChangeChannelName";
 import OptionsListChannel from "./OptionsListChannel";
+import ChangePasswordPrivetOrDesabled from "./ChangePasswordPrivetOrDesabled";
 
 
 
@@ -35,7 +36,7 @@ export default function ConversationUiChannel({
   fullName = "mustapha ouarsass1",
 }: PropsType): JSX.Element {
   const [isAddOpen, setIsAddOpen] = useState(false)
-  const [channelName, setChannelName] = useState("Homaygat")
+  const [channelName, setChannelName] = useState("ChannelHomaygat")
 
   const [showOpstions, setshowOpstions] = useState(false);
   const [msg, setMsg] = useState("");
@@ -124,9 +125,9 @@ export default function ConversationUiChannel({
               </div>
             </div>
             <MenuItem iconBtn={
-              <IoMdMore size={24} color="gray"/>
+              <IoMdMore size={24} color="gray" />
             } >
-              <button className=" hover:bg-[#B2F35F] rounded-md" onClick={() => {setIsAddOpen(true)}} >Add users</button>
+              <button className=" hover:bg-[#B2F35F] rounded-md" onClick={() => { setIsAddOpen(true) }} >Add users</button>
               <button className="hover:bg-[#B2F35F] rounded-md px-2" onClick={() => setshowOpstions(true)}>View Details</button>
 
             </MenuItem>
@@ -146,12 +147,12 @@ export default function ConversationUiChannel({
               >
                 {messages?.map(({ msg, userId, imageUrl, senderName }, index) => (
                   <Fragment key={index}>
-                  {
-                    userId === 1 ?
-                    <SenderLayout  msg={msg}/>
-                  :
-                 <RecieverLayout msg={msg} senderName={senderName} imageUrl={imageUrl} />
-                  } 
+                    {
+                      userId === 1 ?
+                        <SenderLayout msg={msg} />
+                        :
+                        <RecieverLayout msg={msg} senderName={senderName} imageUrl={imageUrl} />
+                    }
                   </Fragment>
                 ))}
               </div>
@@ -184,15 +185,18 @@ export default function ConversationUiChannel({
               </form>
             </div>
             {showOpstions && <div className="flex w-1/3 flex-col h-full bg-[#6666] rounded-md border-2 border-zinc-400 gap-4">
-              <IoIosCloseCircleOutline size={30} color="white" className="cursor-pointer self-end m-1" onClick={() => setshowOpstions(false)}/>
-                <div className=" flex flex-col gap-10">
-                  <div>
-                    <ChangeChannelName channelName={channelName} onSetName={(name: string) => setChannelName(name)}/>
-                  </div>
-                    <div className="flex flex-col items-center justify-center">
-                    <OptionsListChannel/>
-                    </div>
+              <IoIosCloseCircleOutline size={30} color="white" className="cursor-pointer self-end" onClick={() => setshowOpstions(false)} />
+              <div className=" flex flex-col gap-9 h-full">
+                <div>
+                  <ChangePasswordPrivetOrDesabled />
                 </div>
+                <div>
+                  <ChangeChannelName channelName={channelName} onSetName={(name: string) => setChannelName(name)} />
+                </div>
+                <div className=" h-full">
+                  <OptionsListChannel setshowOpstions={setshowOpstions}/>
+                </div>
+              </div>
             </div>
             }
           </div>
@@ -221,4 +225,22 @@ export default function ConversationUiChannel({
   
   TODO
     * add the list of members in channel
+
+owner admin  channel can :
+    mute a user for limited time , demute
+    ban a user   or deban
+    kick user and admin
+    owner channel can :
+    set a user as admin . or inverse
+    
+admin can do all owner can do except kick owner 
+  learn react query, axios, http 
+
+
+mandatory:
+  - update the channel sitution (private -> protected) done
+  - in channels list option, the owner can make a user admine to the channel or remove it from admine role
+feat:
+  - the user can access to other users profile from the mini profile in the chat(navbar) done
+
 */
