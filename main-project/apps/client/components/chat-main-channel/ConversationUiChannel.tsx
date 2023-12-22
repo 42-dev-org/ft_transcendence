@@ -19,8 +19,6 @@ import OptionsListChannel from "./OptionsListChannel";
 import ChangePasswordPrivetOrDesabled from "./ChangePasswordPrivetOrDesabled";
 
 
-
-
 const data = {
   msg: 'how about your day',
   name: 'ouarsass',
