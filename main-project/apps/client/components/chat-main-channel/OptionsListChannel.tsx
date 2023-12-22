@@ -18,21 +18,21 @@ enum Role{
   owner
 }
 
-export function OptionsListChannel(): JSX.Element {
+export function OptionsListChannel({setshowOpstions}: any): JSX.Element {
 
     const [selected, setSelected] = useState<
     SelecterType
     >("Members");
-    const [menuList, setMenuList] = useState<string[]>(['View Profile', 'Invite Game'])
+    const [menuList, setMenuList] = useState<string[]>(['Invite Game'])
 
     // change type of logged user
     const [userType, setUserType] = useState<Role>(Role.admin)
 
     useEffect(() => {
         if(userType === Role.owner)
-          setMenuList(['Mute', 'Ban', 'kick', 'View Profile', 'Invite Game', 'Set as Admin'])
+          setMenuList(['Mute', 'Ban', 'kick', 'Invite Game', 'Set as Admin'])
         if(userType === Role.admin)
-          setMenuList(['Mute', 'Ban', 'kick', 'View Profile', 'Invite Game'])
+          setMenuList(['Mute', 'Ban', 'kick', 'Invite Game'])
 
     }, [userType, menuList])
 
@@ -44,6 +44,7 @@ export function OptionsListChannel(): JSX.Element {
                   {
                     [...Array(10)].map((_, i) => (
                       <ListOfUsersChannal
+                      setshowOpstions={setshowOpstions}
                       name={UserData.name}
                       url={UserData.url}
                       key={i}
@@ -62,6 +63,7 @@ export function OptionsListChannel(): JSX.Element {
                   {
                     [...Array(3)].map((_, i) => (
                       <ListOfUsersChannal
+                      setshowOpstions={setshowOpstions}
                       name={UserData.name}
                       url={UserData.url}
                       key={i}
@@ -81,6 +83,7 @@ export function OptionsListChannel(): JSX.Element {
                   {
                     [...Array(4)].map((_, i) => (
                       <ListOfUsersChannal
+                      setshowOpstions={setshowOpstions}
                       name={UserData.name}
                       url={UserData.url}
                       key={i}
@@ -99,6 +102,7 @@ export function OptionsListChannel(): JSX.Element {
                   {
                     [...Array(1)].map((_, i) => (
                       <ListOfUsersChannal
+                      setshowOpstions={setshowOpstions}
                       name={UserData.name}
                       url={UserData.url}
                       key={i}

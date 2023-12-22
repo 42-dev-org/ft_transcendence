@@ -194,7 +194,7 @@ export default function ConversationUiChannel({
                   <ChangeChannelName channelName={channelName} onSetName={(name: string) => setChannelName(name)} />
                 </div>
                 <div className=" h-full">
-                  <OptionsListChannel />
+                  <OptionsListChannel setshowOpstions={setshowOpstions}/>
                 </div>
               </div>
             </div>

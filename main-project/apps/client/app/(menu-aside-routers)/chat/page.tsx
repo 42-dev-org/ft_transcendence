@@ -206,9 +206,10 @@ const Chat = () => {
         </div>
         {conversationType === "users" ? (
           <ConversationUi
+          uid="1"
             fullName="mustapha ouarsas"
             image="https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg"
-            status="offline"
+            status="in a game"
           />
         ) : conversationType === "channels" ? (
           <ConversationUiChannel fullName={""} />

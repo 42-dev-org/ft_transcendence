@@ -13,14 +13,16 @@ import Link from "next/link";
 
 interface PropsType {
   fullName: string;
+  uid: string;
   image: string | StaticImageData;
   status: "online" | "offline" | "in a game"; //  should add in game
 }
 
 export default function ConversationUi({
-  fullName = "mustapha ouarsas",
-  image= "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg",
-  status = "online",
+  uid,
+  fullName,
+  image,
+  status
 }: PropsType): JSX.Element {
 
   const [showOptions, setshowOpstions] = useState(true);
@@ -61,7 +63,7 @@ export default function ConversationUi({
     <div className="w-2/3 flex justify-center p-2 h-full">
       <div className="w-full flex flex-col ">
         <div className="w-full flex bg-black p-1 text-[#F5F5F5] justify-between items-center">
-          <div className="flex gap-5 items-center h-14">
+          <Link className="flex gap-5 items-center h-14" href={'/users/' + uid}>
               <div className="w-11 h-11 relative">
                 <Image
                   alt="user"
@@ -82,10 +84,9 @@ export default function ConversationUi({
                 <h5 className="font-semibold">{fullName}</h5>
                 <span className={`text-xs font-normal ${status === "online" || status === "in a game" ? " text-green-400" : "text-red-500"} `}>{status}</span>
               </div>
-            </div>
+          </Link>
           <MenuItem  iconBtn={<IoMdMore size={24} color="gray"/>}>
             <button className="hover:bg-[#B2F35F] rounded-md px-2">Block</button>
-            <Link className="hover:bg-[#B2F35F] rounded-md px-2" href="users/1">View Profile</Link>
             <button className="hover:bg-[#B2F35F] rounded-md px-2">Invite Game</button>
           </MenuItem>
         </div>
