@@ -67,6 +67,7 @@ model User {
   url       String
   phone     String
   kind      String
+  points    Decimal
   roles     Roles[] @default([User])
 
   // Media Relation

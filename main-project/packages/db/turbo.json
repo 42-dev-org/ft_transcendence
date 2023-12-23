@@ -4,6 +4,12 @@
     "build": {
       "cache": false,
       "dependsOn": ["db:push", "db:generate", "db:seed"]
+    },
+    "db:generate": {
+      "cache": false
+    },
+    "db:push": {
+      "cache": false
     }
   }
 }
