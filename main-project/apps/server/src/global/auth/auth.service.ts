@@ -4,7 +4,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
-import  * as rs from 'randomstring'
+import * as rs from "randomstring";
 import { UsersRepository } from "../../modules/users/repository/users.repository";
 import { JwtService } from "@nestjs/jwt";
 import { User } from "db";
@@ -32,9 +32,7 @@ export class AuthService {
       url,
     } = data;
     const isUser = await this.repository.findByLogin(login);
-    if (isUser)
-      login += rs.generate(7);
-
+    if (isUser) login += rs.generate(7);
 
     const user = await this.repository.create({
       email,
@@ -46,6 +44,7 @@ export class AuthService {
       kind,
       login,
       phone,
+      points: 0,
     });
 
     return {

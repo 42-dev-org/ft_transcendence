@@ -11,7 +11,7 @@ import { PaginationDto } from "../../../helpers/dto/pagination.dto";
 
 @Injectable()
 export class UsersRepository {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   // work
   async findByLogin(login: string) {
@@ -35,18 +35,18 @@ export class UsersRepository {
               {
                 friendOf: {
                   none: {
-                    user1uid: user
-                  }
-                }
+                    user1uid: user,
+                  },
+                },
               },
               {
                 myFriends: {
                   none: {
-                    user2uid: user
-                  }
-                }
-              }
-            ]
+                    user2uid: user,
+                  },
+                },
+              },
+            ],
           },
           {
             uid: {
@@ -58,6 +58,37 @@ export class UsersRepository {
     });
     console.log(search);
     return getUsers;
+  }
+
+  async friendsLeaderborad(user: string) {
+    return this.prisma.user.findMany({
+      where: {
+        AND: [
+          { uid: { not: user } },
+          {
+            OR: [
+              {
+                friendOf: {
+                  some: {
+                    status: "Accepted",
+                  },
+                },
+              },
+              {
+                myFriends: {
+                  some: {
+                    status: "Accepted",
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+      orderBy: {
+        points: "desc",
+      },
+    });
   }
 
   // work
@@ -93,11 +124,10 @@ export class UsersRepository {
   // work
   async acceptFriend(uid: string) {
     return this.prisma.friend.update({
-      where: { uid, status: 'Pending' },
+      where: { uid, status: "Pending" },
       data: { status: "Accepted" },
     });
   }
-
 
   async getAllInvitations(user: string) {
     return this.prisma.user.findMany({
@@ -105,11 +135,11 @@ export class UsersRepository {
         myFriends: {
           some: {
             user2uid: user,
-            status: 'Pending'
-          }
-        }
-      }
-    })
+            status: "Pending",
+          },
+        },
+      },
+    });
   }
 
   async getAllUsers(user: string) {
@@ -122,24 +152,23 @@ export class UsersRepository {
               {
                 friendOf: {
                   none: {
-                    user1uid: user
-                  }
-                }
+                    user1uid: user,
+                  },
+                },
               },
               {
                 myFriends: {
                   none: {
-                    user2uid: user
-                  }
-                }
-              }
-            ]
-          }
-        ]
-      }
-    })
+                    user2uid: user,
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    });
   }
-
 
   // work
   async getAllFriends(user: string) {
@@ -152,28 +181,28 @@ export class UsersRepository {
               {
                 friendOf: {
                   some: {
-                    status: 'Accepted',
-                  }
-                }
+                    status: "Accepted",
+                  },
+                },
               },
               {
                 myFriends: {
                   some: {
-                    status: 'Accepted'
-                  }
-                }
-              }
-            ]
-          }
-        ]
-      }
-    })
+                    status: "Accepted",
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    });
   }
 
   // work
   async ban(uid: string, user: string) {
     this.prisma.friend.update({
-      where: { uid, status: { not: 'Banned' } },
+      where: { uid, status: { not: "Banned" } },
       data: { status: "Banned", bannedBy: user },
     });
   }
@@ -181,22 +210,22 @@ export class UsersRepository {
   // work
   async unban(uid: string) {
     this.prisma.friend.delete({
-      where: { uid: uid, status: 'Banned' },
+      where: { uid: uid, status: "Banned" },
     });
   }
 
   // work
   async getInvitation(uid: string, user: string) {
-    console.log(uid)
-    console.log(user)
-    console.log(await this.prisma.friend.findMany())
+    console.log(uid);
+    console.log(user);
+    console.log(await this.prisma.friend.findMany());
     return this.prisma.friend.findFirst({
       where: {
         user2uid: user,
         user1uid: uid,
-        status: 'Pending'
-      }
-    })
+        status: "Pending",
+      },
+    });
   }
 
   // work
@@ -225,9 +254,9 @@ export class UsersRepository {
   async getBan(user: string, uid: string) {
     return this.prisma.friend.findFirst({
       where: {
-        status: 'Banned',
-        user1uid: user
-      }
+        status: "Banned",
+        user1uid: user,
+      },
     });
   }
 
