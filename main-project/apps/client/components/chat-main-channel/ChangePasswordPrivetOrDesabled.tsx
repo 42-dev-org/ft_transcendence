@@ -38,8 +38,7 @@ export default function ChangePasswordPrivetOrDesabled(): JSX.Element {
               <option value="protected">Protected</option>
             </select>
           </div>
-
-          {componenetChannelModal === "private" && (
+          {componenetChannelModal === "protected" && (
               <input
               placeholder='Set new password'
               type="password"

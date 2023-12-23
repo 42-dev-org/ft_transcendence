@@ -16,13 +16,14 @@ type usersInChannal = {
     uId: string,
 }
 
-function ListOfUsersChannal({isAdmin, isOwner, name, url, uId, menuList ,setshowOpstions}): JSX.Element {
+function ListOfUsersChannal(props: {isAdmin, isOwner, name, url, uId , setshowOpstions, menuList:string[]}): JSX.Element {
 
     // const isAdmin = true;
     // const isOwner = true;
     const [isAddOpenChannelModal, setIsAddOpenChannelModal] = useState(false);
 
     const router = useRouter();
+    const {isAdmin, isOwner, name, url, uId , setshowOpstions, menuList} = props;
     const onActionClicked = (action: string) => {
         console.log("   "+action)
         if (action ==='mute') {
