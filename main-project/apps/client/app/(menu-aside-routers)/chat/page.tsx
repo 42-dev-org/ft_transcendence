@@ -118,7 +118,7 @@ const Chat = () => {
       <ModalUI open={isAddOpenChannelModal} onClose={onCloseAddChannelModal} title='add Conversation'>
         <div className='flex justify-center items-center p-3 flex-col  max-h-72 gap-2' >
           <div className='flex flex-row' >
-            <input type="text" className='h-7 p-1 px-3 rounded-md w-2/3 mr-2 ' />
+            <input type="text" className='h-7 p-1 px-3 rounded-md w-2/3 mr-2 ' placeholder="channel name" />
             <select defaultValue={componenetChannelModal} name="channels" id="" className='rounded-md' onChange={(e) => setcomponenetChannelModal(e.target.value) }>
               <option value="public">
                 public
@@ -126,12 +126,16 @@ const Chat = () => {
               <option value="private">
                 private
               </option>
+              <option value="protected">
+                protected
+              </option>
 
             </select>
           </div>
 
-          {componenetChannelModal === "private" && (
+          {componenetChannelModal === "protected" && (
             <input
+            placeholder="set a password"
               type="password"
               className="h-7 p-1 px-3 rounded-md w-2/3 mr-2  justify-start"
             />
