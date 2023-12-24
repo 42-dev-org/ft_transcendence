@@ -94,6 +94,13 @@ function HeaderSettingNotifSearchMobale(): JSX.Element {
                     {" "}
                     Profile
                   </Link>
+                  <Link 
+                    href="/setting"
+                    onClick={closeMenus}
+                    className="text-white h-11 flex justify-center items-center w-full hover:bg-[#302d2d] rounded-md mb-1 hover:underline"
+                    >
+                    setting
+                  </Link>
                   <button
                     onClick={() => {
                       logout.refetch();

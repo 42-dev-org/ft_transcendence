@@ -1,43 +1,141 @@
-'use client'
-import Image from 'next/image';
-import React, {useRef, useState} from 'react'
-import Input from '../../../components/Input';
-import withAuth from '../../../hoc/auth';
+"use client";
+import Image from "next/image";
+import React from "react";
+import Button from "../../../components/Button";
+import AchevementCard from "../../../components/Card/AchevementCard";
+import HistoryCard from "../../../components/Card/historyCard";
+import withAuth from "../../../hoc/auth";
+import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "../../../api";
 
+const data = {
+  name: "zakaria",
+  url: "https://cdn.intra.42.fr/users/47192a7a27a46c2c714c6723e30a3cd2/zmaziane.jpg",
+};
 
-function Profile(): JSX.Element {
-  const inputRef = useRef<any>(null)
-  const [picProfile, setPicProfile] = useState('https://cdn.intra.42.fr/users/47192a7a27a46c2c714c6723e30a3cd2/zmaziane.jpg')
+const data2 = {
+  name: "amounach",
+  url: "https://cdn.intra.42.fr/users/e02b4524213b7315479b9ed9f3551093/amounach.jpg",
+};
+const dataAchevment = [
+  {
+    name: "Member VIP",
+    url: "https://media.istockphoto.com/id/1368016954/vector/vip-invitation-with-shiny-glowing-silver-crown-on-shield-and-ribbon-on-gray-curtain.jpg?s=1024x1024&w=is&k=20&c=Z1H06-rL5uoKjZWYpa6eUvUQVdWPZp9DVurIiCjTl30=",
+  },
+  {
+    name: "Play first game",
+    url: "https://media.istockphoto.com/id/1425117356/photo/security-shield-check-mark-icon-on-dark-background-3d-render-concept.jpg?s=612x612&w=0&k=20&c=biUUjoayElOTxm4hGMpVSiIBWeupRd_tVwxMJAhDAbU=",
+  },
+  {
+    name: "win first game",
+    url: "https://media.istockphoto.com/id/1490092075/vector/luxury-golden-star-trophy-award-on-black-background.jpg?s=1024x1024&w=is&k=20&c=D7jrTpxGosEooClb99FqDEUYtfWXAhlhDiFocECSrtA=",
+  },
+  {
+    name: "win second game",
+    url: "https://media.istockphoto.com/id/1447559506/vector/black-and-gold-award-with-glowing-blue-star.jpg?s=612x612&w=0&k=20&c=GBsc4YJoEIj53tINRKFZ0pHAdHx8dSGyGN4TCi2GEI8=",
+  },
+  {
+    name: "win three games",
+    url: "https://media.istockphoto.com/id/1489621737/vector/luxury-gold-award-trophy-on-dark-background.jpg?s=612x612&w=0&k=20&c=CijFELCY9vUbBbiTmE5yJLKYcL4ogPxfu46RTFafAnc=",
+  },
+
+  {
+    name: "win five games",
+    url: "https://media.istockphoto.com/id/1444599665/vector/luxury-gold-and-silver-award-trophy-on-black-background.jpg?s=612x612&w=0&k=20&c=TsZe9tJwM1cIGyzo0IeCgda7R5OJUFDw_PgyF8I56Ec=",
+  },
+  {
+    name: "king",
+    url: "https://media.istockphoto.com/id/1359963131/vector/golden-crown-on-black-background-with-light-effect.jpg?s=1024x1024&w=is&k=20&c=sBfYqcP7iD-iBnUGuIDRLdIHkacLwfFqikfsHGL1aFs=",
+  },
+  {
+    name: " welcom ",
+    url: "https://media.istockphoto.com/id/1056445350/photo/neon-sign-on-brick-wall-background-welcome-3d-rendering.jpg?s=612x612&w=0&k=20&c=HgV9FknkCyM7rt94VgXPHjVF6J81tKqWjR2nvIHGrj8=",
+  },
+];
+function UserProfile() {
+  const {id} = useParams();
+  console.log(id)
   
-  const onHandlePicture = (e:any) => {
-    const file = e.target.files[0];
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file);
-    fileReader.onload = () => {
-        // setPicProfile(fileReader.result);
-        if (fileReader.result) {
-          setPicProfile(fileReader.result as string);
-        }
-    };
-    fileReader.onerror = (error) => {
-        alert(error);
-    };
-  }
+  
+  
+  const query = useQuery({
+    queryKey: ["get-friend", id],
+    queryFn: (meta) => api.api().users.getFriend(meta.queryKey[1] as string),
+  });
+  
+  if (query.isFetched) console.log(query.data?.data);
+  const  displayName = `${query.data?.data.lastName}   ${query.data?.data.firstName}, ${query.data?.data.login}`
+
+
   return (
-    <div className=' flex flex-col w-full gap-y-3 h-full justify-center items-center'>
-        <div className='w-44 h-44 relative'>
-              <Image src={picProfile} width={200} height={200} className='w-full h-full rounded-full' alt='xx'/>
-              <div className='absolute cursor-pointer w-9 h-9 flex justify-center items-center bg-[#1B1B1B] -right-2 bottom-6  rounded-full ' onClick={() => inputRef?.current?.click()}>
-              <svg width={25} height={25} viewBox="0 0 23 26" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="12" cy="13" r="3" stroke="#d9d9d9" strokeWidth="1.5"></circle> <path opacity="0.5" d="M9.77778 21H14.2222C17.3433 21 18.9038 21 20.0248 20.2646C20.51 19.9462 20.9267 19.5371 21.251 19.0607C22 17.9601 22 16.4279 22 13.3636C22 10.2994 22 8.76721 21.251 7.6666C20.9267 7.19014 20.51 6.78104 20.0248 6.46268C19.3044 5.99013 18.4027 5.82123 17.022 5.76086C16.3631 5.76086 15.7959 5.27068 15.6667 4.63636C15.4728 3.68489 14.6219 3 13.6337 3H10.3663C9.37805 3 8.52715 3.68489 8.33333 4.63636C8.20412 5.27068 7.63685 5.76086 6.978 5.76086C5.59733 5.82123 4.69555 5.99013 3.97524 6.46268C3.48995 6.78104 3.07328 7.19014 2.74902 7.6666C2 8.76721 2 10.2994 2 13.3636C2 16.4279 2 17.9601 2.74902 19.0607C3.07328 19.5371 3.48995 19.9462 3.97524 20.2646C5.09624 21 6.65675 21 9.77778 21Z" stroke="#d9d9d9" strokeWidth="1.5"></path> <path d="M19 10H18" stroke="#d9d9d9" strokeWidth="1.5" strokeLinecap="round"></path> </g></svg>
-              </div>
-              <input type='file' className='hidden' ref={inputRef} accept="image/png, image/jpeg" onChange={onHandlePicture}/>
+    <div className=" lg:overflow-hidden md:overflow-auto flex flex-col p-4 w-full h-full gap-y-5">
+      <div
+        className="w-full min-h-[300px] bg-[#ffffff1a] relative rounded-lg"
+        style={{
+          backgroundImage:
+            "url(https://cdn.intra.42.fr/coalition/cover/76/Commodore_BG.jpg)",
+          objectFit: "cover",
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+        }}
+      />
+      <div className="w-full flex lg:flex-row flex-col gap-x-4 gap-y-14 py-2  px-4 ">
+        <div className="lg:min-w-[140px]   relative">
+          <Image
+            width={140}
+            height={140}
+            className="rounded-full absolute border-4 border-[#ffffff1a] -top-24 lg:left-0  md:left-[40%] left-[30%]"
+            alt="zakaria"
+            src={query.data?.data.profileImage}
+          />
         </div>
-        <div className='flex flex-col gap-3'>
-            <Input  onChange={(e) => console.log('xxx')} value='xxxx' className='' />
+        <div className="flex  md:flex-row flex-col w-full gap-4 justify-between">
+          <span className="text-white text-xl font-medium whitespace-nowrap">
+            <strong className="text-white">
+
+            {displayName} 
+            </strong>
+          </span>
+          <div className="flex gap-2 md:flex-row flex-col">
+            <Button onClick={() => null} title="Add Freind" />
+            <Button
+              onClick={() => null}
+              title="Send Message"
+              className="bg-[#ffffff1a] text-white"
+            />
+            <Button
+              onClick={() => null}
+              title="Invite to play"
+              className="bg-[#ffffff1a] text-white"
+            />
+          </div>
         </div>
+      </div>
+      <div className="grid lg:grid-cols-2 mt-4  gap-5 ">
+        <div className="overflow-y-auto max-h-72  flex  gap-4 flex-col">
+          <h2>History</h2>
+
+          {[...Array(9)].map((_, idx) => (
+            <HistoryCard user1={data} user2={data2} key={idx} />
+          ))}
+        </div>
+        <div className="overflow-y-auto max-h-72 gap-3 flex flex-col">
+          <h2>Achievements</h2>
+          <div className="grid  h-full rounded-lg  grid-cols-2 gap-5  w-full">
+            {dataAchevment.map((dataAchevment, idx) => (
+              <AchevementCard
+                name={dataAchevment.name}
+                url={dataAchevment.url}
+                key={idx}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
 
-export default withAuth(Profile)
+export default withAuth(UserProfile);
