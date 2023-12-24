@@ -33,7 +33,13 @@ function setting(): JSX.Element {
               <input type='file' className='hidden' ref={inputRef} accept="image/png, image/jpeg" onChange={onHandlePicture}/>
         </div>
         <div className='flex flex-col gap-3'>
-            <Input  onChange={(e) => console.log('xxx')} value='xxxx' className='' />
+            <Input  onChange={(e) => console.log('login')} value="zmaziane" className='' />
+        </div>
+        <div className='flex flex-col gap-3'>
+            <Input  onChange={(e) => console.log('lastName')} value="maziane" className='' />
+        </div>
+        <div className='flex flex-col gap-3'>
+            <Input  onChange={(e) => console.log('firstName')} value="zakaria" className='' />
         </div>
     </div>
   )
