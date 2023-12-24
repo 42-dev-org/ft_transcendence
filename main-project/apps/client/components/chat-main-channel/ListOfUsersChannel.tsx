@@ -25,13 +25,13 @@ function ListOfUsersChannal(props: {isAdmin, isOwner, name, url, uId , setshowOp
     const router = useRouter();
     const {isAdmin, isOwner, name, url, uId , setshowOpstions, menuList} = props;
     const onActionClicked = (action: string) => {
-        console.log("   "+action)
+        console.log("my action   " + action)
         if (action ==='mute') {
                 setIsAddOpenChannelModal(true);
         }
-        else if (action === 'view profile'){
+        if (action == 'ban'){
             // <FtViewProfile url={url}/> 
-            // alert("here")
+            alert("ban")
             // router.push(`/users/${uId}`)
 
         }

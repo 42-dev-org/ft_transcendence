@@ -43,7 +43,7 @@ export default function ConversationUiChannel({
   fullName = "mustapha ouarsass1",
 }: PropsType): JSX.Element {
   const [isAddOpen, setIsAddOpen] = useState(false)
-  const [channelName, setChannelName] = useState("ChannelHomaygat")
+  const [channelName, setChannelName] = useState("Homaygat")
 
   const [menuList, setMenuList] = useState<string[]>(['Invite Game'])
   const [userType, setUserType] = useState<Role>(Role.owner)
@@ -209,10 +209,10 @@ export default function ConversationUiChannel({
                 </button>
               </form>
             </div>
-            {showOpstions && <div className="flex w-1/3 flex-col h-full bg-[#6666] rounded-md border-2 border-zinc-400 gap-2">
+            {showOpstions && <div className="flex w-1/3 flex-col h-full bg-[#45454566] rounded-md border-2 border-zinc-400 gap-2">
               <IoIosCloseCircleOutline size={30} color="white" className="cursor-pointer self-end" onClick={() => setshowOpstions(false)} />
-              <div className=" flex flex-col gap-5 h-full">
-                <div>
+              <div className="w-full flex flex-col gap-5 h-full">
+                <div className="">
                   <ChangePasswordPrivetOrDesabled />
                 </div>
                 <div>

@@ -6,8 +6,6 @@ import ModalUI from '../Modal';
 
 
 
-
-
 export default function ChangePasswordPrivetOrDesabled(): JSX.Element {
 
     const [isAddOpenChannelModal, setIsAddOpenChannelModal] = useState(false);
