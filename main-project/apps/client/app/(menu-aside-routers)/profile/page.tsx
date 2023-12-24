@@ -8,6 +8,7 @@ import withAuth from "../../../hoc/auth";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../../../api";
+import { useAppSelector } from "../../../store/store";
 
 const data = {
   name: "zakaria",
@@ -53,7 +54,7 @@ const dataAchevment = [
     url: "https://media.istockphoto.com/id/1056445350/photo/neon-sign-on-brick-wall-background-welcome-3d-rendering.jpg?s=612x612&w=0&k=20&c=HgV9FknkCyM7rt94VgXPHjVF6J81tKqWjR2nvIHGrj8=",
   },
 ];
-function UserProfile() {
+function MyProfile() {
   const {id} = useParams();
   console.log(id)
   
@@ -67,6 +68,7 @@ function UserProfile() {
   if (query.isFetched) console.log(query.data?.data);
   const  displayName = `${query.data?.data.lastName}   ${query.data?.data.firstName}, ${query.data?.data.login}`
 
+  const user = useAppSelector(s => s.user.user)
 
   return (
     <div className=" lg:overflow-hidden md:overflow-auto flex flex-col p-4 w-full h-full gap-y-5">
@@ -87,29 +89,17 @@ function UserProfile() {
             height={140}
             className="rounded-full absolute border-4 border-[#ffffff1a] -top-24 lg:left-0  md:left-[40%] left-[30%]"
             alt="zakaria"
-            src={query.data?.data.profileImage}
+            src={user?.profileImage as string}
           />
         </div>
-        <div className="flex  md:flex-row flex-col w-full gap-4 justify-between">
+        <div className="flex  md:flex-row flex-col w-full gap-4 justify-between pt-3">
           <span className="text-white text-xl font-medium whitespace-nowrap">
             <strong className="text-white">
 
-            {displayName} 
+            {user?.lastName && user?.firstName + ' ' + user?.lastName + ', ' + user?.login || ''}
+            {/* {displayName}  */}
             </strong>
           </span>
-          <div className="flex gap-2 md:flex-row flex-col">
-            <Button onClick={() => null} title="Add Freind" />
-            <Button
-              onClick={() => null}
-              title="Send Message"
-              className="bg-[#ffffff1a] text-white"
-            />
-            <Button
-              onClick={() => null}
-              title="Invite to play"
-              className="bg-[#ffffff1a] text-white"
-            />
-          </div>
         </div>
       </div>
       <div className="grid lg:grid-cols-2 mt-4  gap-5 ">
@@ -138,4 +128,4 @@ function UserProfile() {
 }
 
 
-export default withAuth(UserProfile);
+export default withAuth(MyProfile);

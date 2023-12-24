@@ -90,7 +90,7 @@ function UserProfile() {
             src={query.data?.data.profileImage}
           />
         </div>
-        <div className="flex  md:flex-row flex-col w-full gap-4 justify-between">
+        <div className="flex  md:flex-row flex-col w-full gap-4 justify-between pt-3" >
           <span className="text-white text-xl font-medium whitespace-nowrap">
             <strong className="text-white">
 
