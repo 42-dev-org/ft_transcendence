@@ -89,10 +89,17 @@ function HeaderSettingNotifSearchMobale(): JSX.Element {
                   <Link
                     href="/profile"
                     onClick={closeMenus}
-                    className="text-white h-11 flex justify-center items-center w-full hover:bg-[#302d2d] rounded-md mb-1 hover:underline"
+                    className="text-white h-8 flex justify-center items-center w-full hover:bg-[#302d2d] rounded-md mb-1 hover:underline"
                   >
                     {" "}
                     Profile
+                  </Link>
+                  <Link 
+                    href="/setting"
+                    onClick={closeMenus}
+                    className="text-white h-8 flex justify-center items-center w-full hover:bg-[#302d2d] rounded-md mb-1 hover:underline"
+                    >
+                    setting
                   </Link>
                   <button
                     onClick={() => {
