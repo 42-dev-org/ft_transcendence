@@ -55,23 +55,18 @@ export class ConversationsService {
 
   // TODO: impl this
   async protectConversation(dto: ProtectChannel) {
-    return this.repository.update(
-      dto.conversation, {
-        visibility: 'Protected',
-        password: dto.password
-      }
-    )
+    return this.repository.update(dto.conversation, {
+      visibility: "Protected",
+      password: dto.password,
+    });
   }
 
   // TODO: impl this
   async unprotectConversation(dto: UnProtectChannel) {
-    return this.repository.update(
-      dto.conversation,
-      {
-        visibility: 'Public',
-        password: null
-      }
-    )
+    return this.repository.update(dto.conversation, {
+      visibility: "Public",
+      password: null,
+    });
   }
 
   async unMuteUser(uid: string, user: string) {
@@ -94,11 +89,17 @@ export class ConversationsService {
       },
       name,
       participants: {
-        connect: participants.map((uid) => ({ uid })),
+        connect: participants
+          .map((uid) => ({ uid }))
+          .concat([
+            {
+              uid: user,
+            },
+          ]),
       },
       type,
       visibility,
-      ...(visibility === "Private"
+      ...(visibility === "Protected"
         ? {
             password,
           }
