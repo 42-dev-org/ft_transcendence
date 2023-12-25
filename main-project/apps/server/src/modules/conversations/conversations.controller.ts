@@ -45,6 +45,12 @@ export class ConversationsController {
     @Body() createConversationDto: CreateConversationDto,
     @GetUser() { uid }: User
   ) {
+    if (
+      createConversationDto.visibility === "Protected" &&
+      createConversationDto.password.trim().length == 0
+    ) {
+      throw new BadRequestException();
+    }
     return this.conversationsService.create(createConversationDto, uid);
   }
 
@@ -82,7 +88,7 @@ export class ConversationsController {
   async unmut(@Body() dto: UnMutUserDto) {
     return this.conversationsService.unMuteUser(dto.conversation, dto.user);
   }
-  
+
   @UseGuards(IsOwnerGuard)
   @Patch("protect")
   @UseGuards(AuthGuard())
@@ -101,8 +107,7 @@ export class ConversationsController {
   @Patch("ban-participant")
   @UseGuards(AuthGuard())
   async ban(@Body() dto: UpdateUserMembershipInRoomDto) {
-    return this.conversationsService.ban(dto
-    );
+    return this.conversationsService.ban(dto);
   }
 
   @UseGuards(IsGuardAdmin)

@@ -6,6 +6,7 @@ export class CreateConversationDto {
   name: string;
 
   @IsString()
+  @IsOptional()
   password: string;
 
   @IsArray()
