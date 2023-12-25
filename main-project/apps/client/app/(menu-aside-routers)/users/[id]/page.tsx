@@ -87,10 +87,10 @@ function UserProfile() {
             height={140}
             className="rounded-full absolute border-4 border-[#ffffff1a] -top-24 lg:left-0  md:left-[40%] left-[30%]"
             alt="zakaria"
-            src={query.data?.data.profileImage}
+            src={(query.data?.data.profileImage) || 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg'}
           />
         </div>
-        <div className="flex  md:flex-row flex-col w-full gap-4 justify-between">
+        <div className="flex  md:flex-row flex-col w-full gap-4 justify-between pt-3" >
           <span className="text-white text-xl font-medium whitespace-nowrap">
             <strong className="text-white">
 

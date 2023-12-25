@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@prisma/client": "5.4.2"
+    "@prisma/client": "5.7.1"
   },
   "scripts": {
     "db:generate": "prisma generate",
@@ -16,7 +16,7 @@
     "db:seed": "npx prisma db seed"
   },
   "devDependencies": {
-    "prisma": "5.4.2",
+    "prisma": "5.7.1",
     "ts-node": "^10.9.2",
     "tsconfig": "workspace:*",
     "typescript": "^5.2.2"

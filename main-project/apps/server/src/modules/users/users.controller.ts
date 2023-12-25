@@ -18,16 +18,12 @@ import {
 import { UsersService } from "./users.service";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { AuthGuard } from "@nestjs/passport";
-import { PutAbilities } from "src/global/rbac/decorator/rbac.decorator";
-import { Actions } from "src/global/rbac/enum/rbac.enum";
-import { RbacGuard } from "src/global/rbac/guard/rbac.guard";
 import { GetUser } from "src/shared/decorators/get-user.decorator";
 import { User, $Enums } from "db";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { FileValidatorPipe } from "src/global/media/pipes/media.pipe";
 import { MediaFile } from "src/shared/types/media";
 import { Request } from "express";
-import { PaginationDto } from "src/helpers/dto/pagination.dto";
 
 @Controller("users")
 export class UsersController {
@@ -59,6 +55,12 @@ export class UsersController {
     @GetUser() { uid }: User
   ) {
     return this.usersService.searchForUser(s, uid);
+  }
+
+  @Get('leaderboard')
+  @UseGuards(AuthGuard())
+  async friendsLeaderboard(@GetUser() { uid }: User) {
+    return this.usersService.friendsLeaderboard(uid)
   }
 
   @Get("me")

@@ -19,8 +19,6 @@ import OptionsListChannel from "./OptionsListChannel";
 import ChangePasswordPrivetOrDesabled from "./ChangePasswordPrivetOrDesabled";
 
 
-
-
 const data = {
   msg: 'how about your day',
   name: 'ouarsass',
@@ -32,11 +30,24 @@ interface PropsType {
   fullName: string;
 }
 
+
+enum Role{
+  user,
+  admin,
+  owner
+}
+
+
+
 export default function ConversationUiChannel({
   fullName = "mustapha ouarsass1",
 }: PropsType): JSX.Element {
+  console.log('testing from the north')
   const [isAddOpen, setIsAddOpen] = useState(false)
-  const [channelName, setChannelName] = useState("ChannelHomaygat")
+  const [channelName, setChannelName] = useState("Homaygat")
+
+  const [menuList, setMenuList] = useState<string[]>(['Invite Game'])
+  const [userType, setUserType] = useState<Role>(Role.owner)
 
   const [showOpstions, setshowOpstions] = useState(false);
   const [msg, setMsg] = useState("");
@@ -92,8 +103,20 @@ export default function ConversationUiChannel({
     }
   }, []);
 
-
   const onCloseAddModal = () => setIsAddOpen(false)
+
+  useEffect(() => {
+    if(userType === Role.owner)
+    {
+      setMenuList(['Mute', 'Ban', 'kick', 'Invite Game', 'Set as Admin'])
+    }
+    if(userType === Role.admin){
+      setMenuList(['Mute', 'Ban', 'kick', 'Invite Game'])
+      
+    }
+
+}, [userType])
+
   return (
     <Fragment>
       <ModalUI open={isAddOpen} onClose={onCloseAddModal} title='Add Users'>
@@ -127,7 +150,10 @@ export default function ConversationUiChannel({
             <MenuItem iconBtn={
               <IoMdMore size={24} color="gray" />
             } >
-              <button className=" hover:bg-[#B2F35F] rounded-md" onClick={() => { setIsAddOpen(true) }} >Add users</button>
+              {userType != Role.user && 
+              <button className=" hover:bg-[#B2F35F] rounded-md" title="addUsers" onClick={() => { setIsAddOpen(true) }} >Add users</button>
+              }
+              <button className=" hover:bg-[#B2F35F] rounded-md" title="leaveChannel">Leave channel</button>
               <button className="hover:bg-[#B2F35F] rounded-md px-2" onClick={() => setshowOpstions(true)}>View Details</button>
 
             </MenuItem>
@@ -184,17 +210,17 @@ export default function ConversationUiChannel({
                 </button>
               </form>
             </div>
-            {showOpstions && <div className="flex w-1/3 flex-col h-full bg-[#6666] rounded-md border-2 border-zinc-400 gap-4">
+            {showOpstions && <div className="flex w-1/3 flex-col h-full bg-[#45454566] rounded-md border-2 border-zinc-400 gap-2">
               <IoIosCloseCircleOutline size={30} color="white" className="cursor-pointer self-end" onClick={() => setshowOpstions(false)} />
-              <div className=" flex flex-col gap-9 h-full">
-                <div>
+              <div className="w-full flex flex-col gap-5 h-full">
+                <div className="">
                   <ChangePasswordPrivetOrDesabled />
                 </div>
                 <div>
                   <ChangeChannelName channelName={channelName} onSetName={(name: string) => setChannelName(name)} />
                 </div>
                 <div className=" h-full">
-                  <OptionsListChannel setshowOpstions={setshowOpstions}/>
+                  <OptionsListChannel menuList={menuList} userType={userType} setshowOpstions={setshowOpstions}/>
                 </div>
               </div>
             </div>

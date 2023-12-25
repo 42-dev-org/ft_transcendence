@@ -19,8 +19,14 @@ export class UsersService {
   constructor(
     private readonly repository: UsersRepository,
     private readonly media: MediaService
-  ) { }
+  ) {}
 
+  async friendsLeaderboard(user: string) {
+    const friends = await this.repository.friendsLeaderborad(user);
+    return {
+      data: friends,
+    };
+  }
   findAll() {
     return this.repository.findAll();
   }
@@ -31,10 +37,7 @@ export class UsersService {
 
   update(id: string, updateUserDto: UpdateUserDto) {
     const { lastName, firstName, login } = updateUserDto;
-    return this.repository.updateOne(
-      { lastName, firstName, login },
-      id
-    );
+    return this.repository.updateOne({ lastName, firstName, login }, id);
   }
 
   async acceptFriend(uid: string, user: string) {
@@ -71,8 +74,6 @@ export class UsersService {
 
     this.repository.ban(friendship.uid, user);
   }
-
-
 
   async unban(uid: string, user: string) {
     const friendship = await this.repository.getBan(user, uid);

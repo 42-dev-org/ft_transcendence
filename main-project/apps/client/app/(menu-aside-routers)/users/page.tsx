@@ -10,7 +10,7 @@ import withAuth from "../../../hoc/auth";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../../../api";
 
-type ComponeetType = "search" | "friends" | "invitations";
+type ComponeetType = "search" | "friends" | "invitations" | "blocked";
 
 function Users(): JSX.Element {
   const [data, setData] = useState<any[]>([]);
@@ -22,6 +22,8 @@ function Users(): JSX.Element {
       ? "Accepted"
       : componenet === "invitations"
       ? "Pending"
+      : componenet === "blocked"
+      ? "banned"
       : undefined;
 
   const usersQuery = useQuery({
@@ -61,6 +63,21 @@ function Users(): JSX.Element {
   console.log(searchMutation.data?.data)
 
   const render = () => {
+
+    if (componenet === "blocked") {
+      return (
+        <div className="grid lg:grid-cols-5  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
+          {searchMutation.isSuccess &&
+            data.map((user, idx) => (
+              <BannedCArd {...user} 
+              key={idx} 
+              refetch={usersQuery.refetch}
+              />
+            ))}
+        </div>
+      );
+    }
+
     if (componenet === "invitations") {
       return (
         <div className="grid lg:grid-cols-5  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
@@ -125,7 +142,7 @@ function Users(): JSX.Element {
           }}
           className="block w-full p-2  text-sm rounded-lg bg-[#ffffff1a] border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
         >
-          {["search", "friends", "invitations"].map((el) => (
+          {["search", "friends", "invitations", "blocked"].map((el) => (
             <option key={el} value={el}>
               {el}
             </option>
