@@ -113,7 +113,6 @@ const Chat = () => {
                   time={dataChannels.time}
                   nameChannels={ch.name}
                   msg={""}
-                  pic={dataChannels.pic}
                   key={idx}
                 />
               ))}
@@ -239,6 +238,7 @@ const Chat = () => {
               });
             }}
             title="add channel"
+            
           ></Button>
         </div>
       </ModalUI>
@@ -259,7 +259,7 @@ const Chat = () => {
               className=" bg-white h-10 w-full text-black  rounded-full pl-3"
             />
           </div>
-          <div className=" px-2 h-24 flex gap-2 justify-center  items-center ">
+          <div className=" px-2 h-12 flex gap-2 justify-center  items-center ">
             <Button
               onClick={() => setIsAddOpen(true)}
               title={""}
