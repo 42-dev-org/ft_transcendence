@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Prisma } from "db";
+import { Prisma, $Enums } from "db";
 import { PrismaService } from "src/global/prisma/prisma.service";
 
 @Injectable()
@@ -13,23 +13,208 @@ export class ConversationsRepository {
     });
   }
 
+  async userHealthy(uid: string, user: string) {
+    const conversation = await this.prisma.conversation.findUnique({
+      where: {
+        uid,
+        participants: {
+          some: {
+            uid: user,
+          },
+        },
+        mut: {
+          none: {
+            uid: user,
+          },
+        },
+        ban: {
+          none: {
+            uid: user,
+          },
+        },
+      },
+      select: {
+        uid: true,
+      },
+    });
+    return !!conversation;
+  }
+
   public async findAll() {
     return this.prisma.conversation.findMany({
       //   include: { Messages: true },
     });
   }
 
-  public async findMeAll(uid: string) {
-    return this.prisma.conversation.findMany({
-      where: { participants: { some: { uid } } },
-      //   include: { Messages: true },
+  async conversationType(uid: string) {
+    return this.prisma.conversation.findUnique({
+      where: { uid },
+      select: { type: true },
+    });
+  }
+  async conversationVisibility(uid: string) {
+    return this.prisma.conversation.findUnique({
+      where: { uid },
+      select: { visibility: true },
     });
   }
 
-  public async findOne(uid: string) {
+  public async findMeAll(uid: string, type: $Enums.ConversationTypes) {
+    return this.prisma.conversation.findMany({
+      where: {
+        ...(type == "Group"
+          ? {
+              OR: [
+                {
+                  visibility: {
+                    not: "Private",
+                  },
+                },
+                {
+                  visibility: { equals: "Private" },
+                  participants: {
+                    some: {
+                      uid,
+                    },
+                  },
+                },
+              ],
+              type: "Group",
+            }
+          : {
+              participants: { some: { uid } },
+              type: "Single",
+            }),
+      },
+      //   include: { Messages: true },
+      select: {
+        name: true,
+        profileImage: true,
+        messages: {
+          orderBy: {
+            createdAt: "asc",
+          },
+          take: 1,
+          select: {
+            sender: {
+              select: {
+                uid: true,
+                login: true,
+                profileImage: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  async isBanned(uid: string, user: string) {
+    const cnv = this.prisma.conversation.findUnique({
+      where: {
+        uid,
+        ban: {
+          some: {
+            uid: user,
+          },
+        },
+      },
+      select: { uid: true },
+    });
+    return !!cnv;
+  }
+
+  async conversationExist(uid: string) {
+    const cnv = await this.prisma.conversation.findUnique({
+      where: { uid },
+      select: { uid: true },
+    });
+    return !!cnv;
+  }
+
+  async isMuted(uid: string, user: string) {
+    const cnv = await this.prisma.conversation.findUnique({
+      where: {
+        uid,
+        mut: {
+          some: {
+            userUid: user,
+          },
+        },
+      },
+      select: { uid: true },
+    });
+    return !!cnv;
+  }
+
+  async isAdmin(uid: string, user: string) {
+    const cnv = await this.prisma.conversation.findUnique({
+      where: {
+        uid,
+        OR: [
+          {
+            admins: {
+              some: {
+                uid: user,
+              },
+            },
+          },
+          {
+            owner: { uid: user },
+          },
+        ],
+      },
+      select: { uid: true },
+    });
+    return !!cnv;
+  }
+
+  async isOwner(uid: string, user: string) {
+    const cnv = await this.prisma.conversation.findUnique({
+      where: { uid, owner: { uid: user } },
+      select: { uid: true },
+    });
+    return !!cnv;
+  }
+
+  async existsInConversation(uid: string, user: string) {
+    const cnv = await this.prisma.conversation.findUnique({
+      where: {
+        uid,
+        participants: {
+          some: {
+            uid: user,
+          },
+        },
+      },
+      select: { uid: true },
+    });
+    return !!cnv;
+  }
+
+  public async findOne(uid: string, internalUse: boolean = false) {
     return this.prisma.conversation.findUnique({
       where: { uid },
-      //   include: { Messages: true },
+      select: {
+        profileImage: true,
+        type: true,
+        visibility: true,
+
+        ...(internalUse
+          ? {
+              password: true,
+              userUid: true,
+              owner: true,
+            }
+          : {
+              participants: true,
+              name: true,
+              ban: true,
+              messages: true,
+              mut: true,
+              admins: true,
+            }),
+      },
     });
   }
 
@@ -52,7 +237,12 @@ export class ConversationsRepository {
   public async deleteParticipant(uid: string, cnvUid: string) {
     return this.prisma.conversation.update({
       where: { uid: cnvUid },
-      data: { participants: { disconnect: { uid } } },
+      data: {
+        participants: { disconnect: { uid } },
+        mut: {
+          disconnect: { uid },
+        },
+      },
     });
   }
 
@@ -65,7 +255,11 @@ export class ConversationsRepository {
 
   public async addParticipant(uid: string, cnvUid: string) {
     return this.prisma.conversation.update({
-      where: { uid: cnvUid },
+      where: {
+        uid: cnvUid,
+        participants: { none: { uid } },
+        ban: { none: { uid } },
+      },
       data: { participants: { connect: { uid } } },
     });
   }
@@ -88,7 +282,11 @@ export class ConversationsRepository {
     return this.prisma.conversation.update({
       where: { uid: cnv },
       data: {
-        mut: { delete: { uid } },
+        mut: {
+          delete: {
+            uid,
+          },
+        },
       },
     });
   }
@@ -96,6 +294,37 @@ export class ConversationsRepository {
   public async getMut(uid: string, cnv: string) {
     return this.prisma.mutedConversation.findFirst({
       where: { AND: [{ userUid: uid, conversationUid: cnv }] },
+    });
+  }
+
+  public async ban(uid: string, cnvUid: string) {
+    return this.prisma.conversation.update({
+      where: { uid: cnvUid },
+      data: {
+        ban: {
+          connect: {
+            uid,
+          },
+        },
+        participants: {
+          disconnect: {
+            uid,
+          },
+        },
+      },
+    });
+  }
+
+  public async unban(uid: string, cnvUid: string) {
+    return this.prisma.conversation.update({
+      where: { uid: cnvUid },
+      data: {
+        ban: {
+          disconnect: {
+            uid,
+          },
+        },
+      },
     });
   }
 
