@@ -14,7 +14,10 @@ import { UsersModule } from '../users/users.module';
 import { AuthModule } from '../../global/auth/auth.module';
 import { MessagesModule } from '../messages/messages.module';
 import { ConversationsModule } from '../conversations/conversations.module';
+import { GamesGateway } from '../game/games.gateway';
 import * as path from 'path';
+import GameModel from '../game/services/game.model.service';
+import { GamesModule } from '../game/games.module';
 
 @Module({
   imports: [
@@ -36,6 +39,7 @@ import * as path from 'path';
     AuthModule,
     MessagesModule,
     ConversationsModule,
+    GamesModule
   ],
   controllers: [],
   providers: [],
