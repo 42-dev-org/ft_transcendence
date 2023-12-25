@@ -99,7 +99,7 @@ const Chat = () => {
     if (conversationQuery.isFetched) {
       setCnv(conversationQuery.data?.data);
     }
-  }, [conversationQuery.isFetched]);
+  }, [conversationQuery]);
 
   function render() {
     switch (component) {

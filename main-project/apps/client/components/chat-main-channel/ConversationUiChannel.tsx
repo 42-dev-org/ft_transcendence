@@ -47,7 +47,7 @@ export default function ConversationUiChannel({
   const [channelName, setChannelName] = useState("Homaygat")
 
   const [menuList, setMenuList] = useState<string[]>(['Invite Game'])
-  const [userType, setUserType] = useState<Role>(Role.owner)
+  const [userType, setUserType] = useState<Role>(Role.admin)
 
   const [showOpstions, setshowOpstions] = useState(false);
   const [msg, setMsg] = useState("");
@@ -106,15 +106,12 @@ export default function ConversationUiChannel({
   const onCloseAddModal = () => setIsAddOpen(false)
 
   useEffect(() => {
-    if(userType === Role.owner)
-    {
+    if(userType === Role.owner){
       setMenuList(['Mute', 'Ban', 'kick', 'Invite Game', 'Set as Admin'])
     }
     if(userType === Role.admin){
       setMenuList(['Mute', 'Ban', 'kick', 'Invite Game'])
-      
     }
-
 }, [userType])
 
   return (
