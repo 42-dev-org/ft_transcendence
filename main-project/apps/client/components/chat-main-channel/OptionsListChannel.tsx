@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ListOfUsersChannal from './ListOfUsersChannel';
+import ListOfBannedChannal from './ListOfBannedChannal';
+import ListOfMutedChannal from './ListOfMutedChannal';
 
 
 
@@ -18,7 +20,7 @@ const UserData = {
 //   owner
 // }
 
-export function OptionsListChannel(props: {menuList: string[], setshowOpstions: any}): JSX.Element {
+export function OptionsListChannel(props: {menuList: string[], userType, setshowOpstions: any}): JSX.Element {
 
     const [selected, setSelected] = useState<
     SelecterType
@@ -90,36 +92,34 @@ export function OptionsListChannel(props: {menuList: string[], setshowOpstions: 
                 <div className='flex flex-col justify-center items-center w-full'>
                   {
                     [...Array(4)].map((_, i) => (
-                      <ListOfUsersChannal
+                      <ListOfMutedChannal
                       setshowOpstions={props.setshowOpstions}
                       name={UserData.name}
                       url={UserData.url}
                       key={i}
                       uId={UserData.uId}
-                      isAdmin={true}
-                      isOwner={false}
                       menuList={props.menuList}
+                      setMenuList={["Unmuted"]}
                       />
                     ))
                   }
                 </div>
             );
         }
-        if (selected === "Banned")
+        if (selected === "Banned" && props.userType)
         {
             return (
                 <div className='flex flex-col justify-center items-center w-full'>
                   {
                     [...Array(1)].map((_, i) => (
-                      <ListOfUsersChannal
+                      <ListOfBannedChannal
                       setshowOpstions={props.setshowOpstions}
                       name={UserData.name}
                       url={UserData.url}
                       key={i}
                       uId={UserData.uId}
-                      isAdmin={true}
-                      isOwner={false}
                       menuList={props.menuList}
+                      setMenuList={["Unbaned"]}
                       />
                     ))
                   }

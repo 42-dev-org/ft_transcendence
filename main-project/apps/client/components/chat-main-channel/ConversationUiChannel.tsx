@@ -42,6 +42,7 @@ enum Role{
 export default function ConversationUiChannel({
   fullName = "mustapha ouarsass1",
 }: PropsType): JSX.Element {
+  console.log('testing from the north')
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [channelName, setChannelName] = useState("Homaygat")
 
@@ -114,7 +115,7 @@ export default function ConversationUiChannel({
       
     }
 
-}, [userType, menuList])
+}, [userType])
 
   return (
     <Fragment>
@@ -219,7 +220,7 @@ export default function ConversationUiChannel({
                   <ChangeChannelName channelName={channelName} onSetName={(name: string) => setChannelName(name)} />
                 </div>
                 <div className=" h-full">
-                  <OptionsListChannel menuList={menuList} setshowOpstions={setshowOpstions}/>
+                  <OptionsListChannel menuList={menuList} userType={userType} setshowOpstions={setshowOpstions}/>
                 </div>
               </div>
             </div>
