@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ListOfUsersChannal from './ListOfUsersChannel';
+import ListOfBannedChannal from './ListOfBannedChannal';
+import ListOfMutedChannal from './ListOfMutedChannal';
 
 
 
@@ -12,33 +14,33 @@ const UserData = {
   uId: "hereUId"
 };
 
-enum Role{
-  user,
-  admin,
-  owner
-}
+// enum Role{
+//   user,
+//   admin,
+//   owner
+// }
 
-export function OptionsListChannel({setshowOpstions}: any): JSX.Element {
+export function OptionsListChannel(props: {menuList: string[], userType, setshowOpstions: any}): JSX.Element {
 
     const [selected, setSelected] = useState<
     SelecterType
     >("Members");
-    const [menuList, setMenuList] = useState<string[]>(['Invite Game'])
+    // const [menuList, setMenuList] = useState<string[]>(['Invite Game'])
 
     // change type of logged user
-    const [userType, setUserType] = useState<Role>(Role.user)
+    // const [userType, setUserType] = useState<Role>(Role.owner)
 
-    useEffect(() => {
-        if(userType === Role.owner)
-        {
-          setMenuList(['Mute', 'Ban', 'kick', 'Invite Game', 'Set as Admin'])
-        }
-        if(userType === Role.admin){
-          setMenuList(['Mute', 'Ban', 'kick', 'Invite Game'])
+    // useEffect(() => {
+    //     if(userType === Role.owner)
+    //     {
+    //       setMenuList(['Mute', 'Ban', 'kick', 'Invite Game', 'Set as Admin'])
+    //     }
+    //     if(userType === Role.admin){
+    //       setMenuList(['Mute', 'Ban', 'kick', 'Invite Game'])
           
-        }
+    //     }
 
-    }, [userType, menuList])
+    // }, [userType, menuList])
 
     const render = () => {
         if (selected === "Members")
@@ -48,14 +50,14 @@ export function OptionsListChannel({setshowOpstions}: any): JSX.Element {
                   {
                     [...Array(10)].map((_, i) => (
                       <ListOfUsersChannal
-                      setshowOpstions={setshowOpstions}
+                      setshowOpstions={props.setshowOpstions}
                       name={UserData.name}
                       url={UserData.url}
                       key={i}
-                      menuList={menuList}
                       uId={UserData.uId}
                       isAdmin={true}
                       isOwner={false}
+                      menuList={props.menuList}
                       />
                     ))
                   }
@@ -69,14 +71,14 @@ export function OptionsListChannel({setshowOpstions}: any): JSX.Element {
                   {
                     [...Array(3)].map((_, i) => (
                       <ListOfUsersChannal
-                      setshowOpstions={setshowOpstions}
+                      setshowOpstions={props.setshowOpstions}
                       name={UserData.name}
                       url={UserData.url}
                       key={i}
-                      menuList={menuList}
                       uId={UserData.uId}
                       isAdmin={true}
-                      isOwner={false}
+                      isOwner={true}
+                      menuList={props.menuList}
 
                       />
                     ))
@@ -90,36 +92,34 @@ export function OptionsListChannel({setshowOpstions}: any): JSX.Element {
                 <div className='flex flex-col justify-center items-center w-full'>
                   {
                     [...Array(4)].map((_, i) => (
-                      <ListOfUsersChannal
-                      setshowOpstions={setshowOpstions}
+                      <ListOfMutedChannal
+                      setshowOpstions={props.setshowOpstions}
                       name={UserData.name}
                       url={UserData.url}
                       key={i}
-                      menuList={menuList}
                       uId={UserData.uId}
-                      isAdmin={true}
-                      isOwner={false}
+                      menuList={props.menuList}
+                      setMenuList={["Unmuted"]}
                       />
                     ))
                   }
                 </div>
             );
         }
-        if (selected === "Banned")
+        if (selected === "Banned" && props.userType)
         {
             return (
                 <div className='flex flex-col justify-center items-center w-full'>
                   {
                     [...Array(1)].map((_, i) => (
-                      <ListOfUsersChannal
-                      setshowOpstions={setshowOpstions}
+                      <ListOfBannedChannal
+                      setshowOpstions={props.setshowOpstions}
                       name={UserData.name}
                       url={UserData.url}
                       key={i}
-                      menuList={menuList}
                       uId={UserData.uId}
-                      isAdmin={true}
-                      isOwner={false}
+                      menuList={props.menuList}
+                      setMenuList={["Unbaned"]}
                       />
                     ))
                   }

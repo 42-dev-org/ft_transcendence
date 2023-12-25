@@ -80,15 +80,16 @@ model User {
 
   // Conversations Relations
   conversations      Conversation[] @relation("conversations")
-  ownedConversations Conversation[] @relation("owned-conversations")
+  adminConversations Conversation[] @relation("owned-conversations")
 
   ban Conversation[] @relation("banned-conversations")
 
   muted MutedConversation[]
 
   // friendship
-  myFriends Friend[] @relation("my-friends")
-  friendOf  Friend[] @relation("friend-of")
+  myFriends    Friend[]       @relation("my-friends")
+  friendOf     Friend[]       @relation("friend-of")
+  ownedConversations Conversation[]
 
   @@index([uid])
   @@map("users")
@@ -120,7 +121,8 @@ model Conversation {
 
   participants User[] @relation("conversations")
 
-  mut MutedConversation[]
+  mut   MutedConversation[]
+  owner User                @relation(fields: [userUid], references: [uid])
 
   admins User[] @relation("owned-conversations")
 
@@ -129,6 +131,7 @@ model Conversation {
   profileImage String?
 
   messages Message[]
+  userUid  String
 }
 
 enum ChatVisibility {

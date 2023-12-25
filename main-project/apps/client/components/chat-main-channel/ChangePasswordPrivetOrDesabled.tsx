@@ -6,8 +6,6 @@ import ModalUI from '../Modal';
 
 
 
-
-
 export default function ChangePasswordPrivetOrDesabled(): JSX.Element {
 
     const [isAddOpenChannelModal, setIsAddOpenChannelModal] = useState(false);
@@ -38,8 +36,7 @@ export default function ChangePasswordPrivetOrDesabled(): JSX.Element {
               <option value="protected">Protected</option>
             </select>
           </div>
-
-          {componenetChannelModal === "private" && (
+          {componenetChannelModal === "protected" && (
               <input
               placeholder='Set new password'
               type="password"

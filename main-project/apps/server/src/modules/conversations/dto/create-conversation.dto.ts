@@ -5,6 +5,10 @@ export class CreateConversationDto {
   @IsString()
   name: string;
 
+  @IsString()
+  @IsOptional()
+  password: string;
+
   @IsArray()
   participants: string[];
 

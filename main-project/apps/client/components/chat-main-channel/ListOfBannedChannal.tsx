@@ -8,6 +8,7 @@ import GenerateTimeMuted from './GenerateTimeMuted';
 import Link from 'next/link';
 import FtViewProfile from './FtViewProfile';
 import { useRouter } from 'next/navigation';
+import ListOfUsersChannal from './ListOfUsersChannel';
 
 
 type usersInChannal = {
@@ -16,22 +17,16 @@ type usersInChannal = {
     uId: string,
 }
 
-function ListOfUsersChannal(props: {isAdmin, isOwner, name, url, uId , setshowOpstions, menuList:string[]}): JSX.Element {
+function ListOfBannedChannal(props: {name, url, uId , setshowOpstions, menuList:string[], setMenuList:string[]}): JSX.Element {
 
-    // const isAdmin = true;
-    // const isOwner = true;
-    const [isAddOpenChannelModal, setIsAddOpenChannelModal] = useState(false);
 
     const router = useRouter();
-    const {isAdmin, isOwner, name, url, uId , setshowOpstions, menuList} = props;
+    const {name, url, uId , setshowOpstions, menuList , setMenuList} = props;
     const onActionClicked = (action: string) => {
         console.log("my action   " + action)
-        if (action ==='mute') {
-                setIsAddOpenChannelModal(true);
-        }
-        if (action == 'ban'){
-            // <FtViewProfile url={url}/> 
-            alert("ban")
+
+        if (action == 'unbaned'){
+            alert("here action unbaned")
             // router.push(`/users/${uId}`)
 
         }
@@ -51,10 +46,6 @@ function ListOfUsersChannal(props: {isAdmin, isOwner, name, url, uId , setshowOp
                     </span>
                 </div>
                 </Link>
-                <div className='(isAdmin and isOwner) flex flex-row '>
-                    {isOwner && <FaCrown color='yellow' size={10} className='m-1' />}
-                    {isAdmin && <MdAdminPanelSettings color='green' size={12} className='m-1' />}
-                </div>
 
                 <div className='flex  items-start mt-1'>
                     <div className='text-[#707991]  mt-2 justify-end text-xs'>
@@ -63,7 +54,7 @@ function ListOfUsersChannal(props: {isAdmin, isOwner, name, url, uId , setshowOp
                         } >
                             {
                                 
-                                menuList.map(action => <button className=" hover:bg-[#B2F35F] rounded-md flex items-center justify-center" onClick={onActionClicked.bind(null, action.toLowerCase())} >{action}</button>)
+                                setMenuList.map(action => <button className=" hover:bg-[#B2F35F] rounded-md flex items-center justify-center" onClick={onActionClicked.bind(null, action.toLowerCase())} >{action}</button>)
                             }
                         </MenuItem>
                     </div>
@@ -71,9 +62,8 @@ function ListOfUsersChannal(props: {isAdmin, isOwner, name, url, uId , setshowOp
             </div>
         </div>
 
-        <GenerateTimeMuted isAddOpenChannelModal={isAddOpenChannelModal} setIsAddOpenChannelModal={setIsAddOpenChannelModal} />
     </Fragment>
     )
 }
 
-export default ListOfUsersChannal
+export default ListOfBannedChannal

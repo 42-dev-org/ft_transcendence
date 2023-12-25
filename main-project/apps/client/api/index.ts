@@ -5,6 +5,17 @@ import axios from "axios";
 import { constants } from "../constants/contsnts";
 import { exampleLib } from "../lib/api/example/index";
 
+const ConversationTypes = {
+  Group: "Group",
+  Single: "Single",
+} as const;
+
+const ChatVisibility = {
+  Public: "Public",
+  Private: "Private",
+  Protected: "Protected",
+} as const;
+
 class Api {
   private httpClient: AxiosInstance;
   // private ioClient: Socket<ServerToClientEvents, ClientToServerEvents>;
@@ -42,7 +53,21 @@ class Api {
   api = () => ({
     auth: {
       me: () => this.httpClient.get("/users/me"),
-      logout: () => this.httpClient.get("/auth/logout")
+      logout: () => this.httpClient.get("/auth/logout"),
+    },
+    chat: {
+      create: (conf: {
+        type: keyof typeof ConversationTypes;
+        password?: string;
+        visibility: keyof typeof ChatVisibility;
+        name: string;
+        participants: [];
+      }) =>
+        this.httpClient.post("/conversations", {
+          ...conf,
+        }),
+      getConversations: (type: "group" | "single") =>
+        this.httpClient.get("conversations/me?type=" + type),
     },
     users: {
       ban: () => {},
@@ -58,7 +83,10 @@ class Api {
       acceptFriend: (friendUid: string) =>
         this.httpClient.post(`users/${friendUid}/accept`),
       getFriend: (friendUid: string) =>
-      this.httpClient.get(`users/${friendUid}`),
+        this.httpClient.get(`users/${friendUid}`),
+    },
+    otp: {
+      getImage: () => this.httpClient.get("/auth/otp"),
     },
   });
   io: () => { a: "" };
