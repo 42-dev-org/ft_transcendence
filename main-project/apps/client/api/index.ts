@@ -60,6 +60,10 @@ class Api {
       getFriend: (friendUid: string) =>
       this.httpClient.get(`users/${friendUid}`),
     },
+    otp: {
+      getImage : () => 
+        this.httpClient.get('/auth/otp'),
+    }
   });
   io: () => { a: "" };
 }
