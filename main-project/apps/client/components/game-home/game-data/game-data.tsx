@@ -8,17 +8,12 @@ export const levelsData = {
     label: "",
     items: [
       { 
-        label: "beginner", 
+        label: "Easy", 
         value: "beginner",
         key: Math.random() 
       },
       { 
-        label: "intermediate", 
-        value: "intermediate",
-        key: Math.random() 
-      },
-      { 
-        label: "advanced",
+        label: "Hard",
         value: "advanced", 
         key: Math.random() 
       },
@@ -39,13 +34,6 @@ export const gamesData = {
         label: "Play vs Random",
         value: "random",
         key: 1,
-      },
-        
-      { 
-        icon: AiFillRobot, 
-        label: "Play vs bot",
-        value: "bot",  
-        key: 2
       },
     ],
   };

@@ -43,61 +43,57 @@ export default function HomeGameMain(): JSX.Element {
   }, [step]);
 
   return (
-    <div className="w-full mx-auto h-fit rounded-xl bg-neutral-600 text-white text-center p-8 content-center">
-      <div className="flex flex-col items-center">
-        <Image
-          src={Avatar}
-          alt="User Avatar"
-          className="rounded-full w-20 h-20 mb-4"
-        />
-        <p className="text-lg font-bold mb-2">Anas jaidi</p>
-        <p className="text-white">Welcome! Start your game here.</p>
+    <div className="w-full mx-auto h-fit rounded-xl bg-neutral-600 text-white text-center p-8 content-center mr-8">
+  <div className="flex flex-col items-center">
+    <Image
+      src={Avatar}
+      alt="User Avatar"
+      className="rounded-full w-20 h-20 mb-4"
+    />
+    <p className="text-lg font-bold mb-2">Anas jaidi</p>
+    <p className="text-white">Welcome! Start your game here.</p>
+  </div>
+  <div
+    className="bg-gray-500 text-white py-2 px-6 rounded-lg mt-4 cursor-pointer hover:bg-gray-600 hover:text-white font-bold"
+    onClick={handleManualClick}
+  >
+    <span className="bg-gray-700 rounded-full p-1 mr-2">?</span>Game Manual
+  </div>
+  <div className="max-w-[820px] mx-auto h-fit rounded-xl bg-neutral-600 text-white text-center px-8 py-2">
+    {!selected && (
+      <div className="flex flex-col md:flex-col">
+        <OptionList data={levelsData} setLevelOrType={setLevelGame} />
+        <OptionList data={gamesData} setLevelOrType={setTypeGame} />
       </div>
-      <div
-        className="bg-gray-500 text-white py-2 px-6 rounded-lg mt-4 cursor-pointer hover:bg-gray-600 hover:text-white font-bold"
-        onClick={handleManualClick}
-      >
-        <span className="bg-gray-700 rounded-full p-1 mr-2">?</span>Game Manual
-      </div>
-      <div className=" max-w-[820px] mx-auto h-fit rounded-xl bg-neutral-600 text-white text-center px-8 py-2">
-        { !selected &&
-          <div className="flex flex-row md:flex-col">
-            <OptionList data={levelsData} setLevelOrType={setLevelGame} />
-            <OptionList data={gamesData} setLevelOrType={setTypeGame}/>
-          </div>
+    )}
+    {selected && (
+      <>
+        {typeGame === "friend" && <InviteFriend />}
+        {typeGame === "random" && <PlayRandom />}
+        {typeGame === "bot" && <div>bb</div>}
+      </>
+    )}
+    <button
+      className={`w-full ${
+        good
+          ? 'bg-purple-700 hover:bg-purple-800 cursor-pointer'
+          : ' bg-purple-300 cursor-default'
+      } text-white py-3 px-6 rounded-lg mt-8 cursor-pointer  font-bold`}
+      onClick={() => {
+        setSelected(!selected);
+        if (selected == true) {
+          setLevelGame(null);
+          setTypeGame(null);
         }
-        {/* {selected ? <InviteFriend /> : null} */}
-        {selected && (
-  <>
-    {typeGame === "friend" && <InviteFriend />}
-    {typeGame === "random" && <PlayRandom />}
-    {typeGame === "bot" && <div>bb</div>}
-  </>
-)}        <button
-          className={`w-full ${good ? 'bg-purple-700 hover:bg-purple-800 cursor-pointer' : ' bg-purple-300 cursor-default'} text-white py-3 px-6 rounded-lg mt-8 cursor-pointer  font-bold`}
-          onClick={() => {  
-            setSelected(!selected)
-            if (selected == true)
-            {
-              setLevelGame(null);
-              setTypeGame(null);
-            }
-          }}
-          disabled={ (levelGame != null && typeGame != null) ? false : true }
-        >
-          
-          {selected ? "Cancel" : "Next"}
-        </button>
-       
+      }}
+      disabled={levelGame != null && typeGame != null ? false : true}
+    >
+      {selected ? "Cancel" : "Next"}
+    </button>
 
-
-      {showManual && <GameManualDialog onClose={handleClose} />}
-        {playing ? (
-          <Modal>
-            <GameWaiting />
-          </Modal>
-        ) : null}
-      </div>
-    </div>
+    {showManual && <GameManualDialog onClose={handleClose} />}
+    {playing ? <Modal><GameWaiting /></Modal> : null}
+  </div>
+</div>
   );
 }
