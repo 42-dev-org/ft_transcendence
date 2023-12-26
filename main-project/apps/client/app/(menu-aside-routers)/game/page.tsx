@@ -1,6 +1,8 @@
 import React from "react";
-import GameHomeContainer from "../../../containers/game-home/game-home-container";
+import HomeGameMain from "../../../layouts/game-home-main/game-home-main";
 
 export default function Page(): JSX.Element {
-  return <GameHomeContainer />;
+  return <div className="w-full h-full bg-black flex justify-center items-center">
+    <HomeGameMain />
+  </div>;
 }
