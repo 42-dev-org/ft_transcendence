@@ -17,38 +17,73 @@ import { IoIosCloseCircleOutline, IoMdMore } from "react-icons/io";
 import { ChangeChannelName } from "./ChangeChannelName";
 import OptionsListChannel from "./OptionsListChannel";
 import ChangePasswordPrivetOrDesabled from "./ChangePasswordPrivetOrDesabled";
-
+import { useQuery } from "@tanstack/react-query";
+import { api } from "../../api";
+import { useAppSelector } from "../../store/store";
 
 const data = {
-  msg: 'how about your day',
-  name: 'ouarsass',
+  msg: "how about your day",
+  name: "ouarsass",
   numberMsg: 2,
-  url: 'https://cdn.intra.42.fr/users/47192a7a27a46c2c714c6723e30a3cd2/mouarsas.jpg',
-}
+  url: "https://cdn.intra.42.fr/users/47192a7a27a46c2c714c6723e30a3cd2/mouarsas.jpg",
+};
 
 interface PropsType {
   fullName: string;
+  uid: string;
 }
 
-
-enum Role{
+enum Role {
   user,
   admin,
-  owner
+  owner,
 }
-
-
 
 export default function ConversationUiChannel({
   fullName = "mustapha ouarsass1",
+  uid,
 }: PropsType): JSX.Element {
-  console.log('testing from the north')
-  const [isAddOpen, setIsAddOpen] = useState(false)
-  const [channelName, setChannelName] = useState("Homaygat")
+  console.log("testing from the north");
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [channelName, setChannelName] = useState("Homaygat");
+
+  const query = useQuery({
+    queryKey: ["get-group-cnv", uid],
+    queryFn: ({ queryKey }) =>
+      api.api().chat.getConversation(queryKey[1], "Group"),
+  });
+
+  const myUid = useAppSelector((s) => s.user.user?.uid);
+
+  console.log('----------------------------------------------')
+  if (query.isFetched) {
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log(query.data?.data);
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+    console.log('----------------------------------------------')
+  }
 
   // const a = ['a', 'a2']
   // const b = ['b', 'b2']
-
 
   // const users = [...a.map(el => ({
   //   role: 'admin',
@@ -57,8 +92,8 @@ export default function ConversationUiChannel({
   //   role: 'banned',
   //   name: el
   // }))]
-  const [menuList, setMenuList] = useState<string[]>(['Invite Game'])
-  const [userType, setUserType] = useState<Role>(Role.owner)
+  const [menuList, setMenuList] = useState<string[]>(["Invite Game"]);
+  const [userType, setUserType] = useState<Role>(Role.owner);
 
   const [showOpstions, setshowOpstions] = useState(false);
   const [msg, setMsg] = useState("");
@@ -68,25 +103,29 @@ export default function ConversationUiChannel({
       userId: 2,
       msg: "Hi members enybody here ?",
       senderName: "Abdellah",
-      imageUrl: "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg"
+      imageUrl:
+        "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg",
     },
     {
       userId: 1,
       msg: "Hi Players",
       senderName: "mustapha",
-      imageUrl: "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg"
+      imageUrl:
+        "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg",
     },
     {
       userId: 3,
       msg: "Hi Mate",
       senderName: "Zakaria",
-      imageUrl: "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_18.jpg"
+      imageUrl:
+        "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_18.jpg",
     },
     {
       userId: 4,
       msg: "Hi Brothers",
       senderName: "Mounach",
-      imageUrl: "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_19.jpg"
+      imageUrl:
+        "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_19.jpg",
     },
   ]);
   const onSetMessage = (e) => {
@@ -98,7 +137,7 @@ export default function ConversationUiChannel({
           userId: 1,
           msg,
           imageUrl: "",
-          senderName: "mustapha"
+          senderName: "mustapha",
         },
       ]);
       setMsg("");
@@ -114,31 +153,38 @@ export default function ConversationUiChannel({
     }
   }, []);
 
-  const onCloseAddModal = () => setIsAddOpen(false)
+  const onCloseAddModal = () => setIsAddOpen(false);
 
   useEffect(() => {
-    if(userType === Role.owner){
-      setMenuList(['Mute', 'Ban', 'kick', 'Invite Game', 'Set as Admin'])
+    if (userType === Role.owner) {
+      setMenuList(["Mute", "Ban", "kick", "Invite Game", "Set as Admin"]);
     }
-    if(userType === Role.admin){
-      setMenuList(['Mute', 'Ban', 'kick', 'Invite Game'])
+    if (userType === Role.admin) {
+      setMenuList(["Mute", "Ban", "kick", "Invite Game"]);
     }
-}, [userType])
+  }, [userType]);
 
   return (
     <Fragment>
-      <ModalUI open={isAddOpen} onClose={onCloseAddModal} title='Add Users'>
-        <div className='flex justify-center flex-col gap-y-5 items-center p-3'>
-          <div className='flex flex-row'>
-            <input type="text" className='h-7 p-1 px-3 rounded-md w-2/3 ' />
-            <Button onClick={() => { }} title='Search' className=' h-7 flex justify-center items-center mx-2' ></Button>
+      <ModalUI open={isAddOpen} onClose={onCloseAddModal} title="Add Users">
+        <div className="flex justify-center flex-col gap-y-5 items-center p-3">
+          <div className="flex flex-row">
+            <input type="text" className="h-7 p-1 px-3 rounded-md w-2/3 " />
+            <Button
+              onClick={() => {}}
+              title="Search"
+              className=" h-7 flex justify-center items-center mx-2"
+            ></Button>
           </div>
           <div className=" overflow-y-auto ">
-            {
-              [...Array(4)].map((_, i) => (
-                <ListUsersChat name={data.name} url={data.url} key={i} className="" />
-              ))
-            }
+            {[...Array(4)].map((_, i) => (
+              <ListUsersChat
+                name={data.name}
+                url={data.url}
+                key={i}
+                className=""
+              />
+            ))}
           </div>
         </div>
       </ModalUI>
@@ -155,20 +201,37 @@ export default function ConversationUiChannel({
                 <h5 className="font-semibold">{channelName}</h5>
               </div>
             </div>
-            <MenuItem iconBtn={
-              <IoMdMore size={24} color="gray" />
-            } >
-              {userType != Role.user && 
-              <button className=" hover:bg-[#B2F35F] rounded-md" title="addUsers" onClick={() => { setIsAddOpen(true) }} >Add users</button>
-              }
-              <button className=" hover:bg-[#B2F35F] rounded-md" title="leaveChannel">Leave channel</button>
-              <button className="hover:bg-[#B2F35F] rounded-md px-2" onClick={() => setshowOpstions(true)}>View Details</button>
-
+            <MenuItem iconBtn={<IoMdMore size={24} color="gray" />}>
+              {userType != Role.user && (
+                <button
+                  className=" hover:bg-[#B2F35F] rounded-md"
+                  title="addUsers"
+                  onClick={() => {
+                    setIsAddOpen(true);
+                  }}
+                >
+                  Add users
+                </button>
+              )}
+              <button
+                className=" hover:bg-[#B2F35F] rounded-md"
+                title="leaveChannel"
+              >
+                Leave channel
+              </button>
+              <button
+                className="hover:bg-[#B2F35F] rounded-md px-2"
+                onClick={() => setshowOpstions(true)}
+              >
+                View Details
+              </button>
             </MenuItem>
           </div>
           <div className="flex w-full h-[90%]">
             <div
-              className={`flex flex-col h-full ${showOpstions ? 'w-2/3' : 'w-full'}`}
+              className={`flex flex-col h-full ${
+                showOpstions ? "w-2/3" : "w-full"
+              }`}
               style={{
                 backgroundImage:
                   "url(https://cdn2.f-cdn.com/contestentries/2046262/58571795/61f00c583e000_thumb900.jpg)",
@@ -179,16 +242,21 @@ export default function ConversationUiChannel({
                 className="h-full w-full flex  overflow-y-auto flex-col  bg-green p-4 gap-4 scrollbar-hide"
                 ref={msgRef}
               >
-                {messages?.map(({ msg, userId, imageUrl, senderName }, index) => (
-                  <Fragment key={index}>
-                    {
-                      userId === 1 ?
+                {messages?.map(
+                  ({ msg, userId, imageUrl, senderName }, index) => (
+                    <Fragment key={index}>
+                      {userId === 1 ? (
                         <SenderLayout msg={msg} />
-                        :
-                        <RecieverLayout msg={msg} senderName={senderName} imageUrl={imageUrl} />
-                    }
-                  </Fragment>
-                ))}
+                      ) : (
+                        <RecieverLayout
+                          msg={msg}
+                          senderName={senderName}
+                          imageUrl={imageUrl}
+                        />
+                      )}
+                    </Fragment>
+                  )
+                )}
               </div>
               <form
                 className="h-16 w-full  px-6 py-2 relative"
@@ -218,28 +286,40 @@ export default function ConversationUiChannel({
                 </button>
               </form>
             </div>
-            {showOpstions && <div className="flex w-1/3 flex-col h-full bg-[#45454566] rounded-md border-2 border-zinc-400 gap-2">
-              <IoIosCloseCircleOutline size={30} color="white" className="cursor-pointer self-end" onClick={() => setshowOpstions(false)} />
-              <div className="w-full flex flex-col gap-5 h-full">
-                <div className="">
-                  <ChangePasswordPrivetOrDesabled />
-                </div>
-                <div>
-                  <ChangeChannelName channelName={channelName} onSetName={(name: string) => setChannelName(name)} />
-                </div>
-                <div className=" h-full">
-                  <OptionsListChannel menuList={menuList} userType={userType} setshowOpstions={setshowOpstions}/>
+            {showOpstions && (
+              <div className="flex w-1/3 flex-col h-full bg-[#45454566] rounded-md border-2 border-zinc-400 gap-2">
+                <IoIosCloseCircleOutline
+                  size={30}
+                  color="white"
+                  className="cursor-pointer self-end"
+                  onClick={() => setshowOpstions(false)}
+                />
+                <div className="w-full flex flex-col gap-5 h-full">
+                  <div className="">
+                    <ChangePasswordPrivetOrDesabled />
+                  </div>
+                  <div>
+                    <ChangeChannelName
+                      channelName={channelName}
+                      onSetName={(name: string) => setChannelName(name)}
+                    />
+                  </div>
+                  <div className=" h-full">
+                    <OptionsListChannel
+                      menuList={menuList}
+                      userType={userType}
+                      setshowOpstions={setshowOpstions}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            }
+            )}
           </div>
         </div>
       </div>
     </Fragment>
   );
 }
-
 
 /**
  * admins:

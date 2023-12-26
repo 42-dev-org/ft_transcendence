@@ -9,8 +9,8 @@ export class UserIsHealthyGuard implements CanActivate {
   constructor(private readonly conversationsService: ConversationsService) {}
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest<Request>();
-    const { conversation } = request.body();
+    const { conversation } = request.body;
     const { uid } = <User>request.user;
-    return this.conversationsService.userHealthy(conversation, uid);
+    return this.conversationsService.userHealthy(conversation || request.params.id, uid);
   }
 }

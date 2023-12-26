@@ -31,6 +31,10 @@ export class UsersService {
     return this.repository.findAll();
   }
 
+  findMeAll(uid: string) {
+    return this.repository.findMeAll(uid)
+  }
+
   findOne(id: string) {
     return this.repository.findOne(id);
   }

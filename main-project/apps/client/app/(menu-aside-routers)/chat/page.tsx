@@ -55,6 +55,7 @@ const dataChannels = {
 // }
 const Chat = () => {
   const [cnv, setCnv] = useState([]);
+  const [cnvUid, setCnvUid] = useState<null | string>(null);
   const [search, setSearch] = useState("");
   const reactQueryClinet = useQueryClient();
   const [password, setPassword] = useState("");
@@ -65,6 +66,12 @@ const Chat = () => {
   const [conversationType, setConversationType] = useState("");
   const [componenetChannelModal, setcomponenetChannelModal] =
     useState("public");
+
+  const usersQuery = useQuery({
+    queryKey: ["all-users"],
+    enabled: false,
+    queryFn: api.api().users.allExceptBanned,
+  });
 
   const creationMutation = useMutation({
     mutationKey: ["create-chat"],
@@ -101,6 +108,16 @@ const Chat = () => {
     }
   }, [conversationQuery]);
 
+  const onSingleConversationClicked = (uid: string) => {
+    setConversationType("users");
+    setCnvUid(uid);
+  };
+
+  const onGroupConversationClicked = (uid: string) => {
+    setConversationType("channels");
+    setCnvUid(uid);
+  };
+
   function render() {
     switch (component) {
       case "channels":
@@ -109,7 +126,8 @@ const Chat = () => {
             {conversationQuery.isFetched &&
               (cnv as any[]).map((ch, idx) => (
                 <ChannelsChat
-                  onClick={() => setConversationType("channels")}
+                  uid={ch.uid}
+                  onClick={onGroupConversationClicked}
                   time={dataChannels.time}
                   nameChannels={ch.name}
                   msg={""}
@@ -123,28 +141,48 @@ const Chat = () => {
       case "users":
         return (
           <>
-            {[...Array(20)].map((_, idx) => (
-              <Userschat
-                onClick={() => setConversationType("users")}
-                time={data.time}
-                name={data.name}
-                msg={data.msg}
-                url={data.url}
-                key={idx}
-              />
-            ))}
+            {conversationQuery.isFetched &&
+              cnv.map((_, idx) => (
+                <Userschat
+                  uid={_.uid}
+                  onClick={(uid: string) => onSingleConversationClicked(uid)}
+                  time={data.time}
+                  name={
+                    (_.participants?.length && _.participants[0].login) ||
+                    "mock"
+                  }
+                  msg={data.msg}
+                  url={data.url}
+                  key={idx}
+                />
+              ))}
           </>
         );
     }
   }
 
+  const addSingleChat = (uid: string) => {
+    creationMutation.mutate({
+      type: "Single",
+      participants: [uid],
+    });
+  };
+
   useEffect(() => {
     console.log(search);
 
-    setCnv(
-      conversationQuery.isFetched ? ( conversationQuery.data.data as any[]).filter((cnv) => (cnv.name as string).includes(search)): []
-    );
+    // setCnv(
+    //   conversationQuery.isFetched
+    //     ? (conversationQuery.data.data as any[]).filter((cnv) =>
+    //         (cnv.name as string).includes(search)
+    //       )
+    //     : []
+    // );
   }, [search]);
+
+  if (conversationQuery.isFetched) {
+    console.log(cnv);
+  }
 
   const onCloseAddModal = () => setIsAddOpen(false);
   const onCloseAddChannelModal = () => setIsAddOpenChannelModal(false);
@@ -171,14 +209,17 @@ const Chat = () => {
             ></Button>
           </div>
           <div className=" overflow-y-auto">
-            {[...Array(4)].map((_, idx) => (
-              <ListUsersChat
-                name={data.name}
-                url={data.url}
-                key={idx}
-                className=" w-"
-              />
-            ))}
+            {usersQuery.isFetched &&
+              usersQuery?.data?.data?.map((_, idx) => (
+                <ListUsersChat
+                  onClick={addSingleChat}
+                  name={_.login}
+                  url={data.url}
+                  key={idx}
+                  uid={_.uid}
+                  className=" w-"
+                />
+              ))}
           </div>
         </div>
       </ModalUI>
@@ -261,7 +302,10 @@ const Chat = () => {
           </div>
           <div className=" px-2 h-24 flex gap-2 justify-center  items-center ">
             <Button
-              onClick={() => setIsAddOpen(true)}
+              onClick={() => {
+                setIsAddOpen(true);
+                usersQuery.refetch();
+              }}
               title={""}
               className="flex items-center justify-center text-black  w-1/3 h-3/4"
             >
@@ -307,13 +351,13 @@ const Chat = () => {
         </div>
         {conversationType === "users" ? (
           <ConversationUi
-            uid="1"
+            uid={cnvUid!}
             fullName="mustapha ouarsas"
             image="https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg"
             status="in a game"
           />
         ) : conversationType === "channels" ? (
-          <ConversationUiChannel fullName={""} />
+          <ConversationUiChannel fullName={""} uid={cnvUid}/>
         ) : null}
       </div>
     </Fragment>
