@@ -184,7 +184,6 @@ const Chat = () => {
                   url={(userChat?.participants?.length && userChat?.participants[0].profileImage) || 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg'} 
                   key={idx}
                   />
-                  
               ))}
           </>
         );
