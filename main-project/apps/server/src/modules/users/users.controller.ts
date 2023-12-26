@@ -27,40 +27,43 @@ import { Request } from "express";
 
 @Controller("users")
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @Get()
   @UseGuards(AuthGuard())
   async findAll(
     @GetUser() { uid }: User,
-    @Query("type") type: $Enums.FriendStatus,
+    @Query("type") type: $Enums.FriendStatus
   ) {
     switch (type) {
-      case 'Accepted':
+      case "Accepted":
         return { data: await this.usersService.getFriends(uid) };
-      case 'Banned':
+      case "Banned":
         break;
-      case 'Pending':
+      case "Pending":
         return { data: await this.usersService.getAllInvitations(uid) };
       default:
-        throw new BadRequestException('type invalid')
+        throw new BadRequestException("type invalid");
     }
-  };
-
+  }
 
   @Get("search")
   @UseGuards(AuthGuard())
-  async searchForFriend(
-    @Query("search") s: string,
-    @GetUser() { uid }: User
-  ) {
+  async searchForFriend(@Query("search") s: string, @GetUser() { uid }: User) {
     return this.usersService.searchForUser(s, uid);
   }
 
-  @Get('leaderboard')
+  @Get("all")
+  @UseGuards(AuthGuard())
+  async giveMeAllUsers(@GetUser() { uid }: User) {
+    console.log(uid)
+    return this.usersService.findMeAll(uid);
+  }
+
+  @Get("leaderboard")
   @UseGuards(AuthGuard())
   async friendsLeaderboard(@GetUser() { uid }: User) {
-    return this.usersService.friendsLeaderboard(uid)
+    return this.usersService.friendsLeaderboard(uid);
   }
 
   @Get("me")

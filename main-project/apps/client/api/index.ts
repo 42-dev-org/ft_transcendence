@@ -68,6 +68,8 @@ class Api {
         }),
       getConversations: (type: "group" | "single") =>
         this.httpClient.get("conversations/me?type=" + type),
+      getConversation: (uid: string, type: "Single" | "Group") =>
+        this.httpClient.get("conversations/" + uid + "?type=" + type),
     },
     users: {
       ban: () => {},
@@ -84,6 +86,7 @@ class Api {
         this.httpClient.post(`users/${friendUid}/accept`),
       getFriend: (friendUid: string) =>
         this.httpClient.get(`users/${friendUid}`),
+      allExceptBanned: () => this.httpClient.get("/users/all"),
     },
     otp: {
       getImage: () => this.httpClient.get("/auth/otp"),

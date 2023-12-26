@@ -57,6 +57,11 @@ model User {
   // login infos
   email String @unique
 
+  // Blocking relations
+  blockedBy User[] @relation("block")
+  blocked   User[] @relation("block")
+  // blockedUsers User[] @relation("blocked-users")
+
   // Profile and Cover Images
   profileImage String @default("https://upload.wikimedia.org/wikipedia/commons/7/72/Default-welcomer.png")
 
@@ -87,8 +92,8 @@ model User {
   muted MutedConversation[]
 
   // friendship
-  myFriends    Friend[]       @relation("my-friends")
-  friendOf     Friend[]       @relation("friend-of")
+  myFriends          Friend[]       @relation("my-friends")
+  friendOf           Friend[]       @relation("friend-of")
   ownedConversations Conversation[]
 
   @@index([uid])
@@ -112,17 +117,17 @@ model MutedConversation {
 
 model Conversation {
   uid  String            @id @default(uuid())
-  name String
+  name String?
   type ConversationTypes
 
-  visibility ChatVisibility @default(Public)
+  visibility ChatVisibility? @default(Public)
 
   password String?
 
   participants User[] @relation("conversations")
 
   mut   MutedConversation[]
-  owner User                @relation(fields: [userUid], references: [uid])
+  owner User?                @relation(fields: [userUid], references: [uid])
 
   admins User[] @relation("owned-conversations")
 
@@ -131,7 +136,7 @@ model Conversation {
   profileImage String?
 
   messages Message[]
-  userUid  String
+  userUid  String?
 }
 
 enum ChatVisibility {
