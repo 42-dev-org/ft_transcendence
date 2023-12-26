@@ -62,7 +62,7 @@ export function OptionsListChannel(props: {menuList: string[], userType, setshow
                 </div>
             );
         }
-        if (selected === "Admins")
+        if (selected === "Admins" && props.userType)
         {
             return (
                 <div className='flex flex-col justify-center items-center w-full'>
