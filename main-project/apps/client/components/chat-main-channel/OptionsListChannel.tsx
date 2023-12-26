@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ListOfUsersChannal from './ListOfUsersChannel';
 import ListOfBannedChannal from './ListOfBannedChannal';
 import ListOfMutedChannal from './ListOfMutedChannal';
+import ListOfAdminsChannal from './ListOfAdminsChannal';
 
 
 
@@ -14,33 +15,31 @@ const UserData = {
   uId: "hereUId"
 };
 
-// enum Role{
-//   user,
-//   admin,
-//   owner
-// }
+enum Role{
+  user,
+  admin,
+  owner
+}
 
 export function OptionsListChannel(props: {menuList: string[], userType, setshowOpstions: any}): JSX.Element {
 
     const [selected, setSelected] = useState<
     SelecterType
     >("Members");
-    // const [menuList, setMenuList] = useState<string[]>(['Invite Game'])
+    const [menuList, setMenuList] = useState<string[]>(['Invite Game'])
 
-    // change type of logged user
-    // const [userType, setUserType] = useState<Role>(Role.owner)
+    const [userTypeRole, setUserTypeRole] = useState<Role>(Role.owner) // for select
 
-    // useEffect(() => {
-    //     if(userType === Role.owner)
-    //     {
-    //       setMenuList(['Mute', 'Ban', 'kick', 'Invite Game', 'Set as Admin'])
-    //     }
-    //     if(userType === Role.admin){
-    //       setMenuList(['Mute', 'Ban', 'kick', 'Invite Game'])
-          
-    //     }
+    useEffect(() => {
+        if(userTypeRole === Role.owner || userTypeRole === Role.admin)
+        {
+          setMenuList(["Members", "Admins", "Muted", "Banned"])
+        }
+        if(userTypeRole === Role.user){
+          setMenuList(["Members"])
+        }
 
-    // }, [userType, menuList])
+    }, [userTypeRole])
 
     const render = () => {
         if (selected === "Members")
@@ -56,7 +55,7 @@ export function OptionsListChannel(props: {menuList: string[], userType, setshow
                       key={i}
                       uId={UserData.uId}
                       isAdmin={true}
-                      isOwner={false}
+                      isOwner={true}
                       menuList={props.menuList}
                       />
                     ))
@@ -64,29 +63,27 @@ export function OptionsListChannel(props: {menuList: string[], userType, setshow
                 </div>
             );
         }
-        if (selected === "Admins")
+        if (selected === "Admins" && props.userType)
         {
             return (
                 <div className='flex flex-col justify-center items-center w-full'>
                   {
                     [...Array(3)].map((_, i) => (
-                      <ListOfUsersChannal
+                      <ListOfAdminsChannal
                       setshowOpstions={props.setshowOpstions}
                       name={UserData.name}
                       url={UserData.url}
                       key={i}
                       uId={UserData.uId}
-                      isAdmin={true}
-                      isOwner={true}
                       menuList={props.menuList}
-
+                      setMenuList={["Remove Role Admin"]}
                       />
                     ))
                   }
                 </div>
             );
         }
-        if (selected === "Muted")
+        if (selected === "Muted" && props.userType)
         {
             return (
                 <div className='flex flex-col justify-center items-center w-full'>
@@ -131,8 +128,9 @@ export function OptionsListChannel(props: {menuList: string[], userType, setshow
   return (
     <div className="flex flex-col justify-center items-center gap-4 overflow-hidden w-full " >
     <select className=' rounded-md py-1 px-5 bg-slate-400' name="" id="" value={selected} onChange={(e) => {setSelected(e.target.value as SelecterType)}} >
+
       {
-        ["Members", "Admins", "Muted", "Banned"].map((elm) => (
+          menuList.map((elm) => (
           <option value={elm} key={elm}>
             {elm}
           </option>

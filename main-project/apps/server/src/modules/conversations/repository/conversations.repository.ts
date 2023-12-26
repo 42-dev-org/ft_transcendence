@@ -6,7 +6,39 @@ import { PrismaService } from "src/global/prisma/prisma.service";
 export class ConversationsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  public async create(conversation: Prisma.ConversationCreateInput) {
+  public async create(
+    conversation: Prisma.ConversationCreateInput,
+    {
+      user,
+      uid,
+      type,
+    }: { user?: string; uid?: string; type: $Enums.ConversationTypes }
+  ) {
+    if (
+      type === "Single" &&
+      (await this.prisma.conversation.findFirst({
+        where: {
+          type: "Single",
+          AND: [
+            {
+              participants: {
+                some: {
+                  uid,
+                },
+              },
+            },
+            {
+              participants: {
+                some: {
+                  uid: user,
+                },
+              },
+            },
+          ],
+        },
+      }))
+    )
+      return null;
     return this.prisma.conversation.create({
       data: conversation,
       //   include: { Messages: true },
@@ -37,6 +69,7 @@ export class ConversationsRepository {
         uid: true,
       },
     });
+
     return !!conversation;
   }
 
@@ -60,53 +93,77 @@ export class ConversationsRepository {
   }
 
   public async findMeAll(uid: string, type: $Enums.ConversationTypes) {
-    return this.prisma.conversation.findMany({
-      where: {
-        ...(type == "Group"
-          ? {
-              OR: [
-                {
-                  visibility: {
-                    not: "Private",
-                  },
+    if (type === "Group") {
+      return this.prisma.conversation.findMany({
+        where: {
+          OR: [
+            {
+              visibility: {
+                not: "Private",
+              },
+            },
+            {
+              visibility: { equals: "Private" },
+              participants: {
+                some: {
+                  uid,
                 },
-                {
-                  visibility: { equals: "Private" },
-                  participants: {
-                    some: {
-                      uid,
-                    },
-                  },
+              },
+            },
+          ],
+          type: "Group",
+        },
+        //   include: { Messages: true },
+        select: {
+          name: true,
+          profileImage: true,
+          uid: true,
+          messages: {
+            orderBy: {
+              createdAt: "asc",
+            },
+            take: 1,
+            select: {
+              sender: {
+                select: {
+                  uid: true,
+                  login: true,
+                  profileImage: true,
                 },
-              ],
-              type: "Group",
-            }
-          : {
-              participants: { some: { uid } },
-              type: "Single",
-            }),
-      },
-      //   include: { Messages: true },
-      select: {
-        name: true,
-        profileImage: true,
-        messages: {
-          orderBy: {
-            createdAt: "asc",
-          },
-          take: 1,
-          select: {
-            sender: {
-              select: {
-                uid: true,
-                login: true,
-                profileImage: true,
               },
             },
           },
         },
-      },
-    });
+      });
+    } else if (type === "Single") {
+      return this.prisma.conversation.findMany({
+        where: {
+          participants: {
+            some: {
+              uid,
+            },
+          },
+          type: "Single",
+        },
+        select: {
+          uid: true,
+          messages: true,
+          type: true,
+
+          participants: {
+            select: {
+              firstName: true,
+              lastName: true,
+              login: true,
+              profileImage: true,
+            },
+            where: {
+              uid: { not: uid },
+            },
+          },
+        },
+      });
+    }
   }
 
   async isBanned(uid: string, user: string) {
@@ -192,30 +249,106 @@ export class ConversationsRepository {
     return !!cnv;
   }
 
-  public async findOne(uid: string, internalUse: boolean = false) {
-    return this.prisma.conversation.findUnique({
-      where: { uid },
-      select: {
-        profileImage: true,
-        type: true,
-        visibility: true,
+  public async findOne(
+    uid: string,
+    user: string,
+    type: $Enums.ConversationTypes
+  ) {
+    if (type === "Group") {
+      return this.prisma.conversation.findUnique({
+        where: {
+          uid,
+          type: "Group",
+        },
+        //   include: { Messages: true },
+        select: {
+          name: true,
+          profileImage: true,
+          participants: {
+            select: {
+              firstName: true,
+              lastName: true,
+              login: true,
+              profileImage: true,
+              uid: true,
+            },
+          },
+          ban: {
+            select: {
+              firstName: true,
+              lastName: true,
+              login: true,
+              profileImage: true,
+              uid: true,
+            },
+          },
+          mut: {
+            select: {
+              // firstName: true,
+              // lastName: true,
+              // login: true,
+              // profileImage: true,
+              // uid: true
+              until: true,
+              user: {
+                select: {
+                  firstName: true,
+                  lastName: true,
+                  login: true,
+                  profileImage: true,
+                  uid: true,
+                },
+              },
+            },
+          },
+          admins: {
+            select: {
+              firstName: true,
+              lastName: true,
+              login: true,
+              profileImage: true,
+              uid: true,
+            },
+          },
+          owner: {
+            select: {
+              firstName: true,
+              lastName: true,
+              login: true,
+              profileImage: true,
+              uid: true,
+            },
+          },
+          uid: true,
+          messages: true,
+        },
+      });
+    } else if (type === "Single") {
+      return this.prisma.conversation.findUnique({
+        where: {
+          uid,
+          type: "Single",
+        },
+        select: {
+          uid: true,
+          messages: true,
+          type: true,
 
-        ...(internalUse
-          ? {
-              password: true,
-              userUid: true,
-              owner: true,
-            }
-          : {
-              participants: true,
-              name: true,
-              ban: true,
-              messages: true,
-              mut: true,
-              admins: true,
-            }),
-      },
-    });
+          participants: {
+            select: {
+              firstName: true,
+              lastName: true,
+              login: true,
+              profileImage: true,
+              uid: true,
+            },
+            where: {
+              uid: { not: user },
+            },
+          },
+        },
+      });
+    }
   }
 
   public async update(uid: string, updates: Prisma.ConversationUpdateInput) {

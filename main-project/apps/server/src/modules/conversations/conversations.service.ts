@@ -9,6 +9,7 @@ import {
 import { ConversationsRepository } from "./repository/conversations.repository";
 import { MediaFile } from "src/shared/types/media";
 import { MediaService } from "src/global/media/providers/media.service";
+import { $Enums } from "db";
 
 @Injectable()
 export class ConversationsService {
@@ -81,35 +82,49 @@ export class ConversationsService {
     const { participants, name, type, visibility, password } =
       createConversationDto;
 
-    const newConversation = await this.repository.create({
-      owner: {
-        connect: {
-          uid: user,
+    if (createConversationDto.type === "Single") {
+      const newConversation = await this.repository.create(
+        {
+          participants: {
+            connect: [{ uid: user }, { uid: participants[0] }],
+          },
+          type,
         },
-      },
-      name,
-      participants: {
-        connect: participants
-          .map((uid) => ({ uid }))
-          .concat([
-            {
+        { type, uid: user, user: participants[0] }
+      );
+      return newConversation;
+    } else if (createConversationDto.type === "Group") {
+      const newConversation = await this.repository.create(
+        {
+          owner: {
+            connect: {
               uid: user,
             },
-          ]),
-      },
-      type,
-      visibility,
-      ...(visibility === "Protected"
-        ? {
-            password,
-          }
-        : {}),
-    });
-
-    return {
-      status: "success",
-      data: newConversation,
-    };
+          },
+          name,
+          participants: {
+            connect: participants
+              .map((uid) => ({ uid }))
+              .concat([
+                {
+                  uid: user,
+                },
+              ]),
+          },
+          type,
+          visibility,
+          ...(visibility === "Protected"
+            ? {
+                password,
+              }
+            : {}),
+        },
+        {
+          type,
+        }
+      );
+      return newConversation;
+    }
   }
 
   async findAll() {
@@ -122,8 +137,8 @@ export class ConversationsService {
     };
   }
 
-  async findOne(id: string) {
-    const cnv = await this.repository.findOne(id);
+  async findOne(id: string, user: string, type: $Enums.ConversationTypes) {
+    const cnv = await this.repository.findOne(id, user, type);
 
     return {
       status: "success",
