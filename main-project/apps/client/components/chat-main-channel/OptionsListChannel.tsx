@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ListOfUsersChannal from './ListOfUsersChannel';
 import ListOfBannedChannal from './ListOfBannedChannal';
 import ListOfMutedChannal from './ListOfMutedChannal';
+import ListOfAdminsChannal from './ListOfAdminsChannal';
 
 
 
@@ -54,7 +55,7 @@ export function OptionsListChannel(props: {menuList: string[], userType, setshow
                       key={i}
                       uId={UserData.uId}
                       isAdmin={true}
-                      isOwner={false}
+                      isOwner={true}
                       menuList={props.menuList}
                       />
                     ))
@@ -68,16 +69,14 @@ export function OptionsListChannel(props: {menuList: string[], userType, setshow
                 <div className='flex flex-col justify-center items-center w-full'>
                   {
                     [...Array(3)].map((_, i) => (
-                      <ListOfUsersChannal
+                      <ListOfAdminsChannal
                       setshowOpstions={props.setshowOpstions}
                       name={UserData.name}
                       url={UserData.url}
                       key={i}
                       uId={UserData.uId}
-                      isAdmin={true}
-                      isOwner={true}
                       menuList={props.menuList}
-
+                      setMenuList={["Remove Role Admin"]}
                       />
                     ))
                   }
