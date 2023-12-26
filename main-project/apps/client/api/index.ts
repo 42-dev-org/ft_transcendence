@@ -59,9 +59,9 @@ class Api {
       create: (conf: {
         type: keyof typeof ConversationTypes;
         password?: string;
-        visibility: keyof typeof ChatVisibility;
-        name: string;
-        participants: [];
+        visibility?: keyof typeof ChatVisibility;
+        name?: string;
+        participants: string[];
       }) =>
         this.httpClient.post("/conversations", {
           ...conf,

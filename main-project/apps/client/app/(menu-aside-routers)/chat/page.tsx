@@ -22,6 +22,30 @@ import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import Search from "../../../components/shared-layouts/header-search/header-search";
 
+
+export interface cnvType {
+  uid: string
+  messages: any[]
+  type: string
+  participants: Participant[]
+}
+
+export type senderType = {
+  messages: {
+    sender: {
+        uid: string;
+        login: string;
+        profileImage: string;
+    };
+}[];
+}
+export interface Participant {
+  firstName: string
+  lastName: string
+  login: string
+  profileImage: string
+}
+
 const ConversationTypes = {
   Group: "Group",
   Single: "Single",
@@ -54,7 +78,8 @@ const dataChannels = {
 
 // }
 const Chat = () => {
-  const [cnv, setCnv] = useState([]);
+
+  const [cnv, setCnv] = useState<cnvType[]>([]);
   const [cnvUid, setCnvUid] = useState<null | string>(null);
   const [search, setSearch] = useState("");
   const reactQueryClinet = useQueryClient();
@@ -66,6 +91,7 @@ const Chat = () => {
   const [conversationType, setConversationType] = useState("");
   const [componenetChannelModal, setcomponenetChannelModal] =
     useState("public");
+    console.log('woow: ',cnv, typeof(cnv))
 
   const usersQuery = useQuery({
     queryKey: ["all-users"],
@@ -88,9 +114,9 @@ const Chat = () => {
     mutationFn: (conf: {
       type: keyof typeof ConversationTypes;
       password?: string | undefined;
-      visibility: keyof typeof ChatVisibility;
-      name: string;
-      participants: [];
+      visibility?: keyof typeof ChatVisibility;
+      name?: string;
+      participants: string[];
     }) => api.api().chat.create(conf),
   });
 
@@ -142,20 +168,23 @@ const Chat = () => {
       case "users":
         return (
           <>
-            {conversationQuery.isFetched &&
-              cnv.map((_, idx) => (
+              {console.log(conversationQuery)}
+            {conversationQuery.isFetched && 
+            
+              cnv.map((userChat, idx) => (
                 <Userschat
-                  uid={_.uid}
-                  onClick={(uid: string) => onSingleConversationClicked(uid)}
+                uid={userChat.uid }
+                onClick={(uid: string) => onSingleConversationClicked(uid)}
                   time={data.time}
                   name={
-                    (_.participants?.length && _.participants[0].login) ||
+                    (userChat?.participants?.length && userChat.participants[0].login) ||
                     "mock"
                   }
                   msg={data.msg}
-                  url={data.url}
+                  url={(userChat?.participants?.length && userChat?.participants[0].profileImage) || 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg'} 
                   key={idx}
-                />
+                  />
+                  
               ))}
           </>
         );
@@ -166,6 +195,7 @@ const Chat = () => {
     creationMutation.mutate({
       type: "Single",
       participants: [uid],
+
     });
   };
 
@@ -211,13 +241,13 @@ const Chat = () => {
           </div>
           <div className=" overflow-y-auto">
             {usersQuery.isFetched &&
-              usersQuery?.data?.data?.map((_, idx) => (
+              usersQuery?.data?.data?.map((user, idx) => (
                 <ListUsersChat
                   onClick={addSingleChat}
-                  name={_.login}
-                  url={data.url}
+                  name={user.login}
+                  url={user.profileImage}
                   key={idx}
-                  uid={_.uid}
+                  uid={user.uid}
                   className=" w-"
                 />
               ))}
@@ -359,7 +389,7 @@ const Chat = () => {
             status="in a game"
           />
         ) : conversationType === "channels" ? (
-          <ConversationUiChannel fullName={""} uid={cnvUid}/>
+          <ConversationUiChannel fullName={""} uid={cnvUid!}/>
         ) : null}
       </div>
     </Fragment>
