@@ -21,22 +21,15 @@ type usersInChannal = {
 
 function ListOfUsersChannal(props: {  name, url, uId, setshowOpstions, menuList: string[], role: ViewerRole }): JSX.Element {
 
-    console.log(props.url)
-    // const isAdmin = true;
-    // const isOwner = true;
     const [isAddOpenChannelModal, setIsAddOpenChannelModal] = useState(false);
 
-    const router = useRouter();
     const {  name, url, uId, setshowOpstions, menuList, role } = props;
     const onActionClicked = (action: string) => {
-        console.log("my action   " + action)
         if (action === 'mute') {
             setIsAddOpenChannelModal(true);
         }
         if (action == 'ban') {
-            // <FtViewProfile url={url}/> 
             alert("ban")
-            // router.push(`/users/${uId}`)
 
         }
     }
@@ -59,37 +52,15 @@ function ListOfUsersChannal(props: {  name, url, uId, setshowOpstions, menuList:
                         <div className='text-[#707991]  mt-2 justify-end text-xs'>
                             <MenuItem iconBtn={
                                 <IoMdMore size={24} color="gray" />
-
                             } >
-                                {/* {
-                                const actions = [
-                                    {
-                                        action: 'kick',
-                                        roles: ['admin', 'owner'],
-                                        cb: )
-                                    }
-                                ]
-                                {action.roles.includes(role) && <btn>action.action</btn>}
-                            } */}
-                                {
-                                    /**
-                                     * step 1 => all users should see the smae users sections [p, o, a, m, b]
-                                     * step 2 => each user can see only actions that he can do
-                                    */
-                                }
-                                <button className=" hover:bg-[#B2F35F] rounded-md flex items-center justify-center" >Invite Game</button>
+                            <button className=" hover:bg-[#B2F35F] rounded-md flex items-center justify-center" >Invite Game</button>
                                 {
                                     role === "owner" &&
-                                    // <OptionsOwner />
                                     <button className=" hover:bg-[#B2F35F] rounded-md flex items-center justify-center" onClick={onActionClicked.bind(null, "Set as Admin".toLowerCase())} >Set as Admin</button>
-
-
-                                    // <button className=" hover:bg-[#B2F35F] rounded-md flex items-center justify-center" onClick={onActionClicked.bind(null, "Ban".toLowerCase())} >Ban</button>
                                 }
                                 {
                                     (role === "admin" || role === 'owner') &&
                                     <>
-
                                         <button className=" hover:bg-[#B2F35F] rounded-md flex items-center justify-center" onClick={onActionClicked.bind(null, "Mute".toLowerCase())} >Mute</button>
                                         <button className=" hover:bg-[#B2F35F] rounded-md flex items-center justify-center" onClick={onActionClicked.bind(null, "Kick".toLowerCase())} >Kick</button>
                                         <button className=" hover:bg-[#B2F35F] rounded-md flex items-center justify-center" onClick={onActionClicked.bind(null, "Ban".toLowerCase())} >Ban</button>
