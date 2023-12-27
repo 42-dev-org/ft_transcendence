@@ -6,3 +6,6 @@ export default function Page(): JSX.Element {
     <HomeGameMain />
   </div>;
 }
+
+
+// s

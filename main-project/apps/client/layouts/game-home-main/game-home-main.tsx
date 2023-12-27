@@ -57,6 +57,7 @@ export default function HomeGameMain(): JSX.Element {
         className="bg-gray-500 text-white py-2 px-6 rounded-lg mt-4 cursor-pointer hover:bg-gray-600 hover:text-white font-bold"
         onClick={handleManualClick}
       >
+        
         <span className="bg-gray-700 rounded-full p-1 mr-2">?</span>Game Manual
       </div>
       <div className="w-full mx-auto h-fit rounded-xl bg-neutral-600 text-white text-center px-2 py-2">
