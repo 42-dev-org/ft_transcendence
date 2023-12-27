@@ -11,9 +11,19 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../../../api";
 
 type ComponeetType = "search" | "friends" | "invitations" | "blocked";
+type paramsdata = "Accepted" | "Pending" | "Banned";
+
+export interface dataUsersTypee {
+  uid: string
+  login: string;
+  profileImage: string;
+  refetch: Function
+    
+  }
+
 
 function Users(): JSX.Element {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<dataUsersTypee[]>([]);
   const [componenet, setComponent] = useState<ComponeetType>("search");
   const [searchString, setSearchString] = useState("");
 
@@ -28,12 +38,13 @@ function Users(): JSX.Element {
 
   const usersQuery = useQuery({
     queryFn: (d) => {
-      return api.api().users.findAll(d.queryKey[1] as any);
+      return api.api().users.findAll(d.queryKey[1] as paramsdata);
     },
     queryKey: ["get-with-type", queryParam],
     enabled: false,
     staleTime: 0,
   });
+
 
   useEffect(() => {
     if (usersQuery.isFetched && usersQuery.data && usersQuery.data.data) {
@@ -71,7 +82,7 @@ function Users(): JSX.Element {
             data.map((user, idx) => (
               <BannedCArd {...user} 
               key={idx} 
-              refetch={usersQuery.refetch}
+              // refetch={usersQuery.refetch} TODO: fix banned logic
               />
             ))}
         </div>
