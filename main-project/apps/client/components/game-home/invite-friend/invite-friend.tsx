@@ -27,6 +27,7 @@ const InviteFriend = () => {
     mutationFn: api.api().users.search,
     onSuccess: (d) => {
       setFriendsData(d.data.data);
+      console.log(d.data.data);
     },
   });
       // searchMutation.mutate('');
