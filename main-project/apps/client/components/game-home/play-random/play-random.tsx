@@ -2,13 +2,9 @@ import React, { useEffect, useState } from "react";
 import { ImCancelCircle } from "react-icons/im";
 import Avatar from "assets-workspace/images/mouarsas.jpeg";
 import Image from "next/image";
-import spinner from "assets-workspace/images/spinner.gif";
+// import spinner from "assets-workspace/images/spinner.gif";
 import { friends } from "../invite-friend/data/friends";
 import { user } from "../invite-friend/interface/user";
-
-
-
-
 
 export default function PlayRandom(): JSX.Element {
     const [timer, setTimer] = useState(60); // Initial timer value in seconds
@@ -45,16 +41,13 @@ export default function PlayRandom(): JSX.Element {
 
                 <div className="w-full md:w-1/2 lg:w-1/3 xl:w-1/3 mb-4">
                     <div className="w-40 h-40 flex items-center justify-center rounded-full border border-[#B2F35F] overflow-hidden">
-                        <Image
+                        {/* <Image
                             className="w-full h-full object-cover rounded-full"
                             alt="profile"
                             src={spinner}
-                        />
+                        /> */}
                     </div>
                 </div>
-
-
-
 
                 <div className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 mb-4">
                     <div className="w-full h-40 md:h-60 flex rounded-lg border border-[#B2F35F] overflow-hidden flex-col">

@@ -29,7 +29,7 @@ export default function MenuAsideroutersLayout({
             <BarMobile />
             <div className="  h-[90%] flex flex-row">
               <AsideBar />
-              <main className="grow flex flex-1 ml-2 items-start">
+              <main className="w-full">
                 {children}
               </main>
             </div>

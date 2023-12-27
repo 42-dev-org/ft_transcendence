@@ -1,6 +1,7 @@
 import type { StaticImageData } from "next/image";
 import SingleGamePlayerCard from "../../../components/single-game/single-game-player-card/single-game-player-card";
 import SingleGameResult from "../../../components/single-game/single-game-result/single-game-result";
+import SinglegameMain from "../single-game-main/single-game-main";
 
 interface Player {
   username: string;
@@ -19,7 +20,7 @@ export default function SingleGameHeader({
   player2,
 }: PropsType): JSX.Element {
   return (
-    <div className="bg-[#1B1B1B] w-full  px-4 py-4 flex justify-between  items-center border border-[#B2F35F] rounded-lg">
+    <div className="bg-[#1B1B1B] w-full  px-3 py-3 flex justify-between  items-center border border-[#B2F35F] rounded-lg">
       <SingleGamePlayerCard
         direction="ltr"
         fullName={player1.fullName}
