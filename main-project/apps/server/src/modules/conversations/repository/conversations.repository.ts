@@ -320,7 +320,25 @@ export class ConversationsRepository {
             },
           },
           uid: true,
-          messages: true,
+          messages: {
+            select: {
+              content: true,
+              conversation: true,
+              conversationUid: true,
+              createdAt: true,
+              updatedAt: true,
+              senderUid: true,
+              sender: {
+                select: {
+                  profileImage: true,
+                  firstName: true,
+                  lastName: true,
+                  login: true,
+                  uid: true
+                }
+              }
+            }
+          },
         },
       });
     } else if (type === "Single") {

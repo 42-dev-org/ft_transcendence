@@ -15,20 +15,20 @@ type usersInChannal = {
     name: string,
     url: string,
     uId: string,
+    setshowOpstions,
+    menuList: string[];
+    setMenuList: string[];
 }
 
-function ListOfMutedChannal(props: {name, url, uId , setshowOpstions, menuList:string[], setMenuList:string[]}): JSX.Element {
+function ListOfMutedChannal(props: usersInChannal): JSX.Element {
 
 
     const router = useRouter();
     const {name, url, uId , setshowOpstions, menuList , setMenuList} = props;
     const onActionClicked = (action: string) => {
-        console.log("my action   " + action)
-
         if (action == 'unmuted'){
             alert("here action unmuted")
             // router.push(`/users/${uId}`)
-
         }
     }
     return (
