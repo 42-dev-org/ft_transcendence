@@ -12,6 +12,7 @@ import {
   UploadedFile,
   Query,
   BadRequestException,
+  ConflictException,
 } from "@nestjs/common";
 import { ConversationsService } from "./conversations.service";
 import { CreateConversationDto } from "./dto/create-conversation.dto";
@@ -27,7 +28,7 @@ import { GetUser } from "src/shared/decorators/get-user.decorator";
 import { AuthGuard } from "@nestjs/passport";
 import { PutAbilities } from "src/global/rbac/decorator/rbac.decorator";
 import { Actions } from "src/global/rbac/enum/rbac.enum";
-import { User } from "db";
+import { User, $Enums } from "db";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { FileValidatorPipe } from "src/global/media/pipes/media.pipe";
 import { MediaFile } from "src/shared/types/media";
@@ -41,11 +42,29 @@ export class ConversationsController {
 
   @Post()
   @UseGuards(AuthGuard())
-  create(
+  async create(
     @Body() createConversationDto: CreateConversationDto,
     @GetUser() { uid }: User
   ) {
-    return this.conversationsService.create(createConversationDto, uid);
+    if (
+      (createConversationDto.visibility === "Protected" &&
+        createConversationDto.password.trim().length == 0) ||
+      (createConversationDto.type == "Single" &&
+        (createConversationDto.participants.length > 1 ||
+          createConversationDto.visibility ||
+          createConversationDto.name ||
+          createConversationDto.password)) ||
+      (createConversationDto.type == "Group" &&
+        (!createConversationDto.name || !createConversationDto.visibility))
+    ) {
+      throw new BadRequestException();
+    }
+    const cnv = await this.conversationsService.create(
+      createConversationDto,
+      uid
+    );
+    if (!cnv) throw new ConflictException();
+    return cnv;
   }
 
   @Get("me")
@@ -82,7 +101,7 @@ export class ConversationsController {
   async unmut(@Body() dto: UnMutUserDto) {
     return this.conversationsService.unMuteUser(dto.conversation, dto.user);
   }
-  
+
   @UseGuards(IsOwnerGuard)
   @Patch("protect")
   @UseGuards(AuthGuard())
@@ -101,8 +120,7 @@ export class ConversationsController {
   @Patch("ban-participant")
   @UseGuards(AuthGuard())
   async ban(@Body() dto: UpdateUserMembershipInRoomDto) {
-    return this.conversationsService.ban(dto
-    );
+    return this.conversationsService.ban(dto);
   }
 
   @UseGuards(IsGuardAdmin)
@@ -163,8 +181,21 @@ export class ConversationsController {
   @Get(":id")
   @UseGuards(UserIsHealthyGuard)
   @UseGuards(AuthGuard())
-  findOne(@Param("conversation") conversation: string) {
-    return this.conversationsService.findOne(conversation);
+  async findOne(
+    @Param("id") conversation: string,
+    @GetUser() { uid }: User,
+    @Query("type") type: $Enums.ConversationTypes
+  ) {
+    if (!uid || (type != "Group" && type != "Single"))
+      throw new BadRequestException();
+    const cnv = await this.conversationsService.findOne(
+      conversation,
+      uid,
+      type
+    );
+    console.log(cnv);
+    console.log('testststst')
+    return cnv;
   }
 
   @Patch(":id")

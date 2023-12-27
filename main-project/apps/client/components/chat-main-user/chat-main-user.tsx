@@ -8,8 +8,9 @@ import { TbRulerOff } from "react-icons/tb";
 import MenuItem from "../Menu-chat";
 import { IoMdMore } from "react-icons/io";
 import Link from "next/link";
-
-
+import { useQuery } from "@tanstack/react-query";
+import { api } from "../../api";
+import { useAppSelector } from "../../store/store";
 
 interface PropsType {
   fullName: string;
@@ -18,36 +19,51 @@ interface PropsType {
   status: "online" | "offline" | "in a game"; //  should add in game
 }
 
+interface MESSAGE {
+  content: string
+  conversationUid: string
+  createdAt: string
+  senderUid: string
+  uid: string
+  updatedAt: string
+}
 export default function ConversationUi({
   uid,
   fullName,
   image,
-  status
+  status,
 }: PropsType): JSX.Element {
-
+  const userUid = useAppSelector(s => s.user.user?.uid)
+  const query = useQuery({
+    queryKey: ["get-single-cnv", uid],
+    queryFn: ({ queryKey }) =>
+      api.api().chat.getConversation(queryKey[1], "Single"),
+  });
+  
   const [showOptions, setshowOpstions] = useState(true);
   const [msg, setMsg] = useState("");
   const msgRef = useRef<HTMLDivElement>(null);
-  const [messages, setMessages] = useState([
-    {
-      userId: 2,
-      msg: "OMG 😲 do you remember what you did last night",
-      timeAt: "18:16",
-    },
+  const [messages, setMessages] = useState<MESSAGE[]>([
   ]);
+  useEffect(() => {
+    if (query.isFetched) {
+      setMessages(query.data?.data.data.messages)
+    }
+  }, [query])
   const onSetMessage = (e) => {
     e.preventDefault();
     if (msg.length && msg.trim()) {
-    setMessages([
-      ...messages,
-      {
-        userId: 1,
-        msg,
-        timeAt: "18:16",
-      },
-    ]);
-    setMsg("");
-  }
+      // setMessages([
+        //   ...messages,
+        //   {
+          //     userId: 1,
+          //     msg,
+          console.log(messages)
+      //     timeAt: "18:16",
+      //   },
+      // ]);
+      setMsg("");
+    }
   };
 
   useEffect(() => {
@@ -63,31 +79,45 @@ export default function ConversationUi({
     <div className="w-2/3 flex justify-center p-2 h-full">
       <div className="w-full flex flex-col ">
         <div className="w-full flex bg-black p-1 text-[#F5F5F5] justify-between items-center">
-          <Link className="flex gap-5 items-center h-14" href={'/users/' + uid}>
-              <div className="w-11 h-11 relative">
-                <Image
-                  alt="user"
-                  className="rounded-full"
-                  height={44}
-                  src={image}
-                  width={44}
-                />
-                <div className="absolute -right-1 bottom-1">
-                  <span className="relative flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                  </span>
-                </div>
+          <Link className="flex gap-5 items-center h-14" href={"/users/" + (query.data?.data.data.participants[0].uid)}>
+            <div className="w-11 h-11 relative">
+              <Image
+                alt="user"
+                className="rounded-full"
+                height={44}
+                src={(query.data?.data.data.participants[0].profileImage || '')}
+                width={44}
+              />
+              <div className="absolute -right-1 bottom-1">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                </span>
               </div>
+            </div>
 
-              <div className="flex flex-col justify-between">
-                <h5 className="font-semibold">{fullName}</h5>
-                <span className={`text-xs font-normal ${status === "online" || status === "in a game" ? " text-green-400" : "text-red-500"} `}>{status}</span>
-              </div>
+            <div className="flex flex-col justify-between">
+              <h5 className="font-semibold">{
+                (query.data?.data.data.participants[0].firstName + ' ' + query.data?.data.data.participants[0].lastName)
+              }</h5>
+              <span
+                className={`text-xs font-normal ${
+                  status === "online" || status === "in a game"
+                    ? " text-green-400"
+                    : "text-red-500"
+                } `}
+              >
+                {status}
+              </span>
+            </div>
           </Link>
-          <MenuItem  iconBtn={<IoMdMore size={24} color="gray"/>}>
-            <button className="hover:bg-[#B2F35F] rounded-md px-2">Block</button>
-            <button className="hover:bg-[#B2F35F] rounded-md px-2">Invite Game</button>
+          <MenuItem iconBtn={<IoMdMore size={24} color="gray" />}>
+            <button className="hover:bg-[#B2F35F] rounded-md px-2">
+              Block
+            </button>
+            <button className="hover:bg-[#B2F35F] rounded-md px-2">
+              Invite Game
+            </button>
           </MenuItem>
         </div>
 
@@ -103,14 +133,14 @@ export default function ConversationUi({
             className="h-full w-full flex  overflow-y-auto flex-col  bg-green p-4 gap-4 scrollbar-hide"
             ref={msgRef}
           >
-            {messages?.map(({ msg, userId }, index) => (
+            {messages?.map(({ content, senderUid}, index) => (
               <div
                 className={`w-max max-w-[50%] p-2 flex  rounded-xl ${
-                  userId === 1 ? "bg-[#b9ef72] self-end" : "bg-slate-300"
+                  senderUid === userUid ? "bg-[#b9ef72] self-end" : "bg-slate-300"
                 }`}
                 key={index}
               >
-                <span>{msg}</span>
+                <span>{content}</span>
               </div>
             ))}
           </div>
@@ -125,7 +155,7 @@ export default function ConversationUi({
               onChange={(e) => setMsg(e.target.value)}
             />
 
-            <button className="" type="submit" >
+            <button className="" type="submit">
               <svg
                 className="absolute top-5 right-8"
                 fill="none"

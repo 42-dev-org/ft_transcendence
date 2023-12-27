@@ -17,6 +17,40 @@ export class UsersRepository {
   async findByLogin(login: string) {
     return this.prisma.user.findUnique({ where: { login } });
   }
+  async findMeAll(uid: string) {
+    return this.prisma.user.findMany({
+      where: {
+        AND: [
+          {
+            myFriends: {
+              none: {
+                // {user2uid: {not: uid}},
+                // user1uid: uid,
+                // OR: [{ user1uid: uid }, { user2uid: uid }],
+                user2uid: uid,
+                status: "Banned",
+              },
+            },
+          },
+          {
+            friendOf: {
+              none: {
+                status: "Banned",
+                // OR: [{ user1uid: uid }, { user2uid: uid }],
+                user1uid: uid
+              },
+            },
+          },
+        ],
+
+        uid: { not: uid },
+      },
+      include: {
+        myFriends: true,
+        friendOf: true,
+      },
+    });
+  }
 
   // work
   async searchForUser(search: string, user: string) {

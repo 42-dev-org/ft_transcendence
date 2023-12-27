@@ -7,6 +7,8 @@ import Header from "../../layouts/shared-haeder/header";
 import StoreProvider from "../../providers/store-provider";
 import "../globals.css";
 import ReactQueryProvider from "../../providers/react-query";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +27,7 @@ export default function MenuAsideroutersLayout({
       <body className="h-screen w-full flex flex-col">
         <StoreProvider>
           <ReactQueryProvider>
+            <ToastContainer />
             <Header />
             <BarMobile />
             <div className="  h-[90%] flex flex-row">
