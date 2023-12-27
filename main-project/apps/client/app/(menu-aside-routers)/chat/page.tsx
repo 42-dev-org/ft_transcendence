@@ -23,10 +23,12 @@ import { AxiosError } from "axios";
 import Search from "../../../components/shared-layouts/header-search/header-search";
 
 
+
 export interface cnvType {
   uid: string
   messages: any[]
   type: string
+  name: string
   participants: Participant[]
 }
 
@@ -44,6 +46,12 @@ export interface Participant {
   lastName: string
   login: string
   profileImage: string
+}
+export interface useQueryType {
+    
+      login: string;
+      profileImage: string;
+      uid: string
 }
 
 const ConversationTypes = {
@@ -93,11 +101,17 @@ const Chat = () => {
     useState("public");
     console.log('woow: ',cnv, typeof(cnv))
 
-  const usersQuery = useQuery({
+  const usersQuery = useQuery<useQueryType | useQueryType[], Error>({
     queryKey: ["all-users"],
     enabled: false,
-    queryFn: api.api().users.allExceptBanned,
+    // queryFn: api.api().users.allExceptBanned,
+    queryFn: async () => {
+      const response = await api.api().users.allExceptBanned();
+      const data: useQueryType[] = response.data; 
+      return data;
+    },
   });
+  console.log('userQuery: ', usersQuery.data, typeof(usersQuery.data))
 
   const creationMutation = useMutation({
     mutationKey: ["create-chat"],
@@ -152,12 +166,12 @@ const Chat = () => {
         return (
           <>
             {conversationQuery.isFetched &&
-              (cnv as any[]).map((ch, idx) => (
+              cnv.map((ch, idx) => (
                 <ChannelsChat
-                  uid={ch.uid}
+                  uid={(ch?.uid.length && ch.uid || '')}
                   onClick={onGroupConversationClicked}
                   time={dataChannels.time}
-                  nameChannels={ch.name}
+                  nameChannels={(ch?.name?.length && ch.name || "nameChannel")}
                   msg={""}
                   key={idx}
                 />
@@ -173,7 +187,7 @@ const Chat = () => {
             
               cnv.map((userChat, idx) => (
                 <Userschat
-                uid={userChat.uid }
+                uid={(userChat.uid.length && userChat.uid || "") }
                 onClick={(uid: string) => onSingleConversationClicked(uid)}
                   time={data.time}
                   name={
@@ -184,8 +198,6 @@ const Chat = () => {
                   url={(userChat?.participants?.length && userChat?.participants[0].profileImage) || 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg'} 
                   key={idx}
                   />
-
-                  
               ))}
           </>
         );
@@ -216,6 +228,13 @@ const Chat = () => {
     console.log(cnv);
   }
 
+
+  const mappedData = Array.isArray(usersQuery.data) ? usersQuery.data.map((item) => {
+    // Perform mapping logic on each item
+    return item; // Modify the return value based on your actual mapping logic
+  }) : [];
+  
+
   const onCloseAddModal = () => setIsAddOpen(false);
   const onCloseAddChannelModal = () => setIsAddOpenChannelModal(false);
   return (
@@ -242,7 +261,7 @@ const Chat = () => {
           </div>
           <div className=" overflow-y-auto">
             {usersQuery.isFetched &&
-              usersQuery?.data?.data?.map((user, idx) => (
+              (mappedData).map((user, idx) => (
                 <ListUsersChat
                   onClick={addSingleChat}
                   name={user.login}
