@@ -53,20 +53,33 @@ const dataAchevment = [
     url: "https://media.istockphoto.com/id/1056445350/photo/neon-sign-on-brick-wall-background-welcome-3d-rendering.jpg?s=612x612&w=0&k=20&c=HgV9FknkCyM7rt94VgXPHjVF6J81tKqWjR2nvIHGrj8=",
   },
 ];
-
+interface usersIDtype {
+  lastName: string,
+  firstName: string,
+  login: string,
+  profileImage: string
+}
 
 function UserProfile() {
   const {id} = useParams();
   console.log(id)
   
-  
+  // <usersIDtype, Error>
   
   const query = useQuery({
     queryKey: ["get-friend", id],
     queryFn: (meta) => api.api().users.getFriend(meta.queryKey[1] as string),
+
+    // queryFn: async () => {
+    //   let response;
+    //    response =  await api.api().users.getFriend(response.queryKey[1] as string);
+    //   const data: usersIDtype = response.data;
+    //   return data;
+    // },
+
   });
   
-  if (query.isFetched) console.log(query.data?.data);
+  if (query.isFetched) console.log('my: ' ,query.data?.data.lastName); else console.log('error: ', query.error);
   const  displayName = `${query.data?.data.lastName}   ${query.data?.data.firstName}, ${query.data?.data.login}`
 
 

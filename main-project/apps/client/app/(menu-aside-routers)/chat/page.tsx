@@ -99,7 +99,7 @@ const Chat = () => {
   const [conversationType, setConversationType] = useState("");
   const [componenetChannelModal, setcomponenetChannelModal] =
     useState("public");
-    console.log('woow: ',cnv, typeof(cnv))
+
 
   const usersQuery = useQuery<useQueryType | useQueryType[], Error>({
     queryKey: ["all-users"],
