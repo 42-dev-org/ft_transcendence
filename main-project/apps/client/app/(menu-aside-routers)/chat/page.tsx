@@ -357,7 +357,7 @@ const Chat = () => {
             status="in a game"
           />
         ) : conversationType === "channels" ? (
-          <ConversationUiChannel fullName={""} uid={cnvUid}/>
+          <ConversationUiChannel uid={cnvUid!} refetch={conversationQuery.refetch}/>
         ) : null}
       </div>
     </Fragment>

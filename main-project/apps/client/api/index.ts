@@ -10,6 +10,16 @@ const ConversationTypes = {
   Single: "Single",
 } as const;
 
+export interface MutUserType {
+  user: string;
+  conversation: string;
+  until: string;
+}
+export interface updateUserMemberShip {
+  user: string;
+  conversation: string;
+}
+
 const ChatVisibility = {
   Public: "Public",
   Private: "Private",
@@ -70,6 +80,41 @@ class Api {
         this.httpClient.get("conversations/me?type=" + type),
       getConversation: (uid: string, type: "Single" | "Group") =>
         this.httpClient.get("conversations/" + uid + "?type=" + type),
+      mutParticipant: (conf: MutUserType) =>
+        this.httpClient.patch("/conversations/mut-participant", {
+          ...conf,
+        }),
+      unmutParticipant: (conf: updateUserMemberShip) =>
+        this.httpClient.patch("/conversations/unmut-participant", {
+          ...conf,
+        }),
+      banParticipant: (conf: updateUserMemberShip) =>
+        this.httpClient.patch("/conversations/ban-participant", {
+          ...conf,
+        }),
+      unbanParticipant: (conf: updateUserMemberShip) =>
+        this.httpClient.patch("/conversations/unban-participant", {
+          ...conf,
+        }),
+      addAdmin: (conf: updateUserMemberShip) =>
+        this.httpClient.patch("/conversations/add-admin", {
+          ...conf,
+        }),
+      removeAdmin: (conf: updateUserMemberShip) =>
+        this.httpClient.patch("/conversations/delete-admin", {
+          ...conf,
+        }),
+      addParticipant: (conf: updateUserMemberShip) =>
+        this.httpClient.patch("/conversations/add-participant", {
+          ...conf,
+        }),
+      removeParticipant: (conf: updateUserMemberShip) =>
+        this.httpClient.patch("/conversations/delete-participant", {
+          ...conf,
+        }),
+      changeInfos: (cnf: {conversation: string, name: string}) => this.httpClient.patch('/conversations/'+cnf.conversation, {
+          name: cnf.name
+        })
     },
     users: {
       ban: () => {},

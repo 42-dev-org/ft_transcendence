@@ -17,9 +17,10 @@ import { IoIosCloseCircleOutline, IoMdMore } from "react-icons/io";
 import { ChangeChannelName } from "./ChangeChannelName";
 import OptionsListChannel from "./OptionsListChannel";
 import ChangePasswordPrivetOrDesabled from "./ChangePasswordPrivetOrDesabled";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../../api";
 import { useAppSelector } from "../../store/store";
+import { toast } from "react-toastify";
 
 export interface Root {
   status: string;
@@ -29,6 +30,12 @@ export interface Root {
 export interface ChatInfos {
   name: string;
   profileImage: string;
+  uid: string;
+  
+}
+
+interface Props {
+  refetch: () => void
   uid: string;
 }
 
@@ -90,10 +97,7 @@ enum Role {
 
 export type ViewerRole = "admin" | "owner" | "participant" | false;
 
-export default function ConversationUiChannel({
-  uid,
-}: ChatInfos): JSX.Element {
-
+export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Element {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [admins, setAdmins] = useState<User[]>([]);
   const [banned, setBanned] = useState<User[]>([]);
@@ -109,14 +113,27 @@ export default function ConversationUiChannel({
     queryKey: ["get-group-cnv", uid],
     queryFn: ({ queryKey }) =>
       api.api().chat.getConversation(queryKey[1], "Group"),
+    
   });
-  const myUid = useAppSelector((s) => s.user.user?.uid);
 
+  const myUid = useAppSelector((s) => s.user.user?.uid);
+  console.log("test");
+
+  const usersQuery = useQuery({
+    queryKey: ["all-users"],
+    enabled: false,
+    queryFn: api.api().users.allExceptBanned,
+  });
+
+  const [test, settest] = useState({})
+
+
+  console.log(query)
   useEffect(() => {
     if (query.isFetched) {
       const data = query.data?.data as Root;
       setAdmins(data.data.admins);
-      setBanned(data.data.ban)
+      setBanned(data.data.ban);
       setParticipants(
         data.data.participants.filter((p) => {
           return !(
@@ -142,8 +159,7 @@ export default function ConversationUiChannel({
       });
       setMessages(data.data.messages);
     }
-  }, [query.isFetched]);
-
+  }, [query.isRefetching, query.isFetching, query.isSuccess]);
 
   const [userType, setUserType] = useState<Role>(Role.owner);
 
@@ -152,6 +168,43 @@ export default function ConversationUiChannel({
   const msgRef = useRef<HTMLDivElement>(null);
 
   const onCloseAddModal = () => setIsAddOpen(false);
+
+  const infosMutation = useMutation({
+    mutationKey: ["change-infos"],
+    mutationFn: api.api().chat.changeInfos,
+    onSuccess: () => {
+      toast('naaaadi')
+      query.refetch()
+    },
+    onError: () => {
+      toast('ghayrha')
+    }
+  });
+  const addparticipantMutations = useMutation({
+    mutationKey: ["change-infos"],
+    mutationFn: api.api().chat.addParticipant,
+    onSuccess: () => {
+      toast('naaaadi')
+      onCloseAddModal()
+      refetch()
+    },
+    onError: () => {
+      toast('ghayrha')
+    }
+  });
+  const deleteparticipantMutations = useMutation({
+    mutationKey: ["change-infos"],
+    mutationFn: api.api().chat.changeInfos,
+    onSuccess: () => {
+      toast('naaaadi')
+      query.refetch()
+      refetch()
+    },
+    onError: () => {
+      toast('ghayrha')
+    }
+  });
+
 
   return (
     <Fragment>
@@ -166,13 +219,19 @@ export default function ConversationUiChannel({
             ></Button>
           </div>
           <div className=" overflow-y-auto ">
-            {[...Array(4)].map((_, i) => (
+            {usersQuery.isFetched &&  usersQuery.data?.data.map((_, i) => (
               <ListUsersChat
-                name={data.name}
-                url={data.url}
+                name={_.login}
+                url={_.profileImage}
                 key={i}
+                uid={_.uid}
                 className=""
-                // onClick={onclick} ///////
+                onClick={(user) => {
+                  addparticipantMutations.mutate({
+                    conversation: uid,
+                    user
+                  })
+                }} ///////
               />
             ))}
           </div>
@@ -197,6 +256,7 @@ export default function ConversationUiChannel({
                   title="addUsers"
                   onClick={() => {
                     setIsAddOpen(true);
+                    usersQuery.refetch()
                   }}
                 >
                   Add users
@@ -284,9 +344,9 @@ export default function ConversationUiChannel({
                   </div>
                   <div>
                     <ChangeChannelName
-                      channelName={(infos?.name.length && infos.name || 'channel')}
+                      channelName={(infos?.name && infos.name) || "channel"}
                       onSetName={(name: string) =>
-                        setInfos((old) => (old ? { ...old, name } : null))
+                        infosMutation.mutate({ conversation: infos?.uid!, name })
                       }
                     />
                   </div>
@@ -301,6 +361,8 @@ export default function ConversationUiChannel({
                       owners={[owner!]}
                       userType={userType}
                       setshowOpstions={setshowOpstions}
+                      conversation={infos?.uid!}
+                      refetch={query.refetch}
                     />
                   </div>
                 </div>

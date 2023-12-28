@@ -6,27 +6,55 @@ import { FaCrown } from "react-icons/fa";
 import { MdAdminPanelSettings } from "react-icons/md";
 import GenerateTimeMuted from "./GenerateTimeMuted";
 import Link from "next/link";
-import FtViewProfile from "./FtViewProfile";
 import { useRouter } from "next/navigation";
 import ListOfUsersChannal from "./ListOfUsersChannel";
 import { user } from "../game-home/invite-friend/interface/user";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "../../api";
+import { toast } from "react-toastify";
 
 type usersInChannal = {
   name: string;
   url: string;
-  setshowOpstions,
+  setshowOpstions: (b: boolean) => void;
   menuList: string[];
   setMenuList: string[];
+  conversation: string;
+  uid: string;
+  refetch: () => void;
 };
 
 function ListOfBannedChannal(props: usersInChannal): JSX.Element {
+  const {
+    name,
+    url,
+    setshowOpstions,
+    menuList,
+    setMenuList,
+    conversation,
+    uid,
+    refetch
+  } = props;
 
-  const router = useRouter();
-  const { name, url, setshowOpstions, menuList, setMenuList } = props;
+  const queryClient = useQueryClient();
+  const unbanMutation = useMutation({
+    mutationKey: ["unban-user"],
+    mutationFn: api.api().chat.unbanParticipant,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["get-group-cnv"] });
+      toast("nadi tle9o sra7k");
+      props.refetch
+    },
+    onError: () => {
+      toast("ghalat azabi");
+    },
+  });
   const onActionClicked = (action: string) => {
     if (action == "unbaned") {
-        // logic unbane here /////////////////////
-      alert("here action unbaned");
+      unbanMutation.mutate({
+        user: uid,
+        conversation,
+      });
     }
   };
   return (
