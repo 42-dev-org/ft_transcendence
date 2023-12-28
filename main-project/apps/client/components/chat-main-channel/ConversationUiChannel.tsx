@@ -163,6 +163,13 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
 
   const [userType, setUserType] = useState<Role>(Role.owner);
 
+
+
+
+  ////////////////
+
+
+  
   const [showOpstions, setshowOpstions] = useState(false);
   const [msg, setMsg] = useState("");
   const msgRef = useRef<HTMLDivElement>(null);
