@@ -5,6 +5,7 @@ import Image from "next/image";
 import spinner from "assets-workspace/images/spinner.gif";
 import { friends } from "../invite-friend/data/friends";
 import { user } from "../invite-friend/interface/user";
+import { useAppSelector } from "../../../store/store";
 
 
 
@@ -12,6 +13,7 @@ import { user } from "../invite-friend/interface/user";
 
 export default function PlayRandom(): JSX.Element {
     const [timer, setTimer] = useState(60); // Initial timer value in seconds
+    const user = useAppSelector(s => s.user.user)
 
     // Function to decrement the timer every second
     const decrementTimer = () => {
@@ -35,10 +37,12 @@ export default function PlayRandom(): JSX.Element {
                         <Image
                             className="w-full h-40 object-cover max-w-full"
                             alt="profile"
-                            src={Avatar}
+                            src={user?.profileImage || ""}
+                            width={300}
+                            height={300}
                         />
                         <div className="bg-[#1c1e21] w-full h-1/4 space-y-2 flex py-2 px-5 flex-col items-center">
-                            <span className="text-[#e4e6eb] capitalize">eheh</span>
+                            <span className="text-[#e4e6eb] capitalize">{user?.login || ""}</span>
                         </div>
                     </div>
                 </div>
