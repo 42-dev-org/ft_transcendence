@@ -43,7 +43,7 @@ export default function HomeGameMain(): JSX.Element {
   }, [step]);
 
   return (
-    <div className="w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto max-h-screen h-full rounded-xl bg-neutral-600 text-white text-center p-8">
+    <div className="flex flex-col w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto max-h-screen h-full rounded-xl bg-[#1B1B1B] text-white text-center pt-8">
       <div className="flex flex-col items-center">
         <Image
           src={Avatar}
@@ -54,13 +54,13 @@ export default function HomeGameMain(): JSX.Element {
         <p className="text-white">Welcome! Start your game here.</p>
       </div>
       <div
-        className="bg-gray-500 text-white py-2 px-6 rounded-lg mt-4 cursor-pointer hover:bg-gray-600 hover:text-white font-bold"
+        className=" py-2 px-6 rounded-lg mt-4 cursor-pointer bg-[#e5e7eb] hover:opacity-90 text-black font-bold "
         onClick={handleManualClick}
       >
         
-        <span className="bg-gray-700 rounded-full p-1 mr-2">?</span>Game Manual
+        <span className="bg-[#e5e7eb]  rounded-full p-1 mr-2">?</span>Game Manual
       </div>
-      <div className="w-full mx-auto h-fit rounded-xl bg-neutral-600 text-white text-center px-2 py-2">
+      <div className="w-full mx-auto h-fit rounded-xl bg-[#1B1B1B] text-white text-center px-2 py-2">
             {!selected && (
           <div className="flex flex-col md:flex-col">
             <OptionList data={levelsData} setLevelOrType={setLevelGame} />
