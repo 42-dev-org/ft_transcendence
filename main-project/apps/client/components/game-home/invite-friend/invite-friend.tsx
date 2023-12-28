@@ -7,10 +7,15 @@ import SearchBar from "./search-bar";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../../../api";
 
+// type ComponeetType = "search" | "friends" | "invitations" | "blocked";
+
 
 const InviteFriend = () => {
+  
+
+  const [friendsData, setFriendsData] = useState<user[]|null>(null);
   const [search, setSearch] = useState<string>('');
-    const [friendsData, setFriendsData] = useState<user[]|null>(null);
+  const [data, setData] = useState<any[]>([]);
 
   const usersQuery = useQuery({
     queryFn: (d) => {
@@ -45,8 +50,8 @@ const InviteFriend = () => {
   // };
 
   return (
-    <div className="container  h-full w-full flex justify-center items-center">
-      <div className="flex w-full flex-col justify-center items-center px-4 gap-8 pt-7 ">
+<div className="container h-full w-full flex justify-center items-center">
+        <div className="flex w-full flex-col justify-center items-center px-4 gap-8 pt-7 ">
         <div className="w-full ">
           <SearchBar setFriendsData={setFriendsData} setSearch={setSearch} Search={search}/>
           <ul className="w-full flex flex-col justify-start items-center pt-5 gap-4 overflow-y-auto h-[300px] p-4">
