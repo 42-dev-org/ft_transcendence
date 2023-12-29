@@ -77,7 +77,7 @@ function Users(): JSX.Element {
 
     if (componenet === "blocked") {
       return (
-        <div className="grid lg:grid-cols-5  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
+        <div className="grid lg:grid-cols-5 2xl:grid-cols-7  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
           {searchMutation.isSuccess &&
             data.map((user, idx) => (
               <BannedCArd {...user} 
@@ -91,7 +91,7 @@ function Users(): JSX.Element {
 
     if (componenet === "invitations") {
       return (
-        <div className="grid lg:grid-cols-5  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
+        <div className="grid lg:grid-cols-5 2xl:grid-cols-7  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
           {searchMutation.isSuccess &&
             data.map((inveted, idx) => (
               <InvitationsCard
@@ -105,7 +105,7 @@ function Users(): JSX.Element {
     }
     if (componenet === "friends") {
       return (
-        <div className="grid lg:grid-cols-5  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
+        <div className="grid lg:grid-cols-5 2xl:grid-cols-7  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
           {data.map((_, idx) => (
             <FriendCard {..._} key={idx} refetch={usersQuery.refetch} />
           ))}
@@ -114,7 +114,7 @@ function Users(): JSX.Element {
     }
     if (componenet === "search") {
       return (
-        <div className="grid lg:grid-cols-5  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
+        <div className="grid lg:grid-cols-5 2xl:grid-cols-7  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
           {searchMutation.isSuccess &&
             data.map((user, idx) => (
               <Card
