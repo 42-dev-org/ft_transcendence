@@ -18,7 +18,6 @@ type usersInChannal = {
   uid: string;
   conversation: string;
   setshowOpstions;
-  menuList: string[];
   setMenuList: string[];
   refetch: () => void;
 };
@@ -31,7 +30,6 @@ function ListOfMutedChannal(props: usersInChannal): JSX.Element {
     uid,
     conversation,
     setshowOpstions,
-    menuList,
     setMenuList,
     refetch
   } = props;

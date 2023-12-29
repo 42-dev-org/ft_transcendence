@@ -21,6 +21,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../../api";
 import { useAppSelector } from "../../store/store";
 import { toast } from "react-toastify";
+import { Gloock } from "next/font/google";
 
 export interface Root {
   status: string;
@@ -79,21 +80,9 @@ export interface Message {
   };
 }
 
-const data = {
-  msg: "how about your day",
-  name: "ouarsass",
-  numberMsg: 2,
-  url: "https://cdn.intra.42.fr/users/47192a7a27a46c2c714c6723e30a3cd2/mouarsas.jpg",
-};
 
 export type RoleType = "participant" | "admin" | "mut" | "owner" | "ban";
 export type UsersWithRole = { data: User; role: RoleType };
-
-enum Role {
-  user,
-  admin,
-  owner,
-}
 
 export type ViewerRole = "admin" | "owner" | "participant" | false;
 
@@ -116,8 +105,10 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
     
   });
 
+  // href={"/users/" + query.data?.data.data.participants[0].uid}
+
+  
   const myUid = useAppSelector((s) => s.user.user?.uid);
-  console.log("test");
 
   const usersQuery = useQuery({
     queryKey: ["all-users"],
@@ -125,10 +116,7 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
     queryFn: api.api().users.allExceptBanned,
   });
 
-  const [test, settest] = useState({})
-
-
-  console.log(query)
+  console.log(query + "         query")
   useEffect(() => {
     if (query.isFetched) {
       const data = query.data?.data as Root;
@@ -161,17 +149,8 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
     }
   }, [query.isRefetching, query.isFetching, query.isSuccess]);
 
-  const [userType, setUserType] = useState<Role>(Role.owner);
-
-
-
-
-  ////////////////
-
-
-  
   const [showOpstions, setshowOpstions] = useState(false);
-  const [msg, setMsg] = useState("");
+  const [msg, setMsg] = useState("hhhhhhh");
   const msgRef = useRef<HTMLDivElement>(null);
 
   const onCloseAddModal = () => setIsAddOpen(false);
@@ -238,7 +217,7 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
                     conversation: uid,
                     user
                   })
-                }} ///////
+                }}
               />
             ))}
           </div>
@@ -257,7 +236,7 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
               </div>
             </div>
             <MenuItem iconBtn={<IoMdMore size={24} color="gray" />}>
-              {userType != Role.user && (
+              {role != "participant" && (
                 <button
                   className=" hover:bg-[#B2F35F] rounded-md"
                   title="addUsers"
@@ -360,13 +339,12 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
                   <div className=" h-full">
                     <OptionsListChannel
                       role={role}
-                      all={all} // escape this is buggy
+                      all={all}
                       admins={admins}
                       participants={participants}
                       ban={banned}
                       mut={mutted}
                       owners={[owner!]}
-                      userType={userType}
                       setshowOpstions={setshowOpstions}
                       conversation={infos?.uid!}
                       refetch={query.refetch}

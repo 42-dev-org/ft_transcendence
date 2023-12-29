@@ -8,7 +8,7 @@ import { Mut, User, UsersWithRole, ViewerRole } from "./ConversationUiChannel";
 type SelecterType = "all" | "Members" | "Admins" | "Muted" | "Banned";
 
 interface PropsTypes {
-  userType;
+
   setshowOpstions: any;
   all: UsersWithRole[];
   mut: Mut[];
@@ -45,7 +45,6 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
               url={_.profileImage}
               key={i}
               uid={_.uid}
-              menuList={menuList}
               role={props.role}
               conversation={props.conversation}
             />
@@ -53,7 +52,7 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
         </div>
       );
     }
-    if (selected === "Admins" && props.userType) {
+    if (selected === "Admins") {
       return (
         <div className="flex flex-col justify-center items-center w-full">
           {props.admins.map((_, i) => (
@@ -63,7 +62,6 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
               name={_.firstName + " " + _.lastName}
               url={_.profileImage}
               key={i}
-              menuList={menuList}
               setMenuList={
                 props.role === "owner"
                   ? ["Remove Role Admin", "invite for game"]
@@ -76,7 +74,7 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
         </div>
       );
     }
-    if (selected === "Muted" && props.userType) {
+    if (selected === "Muted") {
       return (
         <div className="flex flex-col justify-center items-center w-full">
           {props.mut.map((_, i) => (
@@ -88,7 +86,6 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
               key={i}
               uid={_.user.uid}
               conversation={props.conversation}
-              menuList={menuList}
               setMenuList={
                 props.role === "admin" || props.role === "owner"
                   ? ["Unmuted", "invite for a game"]
@@ -99,7 +96,7 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
         </div>
       );
     }
-    if (selected === "Banned" && props.userType) {
+    if (selected === "Banned") {
       return (
         <div className="flex flex-col justify-center items-center w-full">
           {props.ban.map((_, i) => (

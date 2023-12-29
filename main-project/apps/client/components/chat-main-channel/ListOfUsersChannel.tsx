@@ -18,7 +18,6 @@ type Props = {
   uid: string;
   conversation: string;
   role: ViewerRole;
-  menuList: string[];
   setshowOpstions: (b: boolean) => void;
   refetch: () => void;
 };
@@ -52,7 +51,7 @@ function ListOfUsersChannal(props: Props): JSX.Element {
     },
   });
 
-  const { name, url, uid, setshowOpstions, menuList, role, conversation } =
+  const { name, url, uid, setshowOpstions, role, conversation } =
     props;
   const onActionClicked = (action: string) => {
     if (action === "mute") {
@@ -77,7 +76,7 @@ function ListOfUsersChannal(props: Props): JSX.Element {
         <div className="flex flex-row w-full justify-between items-center">
           <Link
             className="flex flex-row items-center"
-            href={"/users/1"}
+            href={"/users/1"} /////////////////////////////
             onClick={() => setshowOpstions(false)}
           >
             <div className="px-2">

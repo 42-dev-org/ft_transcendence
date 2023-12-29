@@ -53,13 +53,11 @@ export default function GenerateTimeMuted({
       <div className="flex justify-center items-center p-3 flex-col  max-h-72 gap-2">
         <div className="flex flex-col">
           <select
-            // defaultValue={componenetChannelModal}
             name="channels"
             id=""
             className="rounded-md py-1 px-2"
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            // onChange={(e) => setcomponenetChannelModal(e.target.value)}
           >
             <option value="8h">8 hours</option>
             <option value="1w">1 week</option>

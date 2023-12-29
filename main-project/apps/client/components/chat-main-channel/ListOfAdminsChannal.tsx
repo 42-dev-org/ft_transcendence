@@ -17,7 +17,6 @@ type usersInChannal = {
   url: string;
   uid: string;
   conversation: string;
-  menuList: string[];
   setshowOpstions: (b: boolean) => void;
   setMenuList: string[];
   refetch: () => void;
@@ -29,7 +28,6 @@ function ListOfAdminsChannal(props: usersInChannal): JSX.Element {
     url,
     uid,
     setshowOpstions,
-    menuList,
     setMenuList,
     conversation,
     refetch,
