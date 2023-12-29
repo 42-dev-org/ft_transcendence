@@ -4,6 +4,8 @@ import { PrismaService } from "./global/prisma/prisma.service";
 import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import * as bp from "body-parser";
+import { IoAdapter } from '@nestjs/platform-socket.io';
+import * as cookieParser from 'cookie-parser';
 import helmet from "helmet";
 // import * as xss from 'xss-clean';
 // import * as hpp from 'hpp';
@@ -38,12 +40,20 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: { origin: "http://localhost:3001", credentials: true },
   });
+  app.useWebSocketAdapter(new IoAdapter(app));
+  app.use(cookieParser());
 
   // create configSevice instance
   const confService = app.get(ConfigService);
 
   // craete prisma service Instance
   const prisma = app.get(PrismaService);
+  
+  await prisma.game.deleteMany({
+    where: {
+      status: 'STARTING',
+    },
+  });
 
   // start env vars
   const port = confService.get<number>("app.port");
