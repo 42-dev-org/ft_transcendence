@@ -7,7 +7,7 @@ import {
     WsException,
   } from '@nestjs/websockets';
   import { Server, Socket } from 'socket.io';
-  import { parse as parseCookie } from 'cookie-parser';
+  import * as cookieParser from 'cookie-parser';
   import { JwtService } from '@nestjs/jwt';
   import { PrismaService } from 'src/global/prisma/prisma.service';
   import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
@@ -17,6 +17,14 @@ import {
   import { Game } from './game.interface';
   import { JwtStrategy } from 'src/global/auth/strategy/auth.jwt.startegy';
 
+  const parseCookie = str =>
+  str
+  .split(';')
+  .map(v => v.split('='))
+  .reduce((acc, v) => {
+    acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+    return acc;
+  }, {});
   
   @WebSocketGateway({
     cors: {
@@ -37,32 +45,38 @@ import {
       private games: Map<string, Game>,
       @Inject('CLIENTS')
       private clients: Map<string, string[]>,
+      
     ) {
       this.queue = [];
+      this.clients = new Map<string, string[]>();
     }
-  
+
     async handleConnection(client: Socket) {
-      console.log("hello there from handl connection function ")
       try {
-        const cookies = parseCookie(client.handshake.headers['cookie'] ?? '');
-  
-        const authToken = cookies['token'];
+        console.log("Client Connected!")
+        const coockies = parseCookie(client.handshake.headers['cookie'] ?? '')  
+        const authToken = coockies['token'];
         if (!authToken) throw new WsException('missing auth-token.');
   
-        const payload: { sub: string } = await this.jwtService.verifyAsync(
+        const payload: { email: string } = await this.jwtService.verifyAsync(
           authToken,
-          { secret: 'JWT_SECRET_TOKEN' },
+          { secret:  process.env.JWT_SECRET_TOKEN},
         );
 
         const user = await this.prismaService.user.findUnique({
-          where: { login: payload.sub },
+          where: { email: payload.email },
         });
         if (!user) throw new WsException('User does not exist.');
+
+        if (!this.clients.has(user.uid)) {
+          this.clients.set(user.uid, []);
+        }
         client.user = user;
         client.inGame = false;
         this.clients.set(user.uid, [...this.clients.get(user.uid), client.id]);
-        console.log("userID", this.clients);
+        console.log("clients tabs: ", this.clients)
       } catch (err) {
+        console.log(err)
         let msg = 'Something went wrong.';
         if (err instanceof WsException) msg = err.message;
         client.emit('error', msg);
@@ -71,6 +85,8 @@ import {
     }
     // // leave queue leave game in case of disconnect
     async handleDisconnect(client: Socket) {
+
+      console.log("Client Disconnected!")
       if (client.user) {
         const userId = client.user.uid;
   
@@ -157,13 +173,13 @@ import {
             },
           },
         });
-        // }
       }
     }
   
     // Listening for 'join-game' WebSocket event
     @SubscribeMessage('join-game')
     async joinGame(client: Socket, payload: any) {
+      console.log("join game")
       if (this.queue.includes(client.user.uid)) {
         client.emit('game-status', { timestamp: new Date(), status: 'in_queue' });
         return;
@@ -179,7 +195,7 @@ import {
         return;
       }
       this.queue.push(client.user.uid);
-  
+      console.log("queue members: ", client.user.firstName)
       // Check if the queue has one player
       if (this.queue.length == 1) {
         // If only one player is in the queue, create a new game and join the user to it
