@@ -16,7 +16,7 @@ export default function SingleGameContainer({
  const [gamePlaying, setGamePlaying] = useState(true);
 
   return (
-    <div className="bg-[#1B1B1B] flex justify-center items-center flex-col">
+    <div className="bg-[#1B1B1B] flex justify-center items-center  h-full flex-col">
       <div className="w-full lg:w-[700px] h-full flex flex-col justify-center items-center gap-4">
         <SingleGameHeader
           player1={{

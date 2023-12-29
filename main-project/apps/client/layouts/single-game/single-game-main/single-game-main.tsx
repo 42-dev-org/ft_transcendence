@@ -30,7 +30,7 @@
 // }
 
 import React from "react";
-import PingPongGame from "../../game-home-main/PingPongGame"; // Adjust the import path based on your project structure
+import PingPongGame from "../../game-home-main/PingPongGame";
 
 export default function SinglegameMain({
   isActive,

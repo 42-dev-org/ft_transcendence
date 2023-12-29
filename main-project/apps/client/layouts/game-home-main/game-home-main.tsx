@@ -43,7 +43,7 @@ export default function HomeGameMain(): JSX.Element {
   }, [step]);
 
   return (
-    <div className="w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto max-h-screen h-full rounded-xl bg-neutral-600 text-white text-center p-8">
+    <div className="w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto max-h-full h-full rounded-xl bg-neutral-600 text-white text-center p-8">
       <div className="flex flex-col items-center">
         <Image
           src={Avatar}

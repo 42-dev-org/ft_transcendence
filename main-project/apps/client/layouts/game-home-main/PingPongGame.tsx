@@ -28,7 +28,9 @@ function App() {
 
   useEffect(() => {
     game = new GameModel(gameBoard.current!);
+  }, []);
 
+  useEffect(() => {
     const callback = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft") {
         socket.emit("move-paddle", { direction: "left", roomId: gameId });
@@ -38,36 +40,43 @@ function App() {
       }
     };
 
+    window.addEventListener("keydown", callback);
+    () => window.removeEventListener("keydown", callback);
+  }, [gameId]);
+
+  useEffect(() => {
     socket.on("ball-position", (data: any) => {
+      console.log(data);
       game.moveBall(data);
     });
 
+    // TODO: add type for game
     socket.on("start-game", (game: any) => {
-      toast.success("game started");
+      toast.success("game started")
       setGameId(game.gameId);
       setGameScore(game.players);
     });
 
+
     socket.on("game-status", ({ status }) => setStatus(status));
     socket.on("score", (data) => {
-      setGameScore(data);
+      console.log(data);
+      setGameScore(data); // Update the score state when a new score is received
     });
     socket.on("paddle-position", (data: { y: number; x: number }[]) => {
       game.movePaddle(data[0], 1);
       game.movePaddle(data[1], 2);
     });
-
-    window.addEventListener("keydown", callback);
     return () => {
       game.destory();
       socket.off("ball-position");
+      // socket.off("paddle-position");
       socket.off("invite");
       socket.off("game-status");
       socket.off("score");
       socket.off("start-game");
-      window.removeEventListener("keydown", callback);
     };
-  }, [gameId, socket]);
+  }, [socket]);
 
   return (
     <Fragment>
@@ -95,7 +104,14 @@ function App() {
             </button>
             <span className="text-2xl">Player 2: {gameScore[1].score}</span>
           </div> */}
-          <div className="w-[200px] h-[400px]" ref={gameBoard}></div>
+           <button onClick={joinGame} className="">
+              Join Queue
+            </button>
+            <button onClick={leaveGame} className="w-44 mb-2">
+              Leave Game
+            </button>
+          <div className="w-[200px] h-[400px] sm:w-[300px] sm:h-[500px] md:w-[400px] md:h-[600px] lg:w-[400px] lg:h-[700px] " ref={gameBoard}></div>
+          <div className="text-white mb-2">Status: {status}</div>
           {/* <div className="flex flex-col ml-4">
             <button
               className="w-44 mb-2"

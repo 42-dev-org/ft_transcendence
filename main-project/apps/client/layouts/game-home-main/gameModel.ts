@@ -6,10 +6,7 @@ import Matter, {
     Render,
     Runner,
   } from "matter-js";
-  import { io, Socket } from "socket.io-client";
-  
-  const socket: Socket = io("http://localhost:8080");
-  
+
   class GameModel {
     public engine: Matter.Engine;
     private render: Matter.Render;
