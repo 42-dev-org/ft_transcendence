@@ -131,16 +131,18 @@ function UserProfile() {
           ))}
         </div>
         <div className="overflow-y-auto max-h-full gap-3 flex flex-col">
+          {/* <> */}
           <h2>Achievements</h2>
-          <div className="grid  h-full rounded-lg  grid-cols-2 gap-5  w-full">
+          {/* <div className="grid  h-full rounded-lg  grid-cols-2 gap-5  w-full"> */}
             {dataAchevment.map((dataAchevment, idx) => (
               <AchevementCard
-                name={dataAchevment.name}
-                url={dataAchevment.url}
-                key={idx}
+              name={dataAchevment.name}
+              url={dataAchevment.url}
+              key={idx}
               />
-            ))}
-          </div>
+              ))}
+          {/* </div> */}
+              {/* </> */}
         </div>
       </div>
     </div>
