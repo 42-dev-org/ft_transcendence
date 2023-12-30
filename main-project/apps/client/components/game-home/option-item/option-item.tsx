@@ -18,7 +18,9 @@ export default function OptionItem(props: PropsType) {
         }
         onClick={props.hander}
     >
-      {props.icon && <props.icon className="w-5 h-5" />}
+
+      // TODO: fix this
+      {/* {props.icon && <props.icon className="w-5 h-5" />} */}
       {props.label}
     </div>
   );

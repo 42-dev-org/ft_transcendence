@@ -17,152 +17,180 @@ import { IoIosCloseCircleOutline, IoMdMore } from "react-icons/io";
 import { ChangeChannelName } from "./ChangeChannelName";
 import OptionsListChannel from "./OptionsListChannel";
 import ChangePasswordPrivetOrDesabled from "./ChangePasswordPrivetOrDesabled";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../../api";
 import { useAppSelector } from "../../store/store";
+import { toast } from "react-toastify";
+import { Gloock } from "next/font/google";
 
-const data = {
-  msg: "how about your day",
-  name: "ouarsass",
-  numberMsg: 2,
-  url: "https://cdn.intra.42.fr/users/47192a7a27a46c2c714c6723e30a3cd2/mouarsas.jpg",
-};
+export interface Root {
+  status: string;
+  data: Data;
+}
 
-interface PropsType {
-  fullName: string;
+export interface ChatInfos {
+  name: string;
+  profileImage: string;
+  uid: string;
+  
+}
+
+interface Props {
+  refetch: () => void
   uid: string;
 }
 
-enum Role {
-  user,
-  admin,
-  owner,
+export interface Data {
+  name: string;
+  profileImage: string;
+  participants: User[];
+  ban: User[];
+  mut: Mut[];
+  admins: User[];
+  owner: User;
+  uid: string;
+  messages: Message[];
 }
 
-export default function ConversationUiChannel({
-  fullName = "mustapha ouarsass1",
-  uid,
-}: PropsType): JSX.Element {
-  console.log("testing from the north");
+export interface Mut {
+  until: string;
+  user: User;
+}
+
+export interface User {
+  firstName: string;
+  lastName: string;
+  login: string;
+  profileImage: string;
+  uid: string;
+}
+
+export interface Message {
+  uid: string;
+  content: string;
+  senderUid: string;
+  conversationUid: string;
+  createdAt: string;
+  updatedAt: string;
+  sender: {
+    profileImage: string;
+    firstName: string;
+    lastName: string;
+    login: string;
+  };
+}
+
+
+export type RoleType = "participant" | "admin" | "mut" | "owner" | "ban";
+export type UsersWithRole = { data: User; role: RoleType };
+
+export type ViewerRole = "admin" | "owner" | "participant" | false;
+
+export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Element {
   const [isAddOpen, setIsAddOpen] = useState(false);
-  const [channelName, setChannelName] = useState("Homaygat");
+  const [admins, setAdmins] = useState<User[]>([]);
+  const [banned, setBanned] = useState<User[]>([]);
+  const [mutted, setMutted] = useState<Mut[]>([]);
+  const [participants, setParticipants] = useState<User[]>([]);
+  const [role, setRole] = useState<ViewerRole>(false);
+  const [owner, setOwner] = useState<User | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [all, setAll] = useState<UsersWithRole[]>([]);
+  const [infos, setInfos] = useState<ChatInfos | null>(null);
 
   const query = useQuery({
     queryKey: ["get-group-cnv", uid],
     queryFn: ({ queryKey }) =>
       api.api().chat.getConversation(queryKey[1], "Group"),
+    
   });
 
+  // href={"/users/" + query.data?.data.data.participants[0].uid}
+
+  
   const myUid = useAppSelector((s) => s.user.user?.uid);
 
-  console.log('----------------------------------------------')
-  if (query.isFetched) {
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log(query.data?.data);
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-    console.log('----------------------------------------------')
-  }
+  const usersQuery = useQuery({
+    queryKey: ["all-users"],
+    enabled: false,
+    queryFn: api.api().users.allExceptBanned,
+  });
 
-  // const a = ['a', 'a2']
-  // const b = ['b', 'b2']
-
-  // const users = [...a.map(el => ({
-  //   role: 'admin',
-  //   name: el
-  // })), ...b.map(el => ({
-  //   role: 'banned',
-  //   name: el
-  // }))]
-  const [menuList, setMenuList] = useState<string[]>(["Invite Game"]);
-  const [userType, setUserType] = useState<Role>(Role.owner);
+  console.log(query + "         query")
+  useEffect(() => {
+    if (query.isFetched) {
+      const data = query.data?.data as Root;
+      setAdmins(data.data.admins);
+      setBanned(data.data.ban);
+      setParticipants(
+        data.data.participants.filter((p) => {
+          return !(
+            data.data.admins.find((a) => a.uid === p.uid) ||
+            data.data.owner.uid === p.uid ||
+            data.data.mut.find((m) => m.user.uid === p.uid) ||
+            data.data.ban.find((b) => b.uid === p.uid)
+          );
+        })
+      );
+      setMutted(data.data.mut);
+      setRole(
+        data.data.owner.uid === myUid
+          ? "owner"
+          : data.data.admins.find((el) => el.uid === myUid)
+            ? "admin"
+            : "participant"
+      );
+      setInfos({
+        name: data.data.name,
+        uid: data.data.uid,
+        profileImage: data.data.profileImage,
+      });
+      setMessages(data.data.messages);
+    }
+  }, [query.isRefetching, query.isFetching, query.isSuccess]);
 
   const [showOpstions, setshowOpstions] = useState(false);
-  const [msg, setMsg] = useState("");
+  const [msg, setMsg] = useState("hhhhhhh");
   const msgRef = useRef<HTMLDivElement>(null);
-  const [messages, setMessages] = useState([
-    {
-      userId: 2,
-      msg: "Hi members enybody here ?",
-      senderName: "Abdellah",
-      imageUrl:
-        "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg",
-    },
-    {
-      userId: 1,
-      msg: "Hi Players",
-      senderName: "mustapha",
-      imageUrl:
-        "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg",
-    },
-    {
-      userId: 3,
-      msg: "Hi Mate",
-      senderName: "Zakaria",
-      imageUrl:
-        "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_18.jpg",
-    },
-    {
-      userId: 4,
-      msg: "Hi Brothers",
-      senderName: "Mounach",
-      imageUrl:
-        "https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_19.jpg",
-    },
-  ]);
-  const onSetMessage = (e) => {
-    e.preventDefault();
-    if (msg.trim() && msg.length) {
-      setMessages([
-        ...messages,
-        {
-          userId: 1,
-          msg,
-          imageUrl: "",
-          senderName: "mustapha",
-        },
-      ]);
-      setMsg("");
-    }
-  };
-
-  useEffect(() => {
-    if (msgRef?.current) {
-      msgRef?.current.addEventListener("DOMNodeInserted", (event) => {
-        const { currentTarget: target }: any = event;
-        target?.scroll({ top: target.scrollHeight, behavior: "smooth" });
-      });
-    }
-  }, []);
 
   const onCloseAddModal = () => setIsAddOpen(false);
 
-  useEffect(() => {
-    if (userType === Role.owner) {
-      setMenuList(["Mute", "Ban", "kick", "Invite Game", "Set as Admin"]);
+  const infosMutation = useMutation({
+    mutationKey: ["change-infos"],
+    mutationFn: api.api().chat.changeInfos,
+    onSuccess: () => {
+      toast('naaaadi')
+      query.refetch()
+    },
+    onError: () => {
+      toast('ghayrha')
     }
-    if (userType === Role.admin) {
-      setMenuList(["Mute", "Ban", "kick", "Invite Game"]);
+  });
+  const addparticipantMutations = useMutation({
+    mutationKey: ["change-infos"],
+    mutationFn: api.api().chat.addParticipant,
+    onSuccess: () => {
+      toast('naaaadi')
+      onCloseAddModal()
+      refetch()
+    },
+    onError: () => {
+      toast('ghayrha')
     }
-  }, [userType]);
+  });
+  const deleteparticipantMutations = useMutation({
+    mutationKey: ["change-infos"],
+    mutationFn: api.api().chat.changeInfos,
+    onSuccess: () => {
+      toast('naaaadi')
+      query.refetch()
+      refetch()
+    },
+    onError: () => {
+      toast('ghayrha')
+    }
+  });
+
 
   return (
     <Fragment>
@@ -177,18 +205,24 @@ export default function ConversationUiChannel({
             ></Button>
           </div>
           <div className=" overflow-y-auto ">
-            {[...Array(4)].map((_, i) => (
+            {usersQuery.isFetched &&  (usersQuery.data?.data as User[]).map((_, i) => (
               <ListUsersChat
-                name={data.name}
-                url={data.url}
+                name={_.login}
+                url={_.profileImage}
                 key={i}
+                uid={_.uid}
                 className=""
+                onClick={(user) => {
+                  addparticipantMutations.mutate({
+                    conversation: uid,
+                    user
+                  })
+                }}
               />
             ))}
           </div>
         </div>
       </ModalUI>
-
       <div className="w-2/3 flex justify-center p-2 h-full">
         <div className="w-full flex flex-col ">
           <div className="w-full flex bg-black p-1 text-[#F5F5F5] justify-between items-center rounded-lg">
@@ -198,16 +232,17 @@ export default function ConversationUiChannel({
               </div>
 
               <div className="flex flex-col justify-between">
-                <h5 className="font-semibold">{channelName}</h5>
+                <h5 className="font-semibold">{infos?.name}</h5>
               </div>
             </div>
             <MenuItem iconBtn={<IoMdMore size={24} color="gray" />}>
-              {userType != Role.user && (
+              {role != "participant" && (
                 <button
                   className=" hover:bg-[#B2F35F] rounded-md"
                   title="addUsers"
                   onClick={() => {
                     setIsAddOpen(true);
+                    usersQuery.refetch()
                   }}
                 >
                   Add users
@@ -242,26 +277,21 @@ export default function ConversationUiChannel({
                 className="h-full w-full flex  overflow-y-auto flex-col  bg-green p-4 gap-4 scrollbar-hide"
                 ref={msgRef}
               >
-                {messages?.map(
-                  ({ msg, userId, imageUrl, senderName }, index) => (
-                    <Fragment key={index}>
-                      {userId === 1 ? (
-                        <SenderLayout msg={msg} />
-                      ) : (
-                        <RecieverLayout
-                          msg={msg}
-                          senderName={senderName}
-                          imageUrl={imageUrl}
-                        />
-                      )}
-                    </Fragment>
-                  )
-                )}
+                {messages?.map(({ content, senderUid, sender }, index) => (
+                  <Fragment key={index}>
+                    {senderUid === myUid ? (
+                      <SenderLayout msg={msg} />
+                    ) : (
+                      <RecieverLayout
+                        msg={content}
+                        senderName={sender.firstName + " " + sender.lastName}
+                        imageUrl={sender.profileImage}
+                      />
+                    )}
+                  </Fragment>
+                ))}
               </div>
-              <form
-                className="h-16 w-full  px-6 py-2 relative"
-                onSubmit={onSetMessage}
-              >
+              <form className="h-16 w-full  px-6 py-2 relative">
                 <input
                   className="w-full h-12 bg-[#2a2a2a] text-[#F5F5F5] rounded-xl pl-3 pr-10"
                   placeholder="Message"
@@ -300,15 +330,24 @@ export default function ConversationUiChannel({
                   </div>
                   <div>
                     <ChangeChannelName
-                      channelName={channelName}
-                      onSetName={(name: string) => setChannelName(name)}
+                      channelName={(infos?.name && infos.name) || "channel"}
+                      onSetName={(name: string) =>
+                        infosMutation.mutate({ conversation: infos?.uid!, name })
+                      }
                     />
                   </div>
                   <div className=" h-full">
                     <OptionsListChannel
-                      menuList={menuList}
-                      userType={userType}
+                      role={role}
+                      all={all}
+                      admins={admins}
+                      participants={participants}
+                      ban={banned}
+                      mut={mutted}
+                      owners={[owner!]}
                       setshowOpstions={setshowOpstions}
+                      conversation={infos?.uid!}
+                      refetch={query.refetch}
                     />
                   </div>
                 </div>
