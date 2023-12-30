@@ -9,6 +9,7 @@ import "../globals.css";
 import ReactQueryProvider from "../../providers/react-query";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { SocketProvider } from "../../contexts/socket-context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default function MenuAsideroutersLayout({
     <html lang="en">
       <body className="h-screen w-full flex flex-col">
         <StoreProvider>
+          <SocketProvider>
           <ReactQueryProvider>
             <ToastContainer />
             <Header />
@@ -37,6 +39,7 @@ export default function MenuAsideroutersLayout({
               </main>
             </div>
           </ReactQueryProvider>
+          </SocketProvider>
         </StoreProvider>
       </body>
     </html>

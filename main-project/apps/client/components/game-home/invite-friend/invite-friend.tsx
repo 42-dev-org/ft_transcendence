@@ -7,10 +7,15 @@ import SearchBar from "./search-bar";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../../../api";
 
+// type ComponeetType = "search" | "friends" | "invitations" | "blocked";
+
 
 const InviteFriend = () => {
+  
+
+  const [friendsData, setFriendsData] = useState<user[]|null>(null);
   const [search, setSearch] = useState<string>('');
-    const [friendsData, setFriendsData] = useState<user[]|null>(null);
+  const [data, setData] = useState<any[]>([]);
 
   const usersQuery = useQuery({
     queryFn: (d) => {

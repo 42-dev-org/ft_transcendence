@@ -17,10 +17,7 @@ function App() {
     { score: 0, winner: false },
   ]);
 
-  const joinGame = () => {
-    console.log("join game");
-    socket.emit("join-game");
-  };
+ 
 
   const leaveGame = () => {
     socket.emit("leave-game");
@@ -104,14 +101,13 @@ function App() {
             </button>
             <span className="text-2xl">Player 2: {gameScore[1].score}</span>
           </div> */}
-           <button onClick={joinGame} className="">
+           {/* <button onClick={joinGame} className="">
               Join Queue
             </button>
             <button onClick={leaveGame} className="w-44 mb-2">
               Leave Game
             </button>
-          <div className="w-[200px] h-[400px] sm:w-[300px] sm:h-[500px] md:w-[400px] md:h-[600px] lg:w-[400px] lg:h-[700px] " ref={gameBoard}></div>
-          <div className="text-white mb-2">Status: {status}</div>
+          <div className="text-white mb-2">Status: {status}</div> */}
           {/* <div className="flex flex-col ml-4">
             <button
               className="w-44 mb-2"
@@ -132,6 +128,7 @@ function App() {
             <div className="text-white mb-2">Status: {status}</div>
           </div>
         </div> */}
+        <div className="w-[200px] h-[400px] sm:w-[300px] sm:h-[500px] md:w-[400px] md:h-[600px] lg:w-[400px] lg:h-[700px] " ref={gameBoard}></div>
         </div>
       </div>
     </Fragment>
