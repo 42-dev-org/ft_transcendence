@@ -5,8 +5,8 @@ import useAuthenticator from "../hooks/use-authenticator";
 import { setIsAuth, setUser } from "../store/slices/user.slice";
 import { useEffect } from "react";
 
-const withAuth = (Component) => {
-  const Auth = (props) => {
+const withAuth = (Component: React.FC) => {
+  const Auth = (props: any) => {
     const router = useRouter();
     const isAuth = useAppSelector((s) => s.user.isAuthenticated);
     const { mutation } = useAuthenticator();

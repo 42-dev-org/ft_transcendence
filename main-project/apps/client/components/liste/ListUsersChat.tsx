@@ -17,7 +17,6 @@ export function ListUsersChat({
   uid,
   onClick,
 }: ListUsersChatProps) {
-  console.log(uid)
   return (
     <div
       className={`flex flex-row justify-between w-72 rounded-lg bg-black  my-1 h-9 items-center ${className} `}

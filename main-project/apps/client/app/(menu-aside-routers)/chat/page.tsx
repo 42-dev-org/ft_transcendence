@@ -8,7 +8,7 @@ import IMAgeUsers from "assets-workspace/svg/users.svg";
 import IMAgeGroups from "assets-workspace/svg/groups.svg";
 import ModalUI from "../../../components/Modal";
 import ConversationUi from "../../../components/chat-main-user/chat-main-user";
-import ConversationUiChannel from "../../../components/chat-main-channel/ConversationUiChannel";
+import ConversationUiChannel, { Message, Mut, User } from "../../../components/chat-main-channel/ConversationUiChannel";
 import { ListUsersChat } from "../../../components/liste/ListUsersChat";
 import withAuth from "../../../hoc/auth";
 import {
@@ -85,9 +85,21 @@ const dataChannels = {
 //   // setborderMsg(!borderMsg);
 
 // }
-const Chat = () => {
 
-  const [cnv, setCnv] = useState<cnvType[]>([]);
+export interface Conversation {
+  name: string;
+  profileImage: string;
+  participants: User[];
+  ban: User[];
+  mut: Mut[];
+  admins: User[];
+  owner: User;
+  uid: string;
+  messages: Message[];
+}
+
+const Chat = () => {
+  const [cnv, setCnv] = useState<Conversation[]>([]);
   const [cnvUid, setCnvUid] = useState<null | string>(null);
   const [search, setSearch] = useState("");
   const reactQueryClinet = useQueryClient();
@@ -126,7 +138,7 @@ const Chat = () => {
       toast(err.message);
     },
     mutationFn: (conf: {
-      type: keyof typeof ConversationTypes;
+      type?: keyof typeof ConversationTypes;
       password?: string | undefined;
       visibility?: keyof typeof ChatVisibility;
       name?: string;
@@ -261,7 +273,7 @@ const Chat = () => {
           </div>
           <div className=" overflow-y-auto">
             {usersQuery.isFetched &&
-              (mappedData).map((user, idx) => (
+              (usersQuery?.data.da as User[]).map((_, idx) => (
                 <ListUsersChat
                   onClick={addSingleChat}
                   name={user.login}
@@ -409,7 +421,7 @@ const Chat = () => {
             status="in a game"
           />
         ) : conversationType === "channels" ? (
-          <ConversationUiChannel fullName={""} uid={cnvUid!}/>
+          <ConversationUiChannel uid={cnvUid!} refetch={conversationQuery.refetch}/>
         ) : null}
       </div>
     </Fragment>
