@@ -22,6 +22,38 @@ import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import Search from "../../../components/shared-layouts/header-search/header-search";
 
+
+
+export interface cnvType {
+  uid: string
+  messages: any[]
+  type: string
+  name: string
+  participants: Participant[]
+}
+
+export type senderType = {
+  messages: {
+    sender: {
+        uid: string;
+        login: string;
+        profileImage: string;
+    };
+}[];
+}
+export interface Participant {
+  firstName: string
+  lastName: string
+  login: string
+  profileImage: string
+}
+export interface useQueryType {
+    
+      login: string;
+      profileImage: string;
+      uid: string
+}
+
 const ConversationTypes = {
   Group: "Group",
   Single: "Single",
@@ -80,11 +112,16 @@ const Chat = () => {
   const [componenetChannelModal, setcomponenetChannelModal] =
     useState("public");
 
+
   const usersQuery = useQuery({
     queryKey: ["all-users"],
     enabled: false,
-    queryFn: api.api().users.allExceptBanned,
+    // queryFn: api.api().users.allExceptBanned,
+    queryFn: async () => {
+  return api.api().users.allExceptBanned();
+    },
   });
+  console.log('userQuery: ', usersQuery.data, typeof(usersQuery.data))
 
   const creationMutation = useMutation({
     mutationKey: ["create-chat"],
@@ -139,12 +176,12 @@ const Chat = () => {
         return (
           <>
             {conversationQuery.isFetched &&
-              (cnv as any[]).map((ch, idx) => (
+              cnv.map((ch, idx) => (
                 <ChannelsChat
-                  uid={ch.uid}
+                  uid={(ch?.uid.length && ch.uid || '')}
                   onClick={onGroupConversationClicked}
                   time={dataChannels.time}
-                  nameChannels={ch.name}
+                  nameChannels={(ch?.name?.length && ch.name || "nameChannel")}
                   msg={""}
                   key={idx}
                 />
@@ -155,20 +192,22 @@ const Chat = () => {
       case "users":
         return (
           <>
-            {conversationQuery.isFetched &&
-              cnv.map((_, idx) => (
+              {console.log(conversationQuery)}
+            {conversationQuery.isFetched && 
+            
+              cnv.map((userChat, idx) => (
                 <Userschat
-                  uid={_.uid}
-                  onClick={(uid: string) => onSingleConversationClicked(uid)}
+                uid={(userChat.uid.length && userChat.uid || "") }
+                onClick={(uid: string) => onSingleConversationClicked(uid)}
                   time={data.time}
                   name={
-                    (_.participants?.length && _.participants[0].login) ||
+                    (userChat?.participants?.length && userChat.participants[0].login) ||
                     "mock"
                   }
                   msg={data.msg}
-                  url={data.url}
+                  url={(userChat?.participants?.length && userChat?.participants[0].profileImage) || 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg'} 
                   key={idx}
-                />
+                  />
               ))}
           </>
         );
@@ -179,8 +218,32 @@ const Chat = () => {
     creationMutation.mutate({
       type: "Single",
       participants: [uid],
+
     });
   };
+
+  useEffect(() => {
+    console.log(search);
+
+    // setCnv(
+    //   conversationQuery.isFetched
+    //     ? (conversationQuery.data.data as any[]).filter((cnv) =>
+    //         (cnv.name as string).includes(search)
+    //       )
+    //     : []
+    // );
+  }, [search]);
+
+  if (conversationQuery.isFetched) {
+    console.log(cnv);
+  }
+
+
+  const mappedData = Array.isArray(usersQuery.data) ? usersQuery.data.map((item) => {
+    // Perform mapping logic on each item
+    return item; // Modify the return value based on your actual mapping logic
+  }) : [];
+  
 
   const onCloseAddModal = () => setIsAddOpen(false);
   const onCloseAddChannelModal = () => setIsAddOpenChannelModal(false);
@@ -208,13 +271,13 @@ const Chat = () => {
           </div>
           <div className=" overflow-y-auto">
             {usersQuery.isFetched &&
-              (usersQuery?.data?.data as User[]).map((_, idx) => (
+              ((usersQuery?.data?.data) as User[]).map((user, idx) => (
                 <ListUsersChat
                   onClick={addSingleChat}
-                  name={_.login}
-                  url={data.url}
+                  name={user.login}
+                  url={user.profileImage}
                   key={idx}
-                  uid={_.uid}
+                  uid={user.uid}
                   className=" w-"
                 />
               ))}

@@ -53,18 +53,33 @@ const dataAchevment = [
     url: "https://media.istockphoto.com/id/1056445350/photo/neon-sign-on-brick-wall-background-welcome-3d-rendering.jpg?s=612x612&w=0&k=20&c=HgV9FknkCyM7rt94VgXPHjVF6J81tKqWjR2nvIHGrj8=",
   },
 ];
+interface usersIDtype {
+  lastName: string,
+  firstName: string,
+  login: string,
+  profileImage: string
+}
+
 function UserProfile() {
   const {id} = useParams();
   console.log(id)
   
-  
+  // <usersIDtype, Error>
   
   const query = useQuery({
     queryKey: ["get-friend", id],
     queryFn: (meta) => api.api().users.getFriend(meta.queryKey[1] as string),
+
+    // queryFn: async () => {
+    //   let response;
+    //    response =  await api.api().users.getFriend(response.queryKey[1] as string);
+    //   const data: usersIDtype = response.data;
+    //   return data;
+    // },
+
   });
   
-  if (query.isFetched) console.log(query.data?.data);
+  if (query.isFetched) console.log('my: ' ,query.data?.data.lastName); else console.log('error: ', query.error);
   const  displayName = `${query.data?.data.lastName}   ${query.data?.data.firstName}, ${query.data?.data.login}`
 
 
@@ -98,12 +113,7 @@ function UserProfile() {
             </strong>
           </span>
           <div className="flex gap-2 md:flex-row flex-col">
-            <Button onClick={() => null} title="Add Freind" />
-            <Button
-              onClick={() => null}
-              title="Send Message"
-              className="bg-[#ffffff1a] text-white"
-            />
+            <Button onClick={() => null} title="Block" />
             <Button
               onClick={() => null}
               title="Invite to play"
@@ -112,25 +122,27 @@ function UserProfile() {
           </div>
         </div>
       </div>
-      <div className="grid lg:grid-cols-2 mt-4  gap-5 ">
-        <div className="overflow-y-auto max-h-72  flex  gap-4 flex-col">
+      <div className="grid lg:grid-cols-2 mt-4  gap-5 h-full ">
+        <div className="overflow-y-auto max-h-full  flex  gap-4 flex-col">
           <h2>History</h2>
 
-          {[...Array(9)].map((_, idx) => (
+          {[...Array(100)].map((_, idx) => (
             <HistoryCard user1={data} user2={data2} key={idx} />
           ))}
         </div>
-        <div className="overflow-y-auto max-h-72 gap-3 flex flex-col">
+        <div className="overflow-y-auto max-h-full gap-3 flex flex-col">
+          {/* <> */}
           <h2>Achievements</h2>
-          <div className="grid  h-full rounded-lg  grid-cols-2 gap-5  w-full">
+          {/* <div className="grid  h-full rounded-lg  grid-cols-2 gap-5  w-full"> */}
             {dataAchevment.map((dataAchevment, idx) => (
               <AchevementCard
-                name={dataAchevment.name}
-                url={dataAchevment.url}
-                key={idx}
+              name={dataAchevment.name}
+              url={dataAchevment.url}
+              key={idx}
               />
-            ))}
-          </div>
+              ))}
+          {/* </div> */}
+              {/* </> */}
         </div>
       </div>
     </div>

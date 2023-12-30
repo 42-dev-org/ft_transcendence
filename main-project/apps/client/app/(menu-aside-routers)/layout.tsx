@@ -30,7 +30,7 @@ export default function MenuAsideroutersLayout({
             <ToastContainer />
             <Header />
             <BarMobile />
-            <div className="  h-[90%] flex flex-row">
+            <div className="  h-full flex flex-row overflow-hidden">
               <AsideBar />
               <main className="grow flex flex-1 ml-2 items-start">
                 {children}

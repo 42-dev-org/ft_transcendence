@@ -14,7 +14,7 @@ type Props = {
 
 function HistoryCard({ user1, user2 }: Props) {
   return (
-    <div className='w-full h-14   bg-[#ffffff1a] grid grid-cols-3 justify-items-center rounded-xl	'>
+    <div className='w-full h-14  m-0.5  bg-[#ffffff1a] grid grid-cols-3 justify-items-center rounded-xl	'>
       <div className='flex gap-4  text-white items-center'>
         <Image width={35} height={35} className='rounded-full w-11 h-11' src={user1.url} alt={user1.name} />
         <Link href='users/1' className='hover:underline md:text-base text-xs'>
