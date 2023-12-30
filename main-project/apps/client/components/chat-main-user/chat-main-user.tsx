@@ -49,7 +49,7 @@ export default function ConversationUi({
       setMessages(query.data?.data.data.messages);
     }
   }, [query]);
-  const onSetMessage = (e) => {
+  const onSetMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (msg.length && msg.trim()) {
       // setMessages([

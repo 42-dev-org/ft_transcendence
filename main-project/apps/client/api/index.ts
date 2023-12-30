@@ -31,12 +31,12 @@ class Api {
   // private ioClient: Socket<ServerToClientEvents, ClientToServerEvents>;
 
   constructor(private readonly baseUrl: string = constants.URL) {
-    this.initializeHttpClient();
+    this.httpClient = this.initializeHttpClient();
     // this.initializeSocketIO();
   }
 
-  private initializeHttpClient(): void {
-    this.httpClient = axios.create({
+  private initializeHttpClient() {
+    return axios.create({
       baseURL: this.baseUrl,
       timeout: 10000,
       withCredentials: true,
@@ -67,11 +67,11 @@ class Api {
     },
     chat: {
       create: (conf: {
-        type: keyof typeof ConversationTypes;
+        type?: keyof typeof ConversationTypes;
         password?: string;
-        visibility: keyof typeof ChatVisibility;
-        name: string;
-        participants: [];
+        visibility?: keyof typeof ChatVisibility;
+        name?: string;
+        participants: string[];
       }) =>
         this.httpClient.post("/conversations", {
           ...conf,
@@ -137,7 +137,6 @@ class Api {
       getImage: () => this.httpClient.get("/auth/otp"),
     },
   });
-  io: () => { a: "" };
 }
 
 export const api = new Api();

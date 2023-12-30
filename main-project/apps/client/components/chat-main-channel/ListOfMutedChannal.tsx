@@ -17,7 +17,7 @@ type usersInChannal = {
   url: string;
   uid: string;
   conversation: string;
-  setshowOpstions;
+  setshowOpstions: (b: boolean) => void;
   setMenuList: string[];
   refetch: () => void;
 };

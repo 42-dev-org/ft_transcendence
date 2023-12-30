@@ -37,22 +37,24 @@ function HeaderSettingNotifSearchMobale(): JSX.Element {
   const settRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const checkIfClickedOutside = (e) => {
+    const checkIfClickedOutside = (e: MouseEvent) => {
       if (
         isOpenNot &&
-        notifRef?.current &&
-        !notifRef?.current?.contains(e.target)
+        notifRef?.current 
+        // TODO: check this later
+        // !notifRef?.current?.contains(e.)
       ) {
         setIsOpenNot(false);
       }
     };
     document.addEventListener("click", checkIfClickedOutside);
 
-    const checkIfClickedOutsides = (e) => {
+    const checkIfClickedOutsides = (e: MouseEvent) => {
       if (
         IsOpenSett &&
-        settRef?.current &&
-        !settRef?.current?.contains(e.target)
+        settRef?.current
+        // !settRef?.current?.contains(e.target)
+        // TODO: check this later
       ) {
         setIsOpenSett(false);
       }

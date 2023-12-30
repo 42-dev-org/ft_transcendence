@@ -12,12 +12,13 @@ interface PropsType {
       icon?: React.ReactNode;
     }[];
   };
+  setLevelOrType: (s: string) => void
 }
 
-const OptionList = ({ data, setLevelOrType}) => {
+const OptionList = ({ data, setLevelOrType}: PropsType) => {
   const [selected, setSelected] = useState('');
 
-  const handleOptionClick = (itemValue) => {
+  const handleOptionClick = (itemValue: string) => {
     setSelected(itemValue);
     setLevelOrType(itemValue);
   };

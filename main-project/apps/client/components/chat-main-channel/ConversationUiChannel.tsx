@@ -205,7 +205,7 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
             ></Button>
           </div>
           <div className=" overflow-y-auto ">
-            {usersQuery.isFetched &&  usersQuery.data?.data.map((_, i) => (
+            {usersQuery.isFetched &&  (usersQuery.data?.data as User[]).map((_, i) => (
               <ListUsersChat
                 name={_.login}
                 url={_.profileImage}

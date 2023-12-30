@@ -51,8 +51,7 @@ function ListOfUsersChannal(props: Props): JSX.Element {
     },
   });
 
-  const { name, url, uid, setshowOpstions, role, conversation } =
-    props;
+  const { name, url, uid, setshowOpstions, role, conversation } = props;
   const onActionClicked = (action: string) => {
     if (action === "mute") {
       setIsAddOpenChannelModal(true);
