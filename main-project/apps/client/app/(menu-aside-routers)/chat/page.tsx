@@ -113,14 +113,12 @@ const Chat = () => {
     useState("public");
 
 
-  const usersQuery = useQuery<useQueryType | useQueryType[], Error>({
+  const usersQuery = useQuery({
     queryKey: ["all-users"],
     enabled: false,
     // queryFn: api.api().users.allExceptBanned,
     queryFn: async () => {
-      const response = await api.api().users.allExceptBanned();
-      const data: useQueryType[] = response.data; 
-      return data;
+  return api.api().users.allExceptBanned();
     },
   });
   console.log('userQuery: ', usersQuery.data, typeof(usersQuery.data))
@@ -273,7 +271,7 @@ const Chat = () => {
           </div>
           <div className=" overflow-y-auto">
             {usersQuery.isFetched &&
-              (usersQuery?.data.da as User[]).map((_, idx) => (
+              ((usersQuery?.data?.data) as User[]).map((user, idx) => (
                 <ListUsersChat
                   onClick={addSingleChat}
                   name={user.login}
