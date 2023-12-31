@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { ConflictException, Injectable } from "@nestjs/common";
 import { Prisma, $Enums } from "db";
 import { PrismaService } from "src/global/prisma/prisma.service";
 
@@ -320,7 +320,25 @@ export class ConversationsRepository {
             },
           },
           uid: true,
-          messages: true,
+          messages: {
+            select: {
+              content: true,
+              conversation: true,
+              conversationUid: true,
+              createdAt: true,
+              updatedAt: true,
+              senderUid: true,
+              sender: {
+                select: {
+                  profileImage: true,
+                  firstName: true,
+                  lastName: true,
+                  login: true,
+                  uid: true,
+                },
+              },
+            },
+          },
         },
       });
     } else if (type === "Single") {
@@ -368,6 +386,17 @@ export class ConversationsRepository {
   }
 
   public async deleteParticipant(uid: string, cnvUid: string) {
+    const cnv = await this.prisma.conversation.findUnique({
+      where: {
+        uid: cnvUid,
+        participants: {
+          some: {
+            uid
+          }
+        }
+      },
+    });
+    if (!cnv) throw new ConflictException();
     return this.prisma.conversation.update({
       where: { uid: cnvUid },
       data: {
@@ -380,6 +409,17 @@ export class ConversationsRepository {
   }
 
   public async deleteAdmin(uid: string, cnvUid: string) {
+    const cnv = await this.prisma.conversation.findUnique({
+      where: {
+        uid: cnvUid,
+        admins: {
+          some: {
+            uid,
+          },
+        },
+      },
+    });
+    if (!cnv) throw new ConflictException();
     return this.prisma.conversation.update({
       where: { uid: cnvUid },
       data: { admins: { disconnect: { uid } } },
@@ -387,6 +427,17 @@ export class ConversationsRepository {
   }
 
   public async addParticipant(uid: string, cnvUid: string) {
+    const cnv = await this.prisma.conversation.findFirst({
+      where: {
+        uid: cnvUid,
+        participants: {
+          some: {
+            uid
+          }
+        }
+      },
+    });
+    if (cnv) throw new ConflictException();
     return this.prisma.conversation.update({
       where: {
         uid: cnvUid,
@@ -398,6 +449,13 @@ export class ConversationsRepository {
   }
 
   public async muted(uid: string, cnv: string, until: Date) {
+    const mut = await this.prisma.mutedConversation.findFirst({
+      where: {
+        userUid: uid,
+        conversationUid: cnv,
+      },
+    });
+    if (mut) throw new ConflictException();
     return this.prisma.conversation.update({
       where: { uid: cnv },
       data: {
@@ -412,12 +470,19 @@ export class ConversationsRepository {
   }
 
   public async unmut(uid: string, cnv: string) {
+    const mut = await this.prisma.mutedConversation.findFirst({
+      where: {
+        userUid: uid,
+        conversationUid: cnv,
+      },
+    });
+    if (!mut) throw new ConflictException();
     return this.prisma.conversation.update({
       where: { uid: cnv },
       data: {
         mut: {
           delete: {
-            uid,
+            uid: mut.uid,
           },
         },
       },
@@ -431,6 +496,17 @@ export class ConversationsRepository {
   }
 
   public async ban(uid: string, cnvUid: string) {
+    const cnv = await this.prisma.conversation.findUnique({
+      where: {
+        uid: cnvUid,
+        ban: {
+          some: {
+            uid,
+          },
+        },
+      },
+    });
+    if (cnv) throw new ConflictException();
     return this.prisma.conversation.update({
       where: { uid: cnvUid },
       data: {
@@ -449,6 +525,17 @@ export class ConversationsRepository {
   }
 
   public async unban(uid: string, cnvUid: string) {
+    const cnv = await this.prisma.conversation.findUnique({
+      where: {
+        uid: cnvUid,
+        ban: {
+          some: {
+            uid,
+          },
+        },
+      },
+    });
+    if (!cnv) throw new ConflictException();
     return this.prisma.conversation.update({
       where: { uid: cnvUid },
       data: {
@@ -462,6 +549,17 @@ export class ConversationsRepository {
   }
 
   public async addAdmin(uid: string, cnvUid: string) {
+    const cnv = await this.prisma.conversation.findUnique({
+      where: {
+        uid: cnvUid,
+        admins: {
+          some: {
+            uid,
+          },
+        },
+      },
+    });
+    if (cnv) throw new ConflictException();
     return this.prisma.conversation.update({
       where: { uid: cnvUid },
       data: { admins: { connect: { uid } } },

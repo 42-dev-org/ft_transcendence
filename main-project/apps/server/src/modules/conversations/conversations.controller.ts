@@ -193,8 +193,6 @@ export class ConversationsController {
       uid,
       type
     );
-    console.log(cnv);
-    console.log('testststst')
     return cnv;
   }
 

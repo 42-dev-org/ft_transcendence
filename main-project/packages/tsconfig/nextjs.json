@@ -10,11 +10,11 @@
     "incremental": true,
     "jsx": "preserve",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "esnext",
     "noEmit": true,
     "resolveJsonModule": true,
     "strict": false,
-    "target": "es5"
+    "target": "ES2022",
+    "module": "CommonJS",
   },
   "include": ["src", "next-env.d.ts"],
   "exclude": ["node_modules"]

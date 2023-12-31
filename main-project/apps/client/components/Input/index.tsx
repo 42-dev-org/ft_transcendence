@@ -4,7 +4,7 @@ import React, { ChangeEvent } from 'react'
 type Props = {
     value : string;
     className?: string;
-    onChange: (e: React.FormEvent<HTMLInputElement>) =>  void;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) =>  void;
 }
 
 function Input({value , onChange, className} :Props) {

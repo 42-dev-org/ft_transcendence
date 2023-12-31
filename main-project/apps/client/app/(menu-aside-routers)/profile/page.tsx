@@ -45,14 +45,14 @@ const dataAchevment = [
     name: "win five games",
     url: "https://media.istockphoto.com/id/1444599665/vector/luxury-gold-and-silver-award-trophy-on-black-background.jpg?s=612x612&w=0&k=20&c=TsZe9tJwM1cIGyzo0IeCgda7R5OJUFDw_PgyF8I56Ec=",
   },
-  {
-    name: "king",
-    url: "https://media.istockphoto.com/id/1359963131/vector/golden-crown-on-black-background-with-light-effect.jpg?s=1024x1024&w=is&k=20&c=sBfYqcP7iD-iBnUGuIDRLdIHkacLwfFqikfsHGL1aFs=",
-  },
-  {
-    name: " welcom ",
-    url: "https://media.istockphoto.com/id/1056445350/photo/neon-sign-on-brick-wall-background-welcome-3d-rendering.jpg?s=612x612&w=0&k=20&c=HgV9FknkCyM7rt94VgXPHjVF6J81tKqWjR2nvIHGrj8=",
-  },
+  // {
+  //   name: "king",
+  //   url: "https://media.istockphoto.com/id/1359963131/vector/golden-crown-on-black-background-with-light-effect.jpg?s=1024x1024&w=is&k=20&c=sBfYqcP7iD-iBnUGuIDRLdIHkacLwfFqikfsHGL1aFs=",
+  // },
+  // {
+  //   name: " welcom ",
+  //   url: "https://media.istockphoto.com/id/1056445350/photo/neon-sign-on-brick-wall-background-welcome-3d-rendering.jpg?s=612x612&w=0&k=20&c=HgV9FknkCyM7rt94VgXPHjVF6J81tKqWjR2nvIHGrj8=",
+  // },
 ];
 function MyProfile() {
   const {id} = useParams();
@@ -71,7 +71,7 @@ function MyProfile() {
   const user = useAppSelector(s => s.user.user)
 
   return (
-    <div className=" lg:overflow-hidden md:overflow-auto flex flex-col p-4 w-full h-full gap-y-5">
+    <div className="  flex flex-col p-4 w-full h-full gap-y-5">
       <div
         className="w-full min-h-[300px] bg-[#ffffff1a] relative rounded-lg"
         style={{
@@ -102,17 +102,17 @@ function MyProfile() {
           </span>
         </div>
       </div>
-      <div className="grid lg:grid-cols-2 mt-4  gap-5 ">
-        <div className="overflow-y-auto max-h-72  flex  gap-4 flex-col">
+      <div className="grid lg:grid-cols-2 mt-4  gap-5  h-full">
+        <div className=" overflow-y-auto h-full flex  flex-col">
           <h2>History</h2>
 
-          {[...Array(9)].map((_, idx) => (
+          {[...Array(120)].map((_, idx) => (
             <HistoryCard user1={data} user2={data2} key={idx} />
           ))}
         </div>
-        <div className="overflow-y-auto max-h-72 gap-3 flex flex-col">
-          <h2>Achievements</h2>
-          <div className="grid  h-full rounded-lg  grid-cols-2 gap-5  w-full">
+        <div className="overflow-y-auto">
+          <h2>Achivements</h2>
+          <div className="flex overflow-y-auto overscroll-contain  h-full rounded-lg  flex-col  w-full  " style={{ maxHeight: "100%" }}>
             {dataAchevment.map((dataAchevment, idx) => (
               <AchevementCard
                 name={dataAchevment.name}

@@ -9,7 +9,7 @@ export class IsOwnerGuard implements CanActivate {
   constructor(private readonly conversationsService: ConversationsService) {}
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest<Request>();
-    const { conversation } = request.body();
+    const { conversation } = request.body;
     const { uid } = <User>request.user;
     return this.conversationsService.isOwner(conversation, uid);
   }

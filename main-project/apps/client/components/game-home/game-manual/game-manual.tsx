@@ -1,7 +1,11 @@
 import React from "react";
 import { ImCancelCircle } from "react-icons/im";
 
-const GameManualDialog = ({ onClose }) => {
+interface PropsType {
+  onClose: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+}
+
+const GameManualDialog = ({ onClose }: PropsType) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center font-bold">
       <div className="bg-white p-12 rounded-xl shadow-md">

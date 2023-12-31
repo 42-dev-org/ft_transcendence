@@ -1,7 +1,9 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateConversationDto } from './create-conversation.dto';
 
-export class UpdateConversationDto extends PartialType(CreateConversationDto) {}
+export class UpdateConversationDto {
+  name: string;
+}
 
 export class UpdateUserMembershipInRoomDto {
   user: string;
@@ -17,7 +19,6 @@ export class MutUserDto {
 export class UnMutUserDto {
   user: string;
   conversation: string;
-  until: Date;
 }
 
 export class ProtectChannel {
