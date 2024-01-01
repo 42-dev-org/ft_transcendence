@@ -32,11 +32,10 @@ export interface ChatInfos {
   name: string;
   profileImage: string;
   uid: string;
-  
 }
 
 interface Props {
-  refetch: () => void
+  refetch: () => void;
   uid: string;
 }
 
@@ -80,13 +79,15 @@ export interface Message {
   };
 }
 
-
 export type RoleType = "participant" | "admin" | "mut" | "owner" | "ban";
 export type UsersWithRole = { data: User; role: RoleType };
 
 export type ViewerRole = "admin" | "owner" | "participant" | false;
 
-export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Element {
+export default function ConversationUiChannel({
+  uid,
+  refetch,
+}: Props): JSX.Element {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [admins, setAdmins] = useState<User[]>([]);
   const [banned, setBanned] = useState<User[]>([]);
@@ -102,13 +103,34 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
     queryKey: ["get-group-cnv", uid],
     queryFn: ({ queryKey }) =>
       api.api().chat.getConversation(queryKey[1], "Group"),
-    
   });
+  const myUid = useAppSelector((s) => s.user.user?.uid);
+
+  useEffect(() => {
+    api.io().emit("joinRoom", {
+      conversation: uid,
+    });
+    if (msgRef?.current) {
+      msgRef?.current.addEventListener("DOMNodeInserted", (event) => {
+        const { currentTarget: target }: any = event;
+        target?.scroll({ top: target.scrollHeight, behavior: "smooth" });
+      });
+    }
+    api.io().on("newmessageingroup", (data: any) => {
+      console.log(data);
+      console.log(myUid);
+      setMessages((old) => [...old, data.data]);
+    });
+    return () => {
+      // msgRef?.current?.removeEventListener("DOMNodeInserted", () => {});
+      api.io().off("newmessageingroup");
+      api.io().emit("leaveRoom", {
+        conversation: uid,
+      });
+    };
+  }, [myUid, uid]);
 
   // href={"/users/" + query.data?.data.data.participants[0].uid}
-
-  
-  const myUid = useAppSelector((s) => s.user.user?.uid);
 
   const usersQuery = useQuery({
     queryKey: ["all-users"],
@@ -116,19 +138,20 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
     queryFn: api.api().users.allExceptBanned,
   });
 
-  console.log(query + "         query")
   useEffect(() => {
     if (query.isFetched) {
       const data = query.data?.data as Root;
       setAdmins(data.data.admins);
       setBanned(data.data.ban);
+      setOwner(data.data.owner);
       setParticipants(
         data.data.participants.filter((p) => {
           return !(
             data.data.admins.find((a) => a.uid === p.uid) ||
             data.data.owner.uid === p.uid ||
             data.data.mut.find((m) => m.user.uid === p.uid) ||
-            data.data.ban.find((b) => b.uid === p.uid)
+            data.data.ban.find((b) => b.uid === p.uid) ||
+            p.uid === myUid
           );
         })
       );
@@ -147,10 +170,17 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
       });
       setMessages(data.data.messages);
     }
-  }, [query.isRefetching, query.isFetching, query.isSuccess]);
+  }, [
+    query.isRefetching,
+    query.isFetching,
+    query.isSuccess,
+    myUid,
+    query.isFetched,
+    query.data,
+  ]);
 
   const [showOpstions, setshowOpstions] = useState(false);
-  const [msg, setMsg] = useState("hhhhhhh");
+  const [msg, setMsg] = useState("");
   const msgRef = useRef<HTMLDivElement>(null);
 
   const onCloseAddModal = () => setIsAddOpen(false);
@@ -159,38 +189,37 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
     mutationKey: ["change-infos"],
     mutationFn: api.api().chat.changeInfos,
     onSuccess: () => {
-      toast('naaaadi')
-      query.refetch()
+      toast("naaaadi");
+      query.refetch();
     },
     onError: () => {
-      toast('ghayrha')
-    }
+      toast("ghayrha");
+    },
   });
   const addparticipantMutations = useMutation({
     mutationKey: ["change-infos"],
     mutationFn: api.api().chat.addParticipant,
     onSuccess: () => {
-      toast('naaaadi')
-      onCloseAddModal()
-      refetch()
+      toast("naaaadi");
+      onCloseAddModal();
+      refetch();
     },
     onError: () => {
-      toast('ghayrha')
-    }
+      toast("ghayrha");
+    },
   });
   const deleteparticipantMutations = useMutation({
     mutationKey: ["change-infos"],
     mutationFn: api.api().chat.changeInfos,
     onSuccess: () => {
-      toast('naaaadi')
-      query.refetch()
-      refetch()
+      toast("naaaadi");
+      query.refetch();
+      refetch();
     },
     onError: () => {
-      toast('ghayrha')
-    }
+      toast("ghayrha");
+    },
   });
-
 
   return (
     <Fragment>
@@ -205,21 +234,22 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
             ></Button>
           </div>
           <div className=" overflow-y-auto ">
-            {usersQuery.isFetched &&  (usersQuery.data?.data as User[]).map((_, i) => (
-              <ListUsersChat
-                name={_.login}
-                url={_.profileImage}
-                key={i}
-                uid={_.uid}
-                className=""
-                onClick={(user) => {
-                  addparticipantMutations.mutate({
-                    conversation: uid,
-                    user
-                  })
-                }}
-              />
-            ))}
+            {usersQuery.isFetched &&
+              (usersQuery.data?.data as User[]).map((_, i) => (
+                <ListUsersChat
+                  name={_.login}
+                  url={_.profileImage}
+                  key={i}
+                  uid={_.uid}
+                  className=""
+                  onClick={(user) => {
+                    addparticipantMutations.mutate({
+                      conversation: uid,
+                      user,
+                    });
+                  }}
+                />
+              ))}
           </div>
         </div>
       </ModalUI>
@@ -242,7 +272,7 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
                   title="addUsers"
                   onClick={() => {
                     setIsAddOpen(true);
-                    usersQuery.refetch()
+                    usersQuery.refetch();
                   }}
                 >
                   Add users
@@ -280,7 +310,7 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
                 {messages?.map(({ content, senderUid, sender }, index) => (
                   <Fragment key={index}>
                     {senderUid === myUid ? (
-                      <SenderLayout msg={msg} />
+                      <SenderLayout msg={content} />
                     ) : (
                       <RecieverLayout
                         msg={content}
@@ -291,7 +321,19 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
                   </Fragment>
                 ))}
               </div>
-              <form className="h-16 w-full  px-6 py-2 relative">
+              <form
+                className="h-16 w-full  px-6 py-2 relative"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (msg.trim().length) {
+                    api.io().emit("sendMessageInRoom", {
+                      message: msg,
+                      conversation: uid,
+                    });
+                    setMsg("");
+                  }
+                }}
+              >
                 <input
                   className="w-full h-12 bg-[#2a2a2a] text-[#F5F5F5] rounded-xl pl-3 pr-10"
                   placeholder="Message"
@@ -332,7 +374,10 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
                     <ChangeChannelName
                       channelName={(infos?.name && infos.name) || "channel"}
                       onSetName={(name: string) =>
-                        infosMutation.mutate({ conversation: infos?.uid!, name })
+                        infosMutation.mutate({
+                          conversation: infos?.uid!,
+                          name,
+                        })
                       }
                     />
                   </div>
@@ -344,7 +389,7 @@ export default function ConversationUiChannel({ uid, refetch }: Props): JSX.Elem
                       participants={participants}
                       ban={banned}
                       mut={mutted}
-                      owners={[owner!]}
+                      owners={owner?.uid != myUid ? [owner!] : []}
                       setshowOpstions={setshowOpstions}
                       conversation={infos?.uid!}
                       refetch={query.refetch}

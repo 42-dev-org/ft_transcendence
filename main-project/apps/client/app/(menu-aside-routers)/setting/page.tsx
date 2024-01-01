@@ -6,7 +6,7 @@ import Input from '../../../components/Input';
 import withAuth from '../../../hoc/auth';
 
 
-function setting(): JSX.Element {
+function Settings(): JSX.Element {
   const inputRef = useRef<any>(null)
   const [picProfile, setPicProfile] = useState('https://cdn.intra.42.fr/users/47192a7a27a46c2c714c6723e30a3cd2/zmaziane.jpg')
   const [login, setLogin] = useState('zmaziane');
@@ -71,4 +71,4 @@ function setting(): JSX.Element {
   )
 }
 
-export default withAuth(setting)
+export default withAuth(Settings)

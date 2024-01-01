@@ -5,7 +5,7 @@ import ListOfMutedChannal from "./ListOfMutedChannal";
 import ListOfAdminsChannal from "./ListOfAdminsChannal";
 import { Mut, User, UsersWithRole, ViewerRole } from "./ConversationUiChannel";
 
-type SelecterType = "all" | "Members" | "Admins" | "Muted" | "Banned";
+type SelecterType = "participants"  | "admins" | "muted" | "banned" | 'owner';
 
 interface PropsTypes {
 
@@ -22,19 +22,12 @@ interface PropsTypes {
 }
 
 export function OptionsListChannel(props: PropsTypes): JSX.Element {
-  const [selected, setSelected] = useState<SelecterType>("all");
-  const [menuList, setMenuList] = useState<string[]>(["Invite Game"]);
+  const [selected, setSelected] = useState<SelecterType>("participants");
+  const [menuList, setMenuList] = useState<string[]>(["participants", "admins", "muted", "banned", "owner"]);
 
-  useEffect(() => {
-    if (props.role === "admin" || props.role === "owner") {
-      setMenuList(["all", "Admins", "Muted", "Banned"]);
-    } else {
-      setMenuList(["all"]);
-    }
-  }, [props.role]);
 
   const render = () => {
-    if (selected === "all") {
+    if (selected === "participants") {
       return (
         <div className="flex flex-col justify-center items-center w-full ">
           {props.participants.map((_, i) => (
@@ -52,7 +45,25 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
         </div>
       );
     }
-    if (selected === "Admins") {
+    if (selected === "owner") {
+      return (
+        <div className="flex flex-col justify-center items-center w-full ">
+          {props.owners.map((_, i) => (
+            <ListOfUsersChannal
+              refetch={props.refetch}
+              setshowOpstions={props.setshowOpstions}
+              name={_.firstName + " " + _.lastName}
+              url={_.profileImage}
+              key={i}
+              uid={_.uid}
+              role={props.role}
+              conversation={props.conversation}
+            />
+          ))}
+        </div>
+      );
+    }
+    if (selected === "admins") {
       return (
         <div className="flex flex-col justify-center items-center w-full">
           {props.admins.map((_, i) => (
@@ -74,7 +85,7 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
         </div>
       );
     }
-    if (selected === "Muted") {
+    if (selected === "muted") {
       return (
         <div className="flex flex-col justify-center items-center w-full">
           {props.mut.map((_, i) => (
@@ -96,7 +107,7 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
         </div>
       );
     }
-    if (selected === "Banned") {
+    if (selected === "banned") {
       return (
         <div className="flex flex-col justify-center items-center w-full">
           {props.ban.map((_, i) => (

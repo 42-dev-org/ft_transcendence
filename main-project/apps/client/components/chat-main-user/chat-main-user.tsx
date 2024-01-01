@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import type { StaticImageData } from "next/image";
 import Image from "next/image";
 import chatImage from "assets-workspace/images/bg-chat-Conversation-user.png";
@@ -48,29 +48,37 @@ export default function ConversationUi({
     if (query.isFetched) {
       setMessages(query.data?.data.data.messages);
     }
-  }, [query]);
+  }, [query.isFetched, query.data]);
   const onSetMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (msg.length && msg.trim()) {
-      // setMessages([
-      //   ...messages,
-      //   {
-      //     userId: 1,
-      //     msg,
-      console.log(messages);
-      //     timeAt: "18:16",
-      //   },
-      // ]);
+      let io = api.io();
+      io.emit("sendPrivateMessage", {
+        to: query.data?.data.data.participants[0].uid,
+        message: msg,
+        sender: "anas",
+        conversation: uid,
+      });
       setMsg("");
     }
   };
 
+
   useEffect(() => {
+    console.log('test')
     if (msgRef?.current) {
       msgRef?.current.addEventListener("DOMNodeInserted", (event) => {
         const { currentTarget: target }: any = event;
         target?.scroll({ top: target.scrollHeight, behavior: "smooth" });
       });
+    }
+    api.io().on("newmessage", (data: any) => {
+      console.log('ee')
+      setMessages((prev) => ([...prev, data.data]));
+    });
+    return () => {
+      // msgRef?.current?.removeEventListener("DOMNodeInserted", () => {});
+      api.io().off("newmessage");
     }
   }, []);
 

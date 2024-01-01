@@ -86,6 +86,7 @@ function ListOfAdminsChannal(props: usersInChannal): JSX.Element {
               <MenuItem iconBtn={<IoMdMore size={24} color="gray" />}>
                 {setMenuList.map((action) => (
                   <button
+                    key={action}
                     className=" hover:bg-[#B2F35F] rounded-md flex items-center justify-center"
                     onClick={onActionClicked.bind(null, action.toLowerCase())}
                   >

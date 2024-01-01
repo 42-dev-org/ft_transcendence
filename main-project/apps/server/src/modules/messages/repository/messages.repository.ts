@@ -11,7 +11,15 @@ export class MessagesRepository {
   }
 
   async create(createMessage: Prisma.MessageCreateInput) {
-    return this.prisma.message.create({ data: createMessage });
+    return this.prisma.message.create({ data: createMessage , select: {
+      sender: true,
+      content: true,
+      conversationUid: true,
+      createdAt: true,
+      updatedAt: true,
+      uid: true,
+      senderUid: true,
+    }});
   }
 
   async findAllInConversation(cnvId: string, userId: string) {

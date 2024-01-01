@@ -8,15 +8,20 @@ import {
 } from "./dto/update-conversation.dto";
 import { ConversationsRepository } from "./repository/conversations.repository";
 import { MediaFile } from "src/shared/types/media";
-import { MediaService } from "src/global/media/providers/media.service";
 import { $Enums } from "db";
+import { CreateMessageDto } from "../messages/dto/create-message.dto";
+import { MessagesService } from "../messages/messages.service";
 
 @Injectable()
 export class ConversationsService {
   public constructor(
     private readonly repository: ConversationsRepository,
-    private readonly media: MediaService
+    private readonly messages: MessagesService
   ) {}
+
+  async sendMessage(dto: CreateMessageDto, uid: string) {
+    return this.messages.create(dto, uid);
+  }
 
   async isAdmin(uid: string, user: string) {
     return this.repository.isAdmin(uid, user);
@@ -54,20 +59,12 @@ export class ConversationsService {
     return this.repository.findMeAll(user, "Group");
   }
 
-  // TODO: impl this
   async protectConversation(dto: ProtectChannel) {
-    return this.repository.update(dto.conversation, {
-      visibility: "Protected",
-      password: dto.password,
-    });
+    return this.repository.protect(dto.conversation, dto.password);
   }
 
-  // TODO: impl this
   async unprotectConversation(dto: UnProtectChannel) {
-    return this.repository.update(dto.conversation, {
-      visibility: "Public",
-      password: null,
-    });
+    return this.repository.unprotect(dto.conversation, dto.visibility);
   }
 
   async unMuteUser(uid: string, user: string) {
@@ -150,7 +147,7 @@ export class ConversationsService {
     const { name } = updateConversationDto;
 
     const cnv = await this.repository.update(id, {
-      name
+      name,
     });
 
     return {
@@ -164,7 +161,10 @@ export class ConversationsService {
   }
 
   async addParticipant(dto: UpdateUserMembershipInRoomDto) {
-    const data = await this.repository.addParticipant(dto.user, dto.conversation);
+    const data = await this.repository.addParticipant(
+      dto.user,
+      dto.conversation
+    );
     return {
       status: "success",
       data,
@@ -186,7 +186,10 @@ export class ConversationsService {
   }
 
   async deleteParticipant(dto: UpdateUserMembershipInRoomDto) {
-    const data = await this.repository.deleteParticipant(dto.user, dto.conversation);
+    const data = await this.repository.deleteParticipant(
+      dto.user,
+      dto.conversation
+    );
     return {
       status: "success",
       data,
@@ -210,11 +213,11 @@ export class ConversationsService {
   }
 
   async addProfileImage(file: MediaFile, cnvId: string, userId: string) {
-    const data = await this.media.uploadFile(file, userId);
-    await this.repository.update(cnvId, { profileImage: data.url });
+    // const data = await this.media.uploadFile(file, userId);
+    // await this.repository.update(cnvId, { profileImage: data.url });
     return {
       status: "success",
-      data,
+      // data,
     };
   }
 
@@ -224,5 +227,9 @@ export class ConversationsService {
     return {
       status: "success",
     };
+  }
+
+  async left(uid: string, cnv: string) {
+    this.repository.left(uid, cnv);
   }
 }

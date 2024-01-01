@@ -28,11 +28,14 @@ const ChatVisibility = {
 
 class Api {
   private httpClient: AxiosInstance;
-  // private ioClient: Socket<ServerToClientEvents, ClientToServerEvents>;
+  private ioClient: Socket<any, any>;
 
   constructor(private readonly baseUrl: string = constants.URL) {
     this.httpClient = this.initializeHttpClient();
-    // this.initializeSocketIO();
+    this.ioClient = this.initializeSocketIO();
+    this.ioClient.on("connect", () => {
+      console.log("connected");
+    });
   }
 
   private initializeHttpClient() {
@@ -47,18 +50,12 @@ class Api {
     });
   }
 
-  // private initializeSocketIO(): void {
-  //   this.ioClient = new Manager(this.baseUrl, {
-  //     autoConnect: true,
-  //   }).socket("/");
-  // }
-
-  // setHeader(token: string): void {
-  //   this.httpClient.defaults.headers.common.Authorization = `Bearer ${token}`;
-  //   // this.ioClient.io.opts.extraHeaders = {
-  //   //   Authorization: `Bearer ${token}`,
-  //   // };
-  // }
+  private initializeSocketIO() {
+    return new Manager(this.baseUrl, {
+      withCredentials: true,
+      autoConnect: true,
+    }).socket("/chat");
+  }
 
   api = () => ({
     auth: {
@@ -112,9 +109,10 @@ class Api {
         this.httpClient.patch("/conversations/delete-participant", {
           ...conf,
         }),
-      changeInfos: (cnf: {conversation: string, name: string}) => this.httpClient.patch('/conversations/'+cnf.conversation, {
-          name: cnf.name
-        })
+      changeInfos: (cnf: { conversation: string; name: string }) =>
+        this.httpClient.patch("/conversations/" + cnf.conversation, {
+          name: cnf.name,
+        }),
     },
     users: {
       ban: () => {},
@@ -137,6 +135,9 @@ class Api {
       getImage: () => this.httpClient.get("/auth/otp"),
     },
   });
+  io() {
+    return this.ioClient;
+  }
 }
 
 export const api = new Api();

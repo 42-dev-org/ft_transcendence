@@ -7,6 +7,7 @@ import Link from "next/link";
 import React from "react";
 import { api } from "../../api";
 import Button from "../Button";
+import Image from "next/image";
 
 function InvitationsCard({
   profileImage,
@@ -26,7 +27,10 @@ function InvitationsCard({
   });
   return (
     <div className="w-full flex rounded-lg border  border-[#B2F35F] overflow-hidden h-72 flex-col ">
-      <img
+      <Image
+      // TODO: fix image
+      width={480}
+      height={480}
         className="w-full h-[60%] object-cover"
         alt="profile"
         src={(profileImage.length && profileImage || 'image profile')}

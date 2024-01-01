@@ -112,12 +112,12 @@ const MapChoose: React.FC = () => {
       </div>
 
       {/* Waiting dialogs */}
-      {Object.entries(waitingState).map(
+      {/* {Object.entries(waitingState).map(
         ([type, { isWaiting, message, icon }]) =>
           isWaiting && (
            
           )
-      )}
+      )} */}
     </div>
   );
 };

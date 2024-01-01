@@ -1,5 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateConversationDto } from './create-conversation.dto';
+import { $Enums } from 'db';
 
 export class UpdateConversationDto {
   name: string;
@@ -28,4 +29,5 @@ export class ProtectChannel {
 
 export class UnProtectChannel {
   conversation: string;
+  visibility: $Enums.ChatVisibility
 }
