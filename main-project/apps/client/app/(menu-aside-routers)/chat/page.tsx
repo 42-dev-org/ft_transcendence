@@ -416,7 +416,7 @@ const Chat = () => {
             uid={cnvUid!}
             fullName="mustapha ouarsas"
             image="https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg"
-            status="in a game"
+            status="online"
           />
         ) : conversationType === "channels" ? (
           <ConversationUiChannel

@@ -4,6 +4,7 @@ import ListOfBannedChannal from "./ListOfBannedChannal";
 import ListOfMutedChannal from "./ListOfMutedChannal";
 import ListOfAdminsChannal from "./ListOfAdminsChannal";
 import { Mut, User, UsersWithRole, ViewerRole } from "./ConversationUiChannel";
+import ListOfOwnersChannal from "./ListOfOwnersChannel";
 
 type SelecterType = "participants"  | "admins" | "muted" | "banned" | 'owner';
 
@@ -49,7 +50,7 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
       return (
         <div className="flex flex-col justify-center items-center w-full ">
           {props.owners.map((_, i) => (
-            <ListOfUsersChannal
+            <ListOfOwnersChannal
               refetch={props.refetch}
               setshowOpstions={props.setshowOpstions}
               name={_.firstName + " " + _.lastName}
