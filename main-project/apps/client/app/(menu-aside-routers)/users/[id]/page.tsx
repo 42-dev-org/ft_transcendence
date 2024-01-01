@@ -84,7 +84,7 @@ function UserProfile() {
 
 
   return (
-    <div className=" lg:overflow-hidden md:overflow-auto flex flex-col p-4 w-full h-full gap-y-5">
+    <div className="  max-h-screen overflow-y-auto md:max-h-full flex flex-col p-4 w-full h-full gap-y-5">
       <div
         className="w-full min-h-[300px] bg-[#ffffff1a] relative rounded-lg"
         style={{
@@ -123,14 +123,14 @@ function UserProfile() {
         </div>
       </div>
       <div className="grid lg:grid-cols-2 mt-4  gap-5 h-[89%] ">
-        <div className="overflow-y-auto h-[73%]  flex flex-col">
+        <div className="overflow-y-auto h-full flex flex-col">
           <h2>History</h2>
 
           {[...Array(100)].map((_, idx) => (
             <HistoryCard user1={data} user2={data2} key={idx} />
           ))}
         </div>
-        <div className="overflow-y-auto h-[73%]">
+        <div className="overflow-y-auto h-full">
           <h2>Achievements</h2>
           <div className="flex overscroll-contain  h-full rounded-lg  flex-col  w-full  " style={{ maxHeight: "100%" }}>
             {dataAchevment.map((dataAchevment, idx) => (
