@@ -5,8 +5,11 @@ import Image from "next/image";
 import spinner from "assets-workspace/images/spinner.gif";
 import { friends } from "../invite-friend/data/friends";
 import { user } from "../invite-friend/interface/user";
+import { useAppSelector } from "../../../store/store";
+
 
 export default function PlayRandom(): JSX.Element {
+  // TODO: re check this
   const [timer, setTimer] = useState(60); // Initial timer value in seconds
 
   // Function to decrement the timer every second

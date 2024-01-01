@@ -14,6 +14,7 @@ const InviteFriend = () => {
   const [search, setSearch] = useState<string>("");
   const [data, setData] = useState<any[]>([]);
 
+  // roben m problem of useeffect
   const usersQuery = useQuery({
     queryFn: (d) => {
       return api.api().users.findAll(d.queryKey[1] as any);
