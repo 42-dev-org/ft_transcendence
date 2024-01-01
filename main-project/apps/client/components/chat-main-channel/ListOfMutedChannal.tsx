@@ -31,20 +31,20 @@ function ListOfMutedChannal(props: usersInChannal): JSX.Element {
     conversation,
     setshowOpstions,
     setMenuList,
-    refetch
+    refetch,
   } = props;
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationKey: ["unmut-user"],
     mutationFn: api.api().chat.unmutParticipant,
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ['get-group-cnv']})
-      toast('safi hder azabi')
-      props.refetch
+      queryClient.invalidateQueries({ queryKey: ["get-group-cnv"] });
+      toast("safi hder azabi");
+      props.refetch;
     },
     onError: () => {
-      toast('ghalat azabi')
-    }
+      toast("ghalat azabi");
+    },
   });
   const onActionClicked = (action: string) => {
     if (action == "unmuted") {
@@ -84,6 +84,7 @@ function ListOfMutedChannal(props: usersInChannal): JSX.Element {
               <MenuItem iconBtn={<IoMdMore size={24} color="gray" />}>
                 {setMenuList.map((action) => (
                   <button
+                    key={action}
                     className=" hover:bg-[#B2F35F] rounded-md flex items-center justify-center"
                     onClick={onActionClicked.bind(null, action.toLowerCase())}
                   >

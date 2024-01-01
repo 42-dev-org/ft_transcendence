@@ -10,7 +10,9 @@ interface PropsType {
   links: LinkItemType[];
 }
 
-export default function NotificationOptionRow({ links }: PropsType): JSX.Element {
+export default function NotificationOptionRow({
+  links,
+}: PropsType): JSX.Element {
   const [isOptionClicked, setIsOptionClicked] = useState(false);
 
   const onOptionClicked: () => void = () => {
@@ -26,7 +28,7 @@ export default function NotificationOptionRow({ links }: PropsType): JSX.Element
       >
         <ul>
           {links.map(({ name }) => (
-            <li className={`${styles["chat-options-item"]}`} >
+            <li className={`${styles["chat-options-item"]}`} key={name}>
               {name}
             </li>
           ))}
@@ -35,4 +37,3 @@ export default function NotificationOptionRow({ links }: PropsType): JSX.Element
     </div>
   );
 }
-

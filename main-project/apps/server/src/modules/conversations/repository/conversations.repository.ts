@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+} from "@nestjs/common";
 import { Prisma, $Enums } from "db";
 import { PrismaService } from "src/global/prisma/prisma.service";
 
@@ -14,6 +18,22 @@ export class ConversationsRepository {
       type,
     }: { user?: string; uid?: string; type: $Enums.ConversationTypes }
   ) {
+    if (
+      await this.prisma.friend.findFirst({
+        where: {
+          OR: [
+            {
+              AND: [{ user1uid: uid }, { user2uid: user }],
+            },
+            {
+              AND: [{ user2uid: uid }, { user1uid: user }],
+            },
+          ],
+          status: "Banned",
+        },
+      })
+    )
+      return null;
     if (
       type === "Single" &&
       (await this.prisma.conversation.findFirst({
@@ -369,6 +389,45 @@ export class ConversationsRepository {
     }
   }
 
+  public async protect(cnv: string, password: string) {
+    if (
+      !(await this.prisma.conversation.findFirst({
+        where: {
+          uid: cnv,
+          visibility: {
+            not: "Protected",
+          },
+        },
+      }))
+    )
+      throw new ConflictException();
+    return this.prisma.conversation.update({
+      where: { uid: cnv },
+      data: {
+        visibility: "Protected",
+        password,
+      },
+    });
+  }
+  public async unprotect(cnv: string, visibility: $Enums.ChatVisibility) {
+    if (
+      !(await this.prisma.conversation.findFirst({
+        where: {
+          uid: cnv,
+          visibility: "Protected",
+        },
+      }))
+    )
+      throw new ConflictException();
+    return this.prisma.conversation.update({
+      where: { uid: cnv },
+      data: {
+        visibility,
+        password: null,
+      },
+    });
+  }
+
   public async update(uid: string, updates: Prisma.ConversationUpdateInput) {
     return this.prisma.conversation.update({
       where: { uid },
@@ -389,11 +448,43 @@ export class ConversationsRepository {
     const cnv = await this.prisma.conversation.findUnique({
       where: {
         uid: cnvUid,
-        participants: {
-          some: {
-            uid
-          }
-        }
+        AND: [
+          {
+            participants: {
+              some: {
+                uid,
+              },
+            },
+          },
+          {
+            owner: {
+              uid: { not: uid },
+            },
+          },
+          {
+            admins: {
+              none: {
+                uid,
+              },
+            },
+          },
+          {
+            ban: {
+              none: {
+                uid,
+              },
+            },
+          },
+          {
+            mut: {
+              none: {
+                user: {
+                  uid,
+                },
+              },
+            },
+          },
+        ],
       },
     });
     if (!cnv) throw new ConflictException();
@@ -404,6 +495,86 @@ export class ConversationsRepository {
         mut: {
           disconnect: { uid },
         },
+      },
+    });
+  }
+
+  public async left(uid: string, cnv: string) {
+    const conversation = await this.prisma.conversation.findUnique({
+      where: { uid: cnv },
+      select: {
+        participants: {
+          where: {
+            uid,
+          },
+          select: {
+            uid: true,
+          },
+        },
+        admins: {
+          where: {
+            uid,
+          },
+          select: {
+            uid: true,
+          },
+        },
+        mut: {
+          where: {
+            userUid: uid,
+          },
+          select: {
+            uid: true,
+          },
+        },
+        ban: {
+          where: {
+            uid,
+          },
+          select: {
+            uid: true,
+          },
+        },
+        owner: {
+          select: {
+            uid: true,
+          },
+        },
+      },
+    });
+    const isAdmin = !!conversation.admins.length;
+    const isOwner = !!conversation.owner?.uid;
+    const isBanned = !!conversation.ban.length;
+    const isMut = !!conversation.mut.length;
+    if (isMut || isBanned) {
+      throw new ForbiddenException();
+    }
+    return this.prisma.conversation.update({
+      where: { uid: cnv },
+      data: {
+        participants: {
+          disconnect: {
+            uid,
+          },
+        },
+        ...(isAdmin
+          ? {
+              admins: {
+                disconnect: {
+                  uid,
+                },
+              },
+            }
+          : {}),
+        ...(isOwner
+          ? {
+              owner: {
+                disconnect: {
+                  uid,
+                },
+              },
+            }
+          : {}),
       },
     });
   }
@@ -432,9 +603,9 @@ export class ConversationsRepository {
         uid: cnvUid,
         participants: {
           some: {
-            uid
-          }
-        }
+            uid,
+          },
+        },
       },
     });
     if (cnv) throw new ConflictException();

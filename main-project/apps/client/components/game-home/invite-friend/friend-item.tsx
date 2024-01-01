@@ -2,6 +2,7 @@ import React from "react";
 import { BiSearchAlt } from "react-icons/bi";
 import { user } from "./interface/user";
 import { log } from "console";
+import Image from "next/image";
 
 // interface SimpleFriendItemProps {
 //   name: string;
@@ -28,7 +29,14 @@ const FriendItem: React.FC<user> = ({ id, firstName, login, profileImage }) => {
                 ></path>
               </svg>
             </div> */}
-            <img className="relative w-10 h-10 overflow-hidden border border-black bg-gray-100 rounded-full dark:bg-gray-600" src={profileImage}></img>
+            <Image
+              alt="profile"
+              // TODO: fix image
+              width={480}
+              height={480}
+              className="relative w-10 h-10 overflow-hidden border border-black bg-gray-100 rounded-full dark:bg-gray-600"
+              src={profileImage}
+            />
           </div>
           <div className="flex-1 min-w-0 max-w-[calc(100%-3.5rem)]">
             {" "}
@@ -40,10 +48,9 @@ const FriendItem: React.FC<user> = ({ id, firstName, login, profileImage }) => {
           </div>
         </div>
         <div className="flex-shrink-0">
-          <button
-            className="inline-flex md:hidden items-center py-1 pl-2 pr-2 text-sm font-medium text-white bg-black rounded-full hover:bg-[#00000097] focus:ring-4 focus:outline-none focus:ring-blue-300"
-          >
-            +</button>
+          <button className="inline-flex md:hidden items-center py-1 pl-2 pr-2 text-sm font-medium text-white bg-black rounded-full hover:bg-[#00000097] focus:ring-4 focus:outline-none focus:ring-blue-300">
+            +
+          </button>
 
           <button
             type="submit"
