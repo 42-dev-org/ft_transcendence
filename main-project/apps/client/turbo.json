@@ -2,7 +2,7 @@
     "extends": ["//"],
     "pipeline": { 
         "build": {
-
+            "cache": false
         },
         "dev": {
             "dependsOn": ["io-types#build"]
