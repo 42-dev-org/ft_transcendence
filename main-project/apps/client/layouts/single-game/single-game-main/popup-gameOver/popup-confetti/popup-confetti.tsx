@@ -1,6 +1,6 @@
 // components/Confetti.js
 import React, { useEffect } from 'react';
-import confetti from 'canvas-confetti';
+import  confetti from 'canvas-confetti';
 
 const Confetti = () => {
   useEffect(() => {

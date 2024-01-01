@@ -9,7 +9,7 @@ type usersChat = {
     uid: string
 }
 
-function ChannelsChat({nameChannels, pic, msg, time, onClick, uid}: usersChat) {
+function ChannelsChat({nameChannels, msg, time, onClick, uid}: usersChat) {
 
 
 

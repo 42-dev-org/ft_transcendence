@@ -11,9 +11,19 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../../../api";
 
 type ComponeetType = "search" | "friends" | "invitations" | "blocked";
+type paramsdata = "Accepted" | "Pending" | "Banned";
+
+export interface dataUsersTypee {
+  uid: string
+  login: string;
+  profileImage: string;
+  refetch: Function
+    
+  }
+
 
 function Users(): JSX.Element {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<dataUsersTypee[]>([]);
   const [componenet, setComponent] = useState<ComponeetType>("search");
   const [searchString, setSearchString] = useState("");
 
@@ -28,12 +38,13 @@ function Users(): JSX.Element {
 
   const usersQuery = useQuery({
     queryFn: (d) => {
-      return api.api().users.findAll(d.queryKey[1] as any);
+      return api.api().users.findAll(d.queryKey[1] as paramsdata);
     },
     queryKey: ["get-with-type", queryParam],
     enabled: false,
     staleTime: 0,
   });
+
 
   useEffect(() => {
     if (usersQuery.isFetched && usersQuery.data && usersQuery.data.data) {
@@ -66,12 +77,12 @@ function Users(): JSX.Element {
 
     if (componenet === "blocked") {
       return (
-        <div className="grid lg:grid-cols-5  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
+        <div className="grid lg:grid-cols-5 2xl:grid-cols-7  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
           {searchMutation.isSuccess &&
             data.map((user, idx) => (
               <BannedCArd {...user} 
               key={idx} 
-              refetch={usersQuery.refetch}
+              // refetch={usersQuery.refetch} TODO: fix banned logic
               />
             ))}
         </div>
@@ -80,7 +91,7 @@ function Users(): JSX.Element {
 
     if (componenet === "invitations") {
       return (
-        <div className="grid lg:grid-cols-5  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
+        <div className="grid lg:grid-cols-5 2xl:grid-cols-7  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
           {searchMutation.isSuccess &&
             data.map((inveted, idx) => (
               <InvitationsCard
@@ -94,7 +105,7 @@ function Users(): JSX.Element {
     }
     if (componenet === "friends") {
       return (
-        <div className="grid lg:grid-cols-5  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
+        <div className="grid lg:grid-cols-5 2xl:grid-cols-7  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
           {data.map((_, idx) => (
             <FriendCard {..._} key={idx} refetch={usersQuery.refetch} />
           ))}
@@ -103,7 +114,7 @@ function Users(): JSX.Element {
     }
     if (componenet === "search") {
       return (
-        <div className="grid lg:grid-cols-5  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
+        <div className="grid lg:grid-cols-5 2xl:grid-cols-7  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
           {searchMutation.isSuccess &&
             data.map((user, idx) => (
               <Card

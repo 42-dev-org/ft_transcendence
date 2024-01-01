@@ -147,11 +147,10 @@ export class ConversationsService {
   }
 
   async update(id: string, updateConversationDto: UpdateConversationDto) {
-    const { name, visibility } = updateConversationDto;
+    const { name } = updateConversationDto;
 
     const cnv = await this.repository.update(id, {
-      name,
-      visibility,
+      name
     });
 
     return {
@@ -165,21 +164,21 @@ export class ConversationsService {
   }
 
   async addParticipant(dto: UpdateUserMembershipInRoomDto) {
-    const data = this.repository.addParticipant(dto.user, dto.conversation);
+    const data = await this.repository.addParticipant(dto.user, dto.conversation);
     return {
       status: "success",
       data,
     };
   }
   async ban(dto: UpdateUserMembershipInRoomDto) {
-    const data = this.repository.ban(dto.user, dto.conversation);
+    const data = await this.repository.ban(dto.user, dto.conversation);
     return {
       status: "success",
       data,
     };
   }
   async unabn(dto: UpdateUserMembershipInRoomDto) {
-    const data = this.repository.unban(dto.user, dto.conversation);
+    const data = await this.repository.unban(dto.user, dto.conversation);
     return {
       status: "success",
       data,
@@ -187,7 +186,7 @@ export class ConversationsService {
   }
 
   async deleteParticipant(dto: UpdateUserMembershipInRoomDto) {
-    const data = this.repository.deleteParticipant(dto.user, dto.conversation);
+    const data = await this.repository.deleteParticipant(dto.user, dto.conversation);
     return {
       status: "success",
       data,
@@ -195,7 +194,7 @@ export class ConversationsService {
   }
 
   async addAdmin(dto: UpdateUserMembershipInRoomDto) {
-    const data = this.repository.addAdmin(dto.user, dto.conversation);
+    const data = await this.repository.addAdmin(dto.user, dto.conversation);
     return {
       status: "success",
       data,
@@ -203,7 +202,7 @@ export class ConversationsService {
   }
 
   async deleteAdmin(uid: string, user: string) {
-    const data = this.repository.deleteAdmin(user, uid);
+    const data = await this.repository.deleteAdmin(user, uid);
     return {
       status: "success",
       data,
