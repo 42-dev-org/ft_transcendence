@@ -102,17 +102,17 @@ function MyProfile() {
           </span>
         </div>
       </div>
-      <div className="grid lg:grid-cols-2 mt-4  gap-5  h-full">
-        <div className=" overflow-y-auto h-full flex  flex-col">
+      <div className="grid lg:grid-cols-2 mt-4  gap-5  h-[90%]">
+        <div className=" overflow-y-auto h-[73%] flex  flex-col">
           <h2>History</h2>
 
           {[...Array(120)].map((_, idx) => (
             <HistoryCard user1={data} user2={data2} key={idx} />
           ))}
         </div>
-        <div className="overflow-y-auto">
+        <div className="overflow-y-auto h-[73%]">
           <h2>Achivements</h2>
-          <div className="flex overflow-y-auto overscroll-contain  h-full rounded-lg  flex-col  w-full  " style={{ maxHeight: "100%" }}>
+          <div className="flex overscroll-contain  h-full rounded-lg  flex-col  w-full  " style={{ maxHeight: "100%" }}>
             {dataAchevment.map((dataAchevment, idx) => (
               <AchevementCard
                 name={dataAchevment.name}
