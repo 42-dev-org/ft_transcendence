@@ -10,17 +10,15 @@ import { api } from "../../../api";
 interface SearchBarProps {
   setFriendsData: (data: user[]) => void;
   setSearch: (searchValue: string) => void;
-  Search:string;
+  Search: string;
+  handleOnClick: () => void; // Define it as a normal function
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ setFriendsData, setSearch, Search }) => {  // const [search, setSearch] = useState<string>('');
-
+const SearchBar: React.FC<SearchBarProps> = ({ setFriendsData, setSearch, Search, handleOnClick }) => {
+ 
   
 
-  const handleOnClick = async () => {
-    const currentSearch = Search;
-    // searchMutation.mutate(currentSearch);
-  };
+ 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
