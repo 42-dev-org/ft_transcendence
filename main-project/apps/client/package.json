@@ -14,16 +14,21 @@
     "@tanstack/react-query": "^5.12.2",
     "assets-workspace": "workspace:*",
     "axios": "^1.5.1",
+    "bufferutil": "^4.0.8",
     "canvas-confetti": "^1.9.2",
-    "next": "^13.4.19",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.0.4",
+    "next": "^14.0.4",
     "react": "^18.2.0",
     "react-canvas-confetti": "^1.4.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
     "react-redux": "^8.1.3",
     "react-toastify": "^9.1.3",
+    "sharp": "^0.33.1",
     "socket.io-client": "^4.7.2",
-    "ui": "workspace:*"
+    "ui": "workspace:*",
+    "utf-8-validate": "^6.0.3"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^13.4.19",

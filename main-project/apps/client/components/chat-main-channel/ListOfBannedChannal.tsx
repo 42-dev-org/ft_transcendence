@@ -33,7 +33,7 @@ function ListOfBannedChannal(props: usersInChannal): JSX.Element {
     setMenuList,
     conversation,
     uid,
-    refetch
+    refetch,
   } = props;
 
   const queryClient = useQueryClient();
@@ -43,7 +43,7 @@ function ListOfBannedChannal(props: usersInChannal): JSX.Element {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["get-group-cnv"] });
       toast("nadi tle9o sra7k");
-      props.refetch
+      props.refetch;
     },
     onError: () => {
       toast("ghalat azabi");
@@ -88,6 +88,7 @@ function ListOfBannedChannal(props: usersInChannal): JSX.Element {
                 <MenuItem iconBtn={<IoMdMore size={24} color="gray" />}>
                   {setMenuList.map((action) => (
                     <button
+                      key={action}
                       className=" hover:bg-[#B2F35F] rounded-md flex items-center justify-center"
                       onClick={onActionClicked.bind(null, action.toLowerCase())}
                     >

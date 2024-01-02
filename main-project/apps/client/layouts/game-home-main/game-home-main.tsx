@@ -40,7 +40,8 @@ export default function HomeGameMain(): JSX.Element {
   }, [step]);
 
   return (
-    <div className="flex flex-col w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 mx-auto max-h-screen h-full rounded-xl bg-[#1B1B1B] text-white text-center pt-8">
+    <div className="flex flex-col w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 max-h-screen h-full rounded-xl bg-[#1B1B1B] text-white text-center pt-8 mt-5
+    ">
       <div className="flex flex-col items-center">
 
       <p className="text-white text-2xl">Welcome! Start your game here.</p>
@@ -54,7 +55,7 @@ export default function HomeGameMain(): JSX.Element {
       </div>
       <div className="w-full mx-auto h-fit rounded-xl bg-[#1B1B1B] text-white text-center px-2 py-2">
         {!selected && (
-          <div className="flex flex-col md:flex-col">
+          <div className="flex flex-col md:flex-col mx-8">
             {/* <OptionList data={levelsData} setLevelOrType={setLevelGame} /> */}
             <OptionList data={gamesData} setLevelOrType={setTypeGame} />
           </div>

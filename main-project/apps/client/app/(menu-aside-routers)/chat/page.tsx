@@ -8,7 +8,11 @@ import IMAgeUsers from "assets-workspace/svg/users.svg";
 import IMAgeGroups from "assets-workspace/svg/groups.svg";
 import ModalUI from "../../../components/Modal";
 import ConversationUi from "../../../components/chat-main-user/chat-main-user";
-import ConversationUiChannel, { Message, Mut, User } from "../../../components/chat-main-channel/ConversationUiChannel";
+import ConversationUiChannel, {
+  Message,
+  Mut,
+  User,
+} from "../../../components/chat-main-channel/ConversationUiChannel";
 import { ListUsersChat } from "../../../components/liste/ListUsersChat";
 import withAuth from "../../../hoc/auth";
 import {
@@ -22,36 +26,33 @@ import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import Search from "../../../components/shared-layouts/header-search/header-search";
 
-
-
 export interface cnvType {
-  uid: string
-  messages: any[]
-  type: string
-  name: string
-  participants: Participant[]
+  uid: string;
+  messages: any[];
+  type: string;
+  name: string;
+  participants: Participant[];
 }
 
 export type senderType = {
   messages: {
     sender: {
-        uid: string;
-        login: string;
-        profileImage: string;
-    };
-}[];
-}
-export interface Participant {
-  firstName: string
-  lastName: string
-  login: string
-  profileImage: string
-}
-export interface useQueryType {
-    
+      uid: string;
       login: string;
       profileImage: string;
-      uid: string
+    };
+  }[];
+};
+export interface Participant {
+  firstName: string;
+  lastName: string;
+  login: string;
+  profileImage: string;
+}
+export interface useQueryType {
+  login: string;
+  profileImage: string;
+  uid: string;
 }
 
 const ConversationTypes = {
@@ -112,16 +113,15 @@ const Chat = () => {
   const [componenetChannelModal, setcomponenetChannelModal] =
     useState("public");
 
-
   const usersQuery = useQuery({
     queryKey: ["all-users"],
     enabled: false,
     // queryFn: api.api().users.allExceptBanned,
     queryFn: async () => {
-  return api.api().users.allExceptBanned();
+      return api.api().users.allExceptBanned();
     },
   });
-  console.log('userQuery: ', usersQuery.data, typeof(usersQuery.data))
+  console.log("userQuery: ", usersQuery.data, typeof usersQuery.data);
 
   const creationMutation = useMutation({
     mutationKey: ["create-chat"],
@@ -158,7 +158,6 @@ const Chat = () => {
     }
   }, [conversationQuery]);
 
-
   const onSingleConversationClicked = (uid: string) => {
     setConversationType("users");
     setCnvUid(uid);
@@ -169,7 +168,6 @@ const Chat = () => {
     setCnvUid(uid);
   };
 
-
   function render() {
     switch (component) {
       case "channels":
@@ -178,10 +176,10 @@ const Chat = () => {
             {conversationQuery.isFetched &&
               cnv.map((ch, idx) => (
                 <ChannelsChat
-                  uid={(ch?.uid.length && ch.uid || '')}
+                  uid={(ch?.uid.length && ch.uid) || ""}
                   onClick={onGroupConversationClicked}
                   time={dataChannels.time}
-                  nameChannels={(ch?.name?.length && ch.name || "nameChannel")}
+                  nameChannels={(ch?.name?.length && ch.name) || "nameChannel"}
                   msg={""}
                   key={idx}
                 />
@@ -192,22 +190,26 @@ const Chat = () => {
       case "users":
         return (
           <>
-              {console.log(conversationQuery)}
-            {conversationQuery.isFetched && 
-            
+            {console.log(conversationQuery)}
+            {conversationQuery.isFetched &&
               cnv.map((userChat, idx) => (
                 <Userschat
-                uid={(userChat.uid.length && userChat.uid || "") }
-                onClick={(uid: string) => onSingleConversationClicked(uid)}
+                  uid={(userChat.uid.length && userChat.uid) || ""}
+                  onClick={(uid: string) => onSingleConversationClicked(uid)}
                   time={data.time}
                   name={
-                    (userChat?.participants?.length && userChat.participants[0].login) ||
+                    (userChat?.participants?.length &&
+                      userChat.participants[0].login) ||
                     "mock"
                   }
                   msg={data.msg}
-                  url={(userChat?.participants?.length && userChat?.participants[0].profileImage) || 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg'} 
+                  url={
+                    (userChat?.participants?.length &&
+                      userChat?.participants[0].profileImage) ||
+                    "https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg"
+                  }
                   key={idx}
-                  />
+                />
               ))}
           </>
         );
@@ -218,7 +220,6 @@ const Chat = () => {
     creationMutation.mutate({
       type: "Single",
       participants: [uid],
-
     });
   };
 
@@ -238,12 +239,12 @@ const Chat = () => {
     console.log(cnv);
   }
 
-
-  const mappedData = Array.isArray(usersQuery.data) ? usersQuery.data.map((item) => {
-    // Perform mapping logic on each item
-    return item; // Modify the return value based on your actual mapping logic
-  }) : [];
-  
+  const mappedData = Array.isArray(usersQuery.data)
+    ? usersQuery.data.map((item) => {
+        // Perform mapping logic on each item
+        return item; // Modify the return value based on your actual mapping logic
+      })
+    : [];
 
   const onCloseAddModal = () => setIsAddOpen(false);
   const onCloseAddChannelModal = () => setIsAddOpenChannelModal(false);
@@ -271,7 +272,7 @@ const Chat = () => {
           </div>
           <div className=" overflow-y-auto">
             {usersQuery.isFetched &&
-              ((usersQuery?.data?.data) as User[]).map((user, idx) => (
+              (usersQuery?.data?.data as User[]).map((user, idx) => (
                 <ListUsersChat
                   onClick={addSingleChat}
                   name={user.login}
@@ -341,7 +342,6 @@ const Chat = () => {
               });
             }}
             title="add channel"
-            
           ></Button>
         </div>
       </ModalUI>
@@ -419,7 +419,10 @@ const Chat = () => {
             status="in a game"
           />
         ) : conversationType === "channels" ? (
-          <ConversationUiChannel uid={cnvUid!} refetch={conversationQuery.refetch}/>
+          <ConversationUiChannel
+            uid={cnvUid!}
+            refetch={conversationQuery.refetch}
+          />
         ) : null}
       </div>
     </Fragment>

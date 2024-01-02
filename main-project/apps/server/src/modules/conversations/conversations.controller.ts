@@ -26,8 +26,6 @@ import {
 } from "./dto/update-conversation.dto";
 import { GetUser } from "src/shared/decorators/get-user.decorator";
 import { AuthGuard } from "@nestjs/passport";
-import { PutAbilities } from "src/global/rbac/decorator/rbac.decorator";
-import { Actions } from "src/global/rbac/enum/rbac.enum";
 import { User, $Enums } from "db";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { FileValidatorPipe } from "src/global/media/pipes/media.pipe";
@@ -35,6 +33,7 @@ import { MediaFile } from "src/shared/types/media";
 import { IsGuardAdmin } from "./guards/is-admin.guard";
 import { IsOwnerGuard } from "./guards/is-owner.guard";
 import { UserIsHealthyGuard } from "./guards/user-in-conversation.guard";
+import { CreateMessageDto } from "../messages/dto/create-message.dto";
 
 @Controller("conversations")
 export class ConversationsController {
@@ -73,14 +72,11 @@ export class ConversationsController {
     switch (type) {
       case "group":
         return this.conversationsService.findMeAllChannels(uid);
-        break;
       case "single":
         return this.conversationsService.findMeAllSingleConversations(uid);
-        break;
 
       default:
         throw new BadRequestException();
-        break;
     }
   }
 
@@ -113,6 +109,7 @@ export class ConversationsController {
   @Patch("unprotect")
   @UseGuards(AuthGuard())
   async unprotectChannel(@Body() dto: UnProtectChannel) {
+    if (dto.visibility === "Protected") throw new BadRequestException();
     return this.conversationsService.unprotectConversation(dto);
   }
 
@@ -211,5 +208,19 @@ export class ConversationsController {
   @UseGuards(AuthGuard())
   remove(@Param("id") id: string) {
     return this.conversationsService.remove(id);
+  }
+
+  @Post("left")
+  @UseGuards(UserIsHealthyGuard)
+  @UseGuards(AuthGuard())
+  async left(@GetUser() { uid }: User, @Body("conversation") cnv: string) {
+    this.conversationsService.left(uid, cnv);
+  }
+
+  @Post("message")
+  @UseGuards(UserIsHealthyGuard)
+  @UseGuards(AuthGuard())
+  async sendMessage(dto: CreateMessageDto, @GetUser() { uid }: User) {
+    this.conversationsService.sendMessage(dto, uid);
   }
 }

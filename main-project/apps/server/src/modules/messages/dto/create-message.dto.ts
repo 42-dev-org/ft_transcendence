@@ -6,5 +6,5 @@ export class CreateMessageDto {
   content: string;
 
   @IsUUID()
-  conversationId: string;
+  conversation: string;
 }

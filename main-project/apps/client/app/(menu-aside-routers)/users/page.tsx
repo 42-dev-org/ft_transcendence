@@ -14,13 +14,11 @@ type ComponeetType = "search" | "friends" | "invitations" | "blocked";
 type paramsdata = "Accepted" | "Pending" | "Banned";
 
 export interface dataUsersTypee {
-  uid: string
+  uid: string;
   login: string;
   profileImage: string;
-  refetch: Function
-    
-  }
-
+  refetch: Function;
+}
 
 function Users(): JSX.Element {
   const [data, setData] = useState<dataUsersTypee[]>([]);
@@ -31,10 +29,10 @@ function Users(): JSX.Element {
     componenet == "friends"
       ? "Accepted"
       : componenet === "invitations"
-      ? "Pending"
-      : componenet === "blocked"
-      ? "banned"
-      : undefined;
+        ? "Pending"
+        : componenet === "blocked"
+          ? "banned"
+          : undefined;
 
   const usersQuery = useQuery({
     queryFn: (d) => {
@@ -45,18 +43,17 @@ function Users(): JSX.Element {
     staleTime: 0,
   });
 
-
   useEffect(() => {
     if (usersQuery.isFetched && usersQuery.data && usersQuery.data.data) {
-      console.log('------------------------------------------------')
-      console.log('------------------------------------------------')
-      console.log(usersQuery.data.data.data.data)
-      console.log('------------------------------------------------')
-      console.log('------------------------------------------------')
-      console.log('------------------------------------------------')
+      console.log("------------------------------------------------");
+      console.log("------------------------------------------------");
+      console.log(usersQuery.data.data.data.data);
+      console.log("------------------------------------------------");
+      console.log("------------------------------------------------");
+      console.log("------------------------------------------------");
       setData(usersQuery.data?.data?.data);
     }
-  }, [usersQuery.data]);
+  }, [usersQuery.data, usersQuery.isFetched]);
 
   const searchMutation = useMutation({
     mutationKey: ["search-mutation"],
@@ -69,20 +66,20 @@ function Users(): JSX.Element {
   useEffect(() => {
     if (componenet === "search") searchMutation.mutate(searchString);
     else usersQuery.refetch();
-  }, [componenet]);
+  }, [componenet, searchMutation, searchString, usersQuery]);
 
-  console.log(searchMutation.data?.data)
+  console.log(searchMutation.data?.data);
 
   const render = () => {
-
     if (componenet === "blocked") {
       return (
         <div className="grid lg:grid-cols-5 2xl:grid-cols-7  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
           {searchMutation.isSuccess &&
             data.map((user, idx) => (
-              <BannedCArd {...user} 
-              key={idx} 
-              // refetch={usersQuery.refetch} TODO: fix banned logic
+              <BannedCArd
+                {...user}
+                key={idx}
+                // refetch={usersQuery.refetch} TODO: fix banned logic
               />
             ))}
         </div>
@@ -164,6 +161,5 @@ function Users(): JSX.Element {
     </div>
   );
 }
-
 
 export default withAuth(Users);
