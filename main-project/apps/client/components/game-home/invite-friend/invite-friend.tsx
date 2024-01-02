@@ -41,7 +41,7 @@ const InviteFriend = () => {
   useEffect(() => {
     // Call searchMutation.mutate() when the component mounts
     searchMutation.mutate(search);
-  }, [searchMutation]);
+  }, []);
 
 
     
