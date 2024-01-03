@@ -17,6 +17,18 @@ export class UsersRepository {
   async findByLogin(login: string) {
     return this.prisma.user.findUnique({ where: { login } });
   }
+
+  async getBanned(uid: string) {
+    return this.prisma.friend.findMany({
+      where: {
+        user1uid: uid,
+        status: 'Banned'
+      },
+      select: {
+        user2: true,
+      },
+    });
+  }
   async findMeAll(uid: string) {
     return this.prisma.user.findMany({
       where: {
@@ -37,7 +49,7 @@ export class UsersRepository {
               none: {
                 status: "Banned",
                 // OR: [{ user1uid: uid }, { user2uid: uid }],
-                user1uid: uid
+                user1uid: uid,
               },
             },
           },
@@ -131,7 +143,16 @@ export class UsersRepository {
   }
 
   // work
-  async findOne(uid: string) {
+  async findOne(uid: string, user: string) {
+    const friendShip = await this.prisma.friend.findFirst({where: {
+      OR: [
+        {user1uid: uid, user2uid: user},
+        {user2uid: uid, user1uid: user},
+      ],
+      status: 'Banned'
+    }})
+    if (friendShip)
+    throw new ForbiddenException()
     return this.prisma.user.findUnique({ where: { uid } });
   }
 
@@ -235,15 +256,26 @@ export class UsersRepository {
 
   // work
   async ban(uid: string, user: string) {
-    this.prisma.friend.update({
+    return this.prisma.friend.update({
       where: { uid, status: { not: "Banned" } },
       data: { status: "Banned", bannedBy: user },
     });
   }
 
+  async createbanned(uid: string, user: string) {
+    const a = await this.prisma.friend.create({
+      data: {
+        user1uid: user,
+        user2uid: uid,
+        status: "Banned",
+        bannedBy: user
+      },
+    });
+    console.log(a)
+  }
   // work
   async unban(uid: string) {
-    this.prisma.friend.delete({
+    return this.prisma.friend.delete({
       where: { uid: uid, status: "Banned" },
     });
   }
@@ -268,7 +300,7 @@ export class UsersRepository {
       where: {
         OR: [
           { user1uid: uid, user2uid: user },
-          { user2uid: user, user1uid: user },
+          { user2uid: uid, user1uid: user },
         ],
       },
     });

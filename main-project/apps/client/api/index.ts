@@ -4,6 +4,7 @@ import { Manager, type Socket } from "socket.io-client";
 import axios from "axios";
 import { constants } from "../constants/contsnts";
 import { exampleLib } from "../lib/api/example/index";
+import { log } from 'console';
 
 const ConversationTypes = {
   Group: "Group",
@@ -115,8 +116,8 @@ class Api {
         }),
     },
     users: {
-      ban: () => {},
-      unban: () => {},
+      ban: (uid: string) => this.httpClient.post(`/users/${uid}/ban`),
+      unban: (uid: string) => this.httpClient.post(`/users/${uid}/unban`),
       search: (search: string) =>
         this.httpClient.get(`/users/search?search=${search}`),
       findAll: (type?: "Pending" | "Accepted" | "Banned") =>
@@ -130,6 +131,22 @@ class Api {
       getFriend: (friendUid: string) =>
         this.httpClient.get(`users/${friendUid}`),
       allExceptBanned: () => this.httpClient.get("/users/all"),
+      leaderBorad: () => this.httpClient.get("/users/leaderboard"),
+      updateProfileImage: (form: any) =>
+        this.httpClient.post("users/me/profile-image", form, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }),
+      updateInfos: (form: {
+        firstName: string;
+        lastName: string;
+        login: string;
+      }) => {
+        return this.httpClient.post("/users/me", {
+          ...form,
+        });
+      }
     },
     otp: {
       getImage: () => this.httpClient.get("/auth/otp"),

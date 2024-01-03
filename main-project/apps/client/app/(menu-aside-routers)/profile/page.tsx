@@ -65,7 +65,7 @@ function MyProfile() {
     queryFn: (meta) => api.api().users.getFriend(meta.queryKey[1] as string),
   });
   
-  if (query.isFetched) console.log(query.data?.data);
+  if (query.isSuccess) console.log(query.data?.data);
   const  displayName = `${query.data?.data.lastName}   ${query.data?.data.firstName}, ${query.data?.data.login}`
 
   const user = useAppSelector(s => s.user.user)

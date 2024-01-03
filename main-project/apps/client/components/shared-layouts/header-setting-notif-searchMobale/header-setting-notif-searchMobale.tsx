@@ -17,7 +17,7 @@ function HeaderSettingNotifSearchMobale(): JSX.Element {
     enabled: false,
   });
   const router = useRouter();
-  if (logout.isFetched) {
+  if (logout.isSuccess) {
     router.push("/");
   }
   const [isOpenNot, setIsOpenNot] = useState(false);

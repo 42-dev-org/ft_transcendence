@@ -1,11 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import type { StaticImageData } from "next/image";
-import Image from "next/image";
-import chatImage from "assets-workspace/images/bg-chat-Conversation-user.png";
 import { MdGroups2 } from "react-icons/md";
-
-import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import MenuItem from "../Menu-chat";
 import ModalUI from "../Modal";
@@ -22,6 +17,7 @@ import { api } from "../../api";
 import { useAppSelector } from "../../store/store";
 import { toast } from "react-toastify";
 import { Gloock } from "next/font/google";
+import useReflection from "@/hooks/useReflection";
 
 export interface Root {
   status: string;
@@ -37,6 +33,7 @@ export interface ChatInfos {
 interface Props {
   refetch: () => void;
   uid: string;
+  close: () => void;
 }
 
 export interface Data {
@@ -86,6 +83,7 @@ export type ViewerRole = "admin" | "owner" | "participant" | false;
 
 export default function ConversationUiChannel({
   uid,
+  close,
   refetch,
 }: Props): JSX.Element {
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -99,8 +97,10 @@ export default function ConversationUiChannel({
   const [all, setAll] = useState<UsersWithRole[]>([]);
   const [infos, setInfos] = useState<ChatInfos | null>(null);
 
+  const { reflector } = useReflection();
+
   const query = useQuery({
-    queryKey: ["get-group-cnv", uid],
+    queryKey: ["get-group-cnv-" + uid, uid],
     queryFn: ({ queryKey }) =>
       api.api().chat.getConversation(queryKey[1], "Group"),
   });
@@ -117,8 +117,6 @@ export default function ConversationUiChannel({
       });
     }
     api.io().on("newmessageingroup", (data: any) => {
-      console.log(data);
-      console.log(myUid);
       setMessages((old) => [...old, data.data]);
     });
     return () => {
@@ -139,7 +137,18 @@ export default function ConversationUiChannel({
   });
 
   useEffect(() => {
-    if (query.isFetched) {
+    if (query.isLoading || query.isRefetching) {
+      reflector({ type: "loading", isLoading: true, payload: null });
+    }
+    
+    if (query.isError) {
+      toast.error("error");
+      close();
+      reflector({ type: "loading", isLoading: false, payload: null });
+      return;
+    }
+    if (query.isSuccess) {
+      reflector({ type: "loading", isLoading: false, payload: null });
       const data = query.data?.data as Root;
       setAdmins(data.data.admins);
       setBanned(data.data.ban);
@@ -171,12 +180,14 @@ export default function ConversationUiChannel({
       setMessages(data.data.messages);
     }
   }, [
+    query.isError,
     query.isRefetching,
     query.isFetching,
     query.isSuccess,
     myUid,
-    query.isFetched,
+    query.isSuccess,
     query.data,
+    close,
   ]);
 
   const [showOpstions, setshowOpstions] = useState(false);
@@ -234,7 +245,7 @@ export default function ConversationUiChannel({
             ></Button>
           </div>
           <div className=" overflow-y-auto ">
-            {usersQuery.isFetched &&
+            {usersQuery.isSuccess &&
               (usersQuery.data?.data as User[]).map((_, i) => (
                 <ListUsersChat
                   name={_.login}
