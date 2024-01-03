@@ -1,22 +1,20 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
-import { GamesGateway } from '../games.gateway';
-import GameModel from './game.model.service';
-import { PrismaService } from 'src/global/prisma/prisma.service';
-import Matter, { Body , Events } from 'matter-js';
-import { Game } from '../game.interface';
+import { Inject, Injectable } from "@nestjs/common";
+import { OnEvent } from "@nestjs/event-emitter";
+import { GamesGateway } from "../games.gateway";
+import GameModel from "./game.model.service";
+import { PrismaService } from "src/global/prisma/prisma.service";
+import { Body } from "matter-js";
+import { Game } from "../game.interface";
 
-const MAX_ROUNDS = 20;
+const MAX_ROUNDS = 1000;
 
 @Injectable()
 export class GamesService {
-  private scoreUpdated: Map<string, boolean> = new Map();
   constructor(
     private readonly gamesGateway: GamesGateway,
     private prismaService: PrismaService,
-    @Inject('GAMES')
-    private games: Map<string, Partial<Game>>,
-    private eventEmitter: EventEmitter2,
+    @Inject("GAMES")
+    private games: Map<string, Partial<Game>>
   ) {}
 
   private async updateGameScore(gameId: string, userId: string, score: number) {
@@ -37,12 +35,12 @@ export class GamesService {
   private async updateGameState(
     ball: Body,
     newVirtualGame: Partial<Game>,
-    playerIndex: number,
+    playerIndex: number
   ) {
     const { gameId } = newVirtualGame;
 
     newVirtualGame.players[playerIndex].score++;
-    this.gamesGateway.server.to(gameId).emit('score', newVirtualGame.players);
+    this.gamesGateway.server.to(gameId).emit("score", newVirtualGame.players);
 
     Body.setPosition(ball, {
       x: 300,
@@ -50,15 +48,15 @@ export class GamesService {
     });
     return false;
   }
-  
-  @OnEvent('game.play')
+
+  @OnEvent("game.play")
   async play(gameId: string) {
     const game = await this.prismaService.game.findUnique({
       where: { id: gameId },
       include: {
         players: {
           orderBy: {
-            createdAt: 'asc',
+            createdAt: "asc",
           },
           select: {
             score: true,
@@ -93,24 +91,24 @@ export class GamesService {
           lastName,
           userId,
           login,
-        }),
+        })
       ),
     };
 
     const interval = setInterval(async () => {
       const ball = gameModel.engine.world.bodies.find(
-        (body) => body.label === 'ball',
+        (body) => body.label === "ball"
       );
       const ballPosition = {
         x: ball.position.x,
         y: ball.position.y,
       };
       const paddle1 = gameModel.engine.world.bodies.find(
-        (body) => body.label === 'paddle1',
-        );
-        const paddle2 = gameModel.engine.world.bodies.find(
-          ({ label }) => label === 'paddle2',
-          );
+        (body) => body.label === "paddle1"
+      );
+      const paddle2 = gameModel.engine.world.bodies.find(
+        ({ label }) => label === "paddle2"
+      );
 
       let scorred = false;
       if (ball.position.y > paddle1.position.y) {
@@ -125,12 +123,12 @@ export class GamesService {
       if (
         scorred &&
         (newVirtualGame.players[0].score === MAX_ROUNDS ||
-          newVirtualGame.players[1].score === MAX_ROUNDS)) 
-      {
+          newVirtualGame.players[1].score === MAX_ROUNDS)
+      ) {
         newVirtualGame.players.map(
           async (player) =>
-            await this.updateGameScore(gameId, player.userId, player.score),
-            );
+            await this.updateGameScore(gameId, player.userId, player.score)
+        );
         const oldGame = this.games.get(gameId);
         if (oldGame) {
           clearInterval(oldGame.interval);
@@ -139,19 +137,19 @@ export class GamesService {
         await this.prismaService.game.update({
           where: { id: gameId },
           data: {
-            status: 'ENDING',
+            status: "ENDING",
           },
         });
 
-        this.gamesGateway.server.to(gameId).emit('game-status', {
+        this.gamesGateway.server.to(gameId).emit("game-status", {
           timestamp: new Date(),
-          status: 'ending',
+          status: "ending",
         });
         // leave room !
         return;
       }
-      this.gamesGateway.server.to(gameId).emit('ball-position', ballPosition);
-      this.eventEmitter.emit('paddle-position', [
+      this.gamesGateway.server.to(gameId).emit("ball-position", ballPosition);
+      this.gamesGateway.server.to(gameId).emit("paddle-position", [
         { x: paddle1.position.x, y: paddle1.position.y },
         { x: paddle2.position.x, y: paddle2.position.y },
       ]);
@@ -159,7 +157,7 @@ export class GamesService {
 
     newVirtualGame.interval = interval;
     this.games.set(gameId, newVirtualGame);
-    this.gamesGateway.server.to(gameId).emit('start-game', {
+    this.gamesGateway.server.to(gameId).emit("start-game", {
       players: newVirtualGame.players,
       gameId: newVirtualGame.gameId,
     });

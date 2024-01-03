@@ -7,24 +7,14 @@ import {
   WsException,
 } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
-import {parse as cookieParser} from "cookie";
+import { parse as cookieParser } from "cookie";
 import { JwtService } from "@nestjs/jwt";
 import { PrismaService } from "src/global/prisma/prisma.service";
-import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
-import { Inject, Injectable } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { Inject } from "@nestjs/common";
 import GameModel from "./services/game.model.service";
 import { Body } from "matter-js";
 import { Game } from "./game.interface";
-import { JwtStrategy } from "src/global/auth/strategy/auth.jwt.startegy";
-
-// const parseCookie = (str) =>
-//   str
-//     .split(";")
-//     .map((v) => v.split("="))
-//     .reduce((acc, v) => {
-//       acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
-//       return acc;
-//     }, {});
 
 interface JoinGamePayload {
   gameMaps: "default" | "opt";
@@ -42,7 +32,6 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
   server: Server;
   constructor(
     private jwtService: JwtService,
-    private jwtStrategy: JwtStrategy,
     private prismaService: PrismaService,
     private eventEmitter: EventEmitter2,
     @Inject("GAMES")
@@ -52,7 +41,7 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
     this.queue = [];
     this.modeQueue = [];
-    this.clients = new Map<string, string[]>;
+    this.clients = new Map<string, string[]>();
   }
 
   async handleConnection(client: Socket) {
@@ -77,7 +66,10 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
       // }
       client.user = user;
       client.inGame = false;
-      this.clients.set(user.uid, [...(this.clients.get(user.uid)??[]), client.id]);
+      this.clients.set(user.uid, [
+        ...(this.clients.get(user.uid) ?? []),
+        client.id,
+      ]);
       console.log("clients tabs: ", this.clients);
     } catch (err) {
       console.log(err);
@@ -163,9 +155,11 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async joinGame(client: Socket, payload: JoinGamePayload) {
     const { gameMaps } = payload;
 
-    if (
-      this.queue.includes(client.user.uid)
-    ) {
+    console.log(client.user.uid);
+    console.log(this.queue);
+
+    if (this.queue.includes(client.user.uid)) {
+      console.log("Got Here!");
       client.emit("game-status", { timestamp: new Date(), status: "in_queue" });
       return;
     }
@@ -226,6 +220,7 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
         });
         client.inGame = true;
         client.join(pendingGame.id);
+        console.log("game started !here!");
         this.eventEmitter.emit("game.play", pendingGame.id);
       }
       console.log("queue members: ", this.queue);
@@ -238,8 +233,7 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
   // Leave Queue
   @SubscribeMessage("leave-queue")
   async leaveQueue(client: Socket) {
-
-    console.log("gotcha ")
+    console.log("gotcha ");
     if (this.queue.length == 1) {
       // if (this.queue.includes(client.user.id)) {
       this.queue.pop();
