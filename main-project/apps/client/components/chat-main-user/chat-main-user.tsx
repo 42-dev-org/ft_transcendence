@@ -1,22 +1,22 @@
 "use client";
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import type { StaticImageData } from "next/image";
 import Image from "next/image";
-import chatImage from "assets-workspace/images/bg-chat-Conversation-user.png";
-import { current } from "@reduxjs/toolkit";
-import { TbRulerOff } from "react-icons/tb";
 import MenuItem from "../Menu-chat";
 import { IoMdMore } from "react-icons/io";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../../api";
 import { useAppSelector } from "../../store/store";
+import { toast } from "react-toastify";
+import useReflection from "@/hooks/useReflection";
 
 interface PropsType {
   fullName: string;
   uid: string;
   image: string | StaticImageData;
   status: "online" | "offline" | "in a game"; //  should add in game
+  close: () => void;
 }
 
 interface MESSAGE {
@@ -32,23 +32,35 @@ export default function ConversationUi({
   fullName,
   image,
   status,
+  close,
 }: PropsType): JSX.Element {
   const userUid = useAppSelector((s) => s.user.user?.uid);
   const query = useQuery({
-    queryKey: ["get-single-cnv", uid],
+    queryKey: ["get-single-cnv-" + uid, uid],
     queryFn: ({ queryKey }) =>
       api.api().chat.getConversation(queryKey[1], "Single"),
   });
+  const { reflector } = useReflection();
 
-  const [showOptions, setshowOpstions] = useState(true);
+  if (query.isLoading || query.isFetching || query.isPending) {
+    reflector({ type: "loading", isLoading: true, payload: null });
+  }
   const [msg, setMsg] = useState("");
   const msgRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<MESSAGE[]>([]);
   useEffect(() => {
-    if (query.isFetched) {
+    if (query.isError) {
+      toast.error("error");
+      close();
+      return;
+      reflector({ type: "loading", isLoading: false, payload: null });
+    }
+    if (query.isSuccess) {
+      reflector({ type: "loading", isLoading: false, payload: null });
       setMessages(query.data?.data.data.messages);
     }
-  }, [query.isFetched, query.data]);
+  }, [query.isSuccess, query.data, query.isError, close]);
+
   const onSetMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (msg.length && msg.trim()) {
@@ -63,9 +75,7 @@ export default function ConversationUi({
     }
   };
 
-
   useEffect(() => {
-    console.log('test')
     if (msgRef?.current) {
       msgRef?.current.addEventListener("DOMNodeInserted", (event) => {
         const { currentTarget: target }: any = event;
@@ -73,14 +83,33 @@ export default function ConversationUi({
       });
     }
     api.io().on("newmessage", (data: any) => {
-      console.log('ee')
-      setMessages((prev) => ([...prev, data.data]));
+      console.log("ee");
+      setMessages((prev) => [...prev, data.data]);
     });
     return () => {
       // msgRef?.current?.removeEventListener("DOMNodeInserted", () => {});
       api.io().off("newmessage");
-    }
+    };
   }, []);
+
+  const banMutation = useMutation({
+    mutationKey: ["ban-friend"],
+    mutationFn: api.api().users.ban,
+    onSuccess: () => {
+      close();
+      toast.done("done");
+    },
+    onError: () => {
+      toast.error("sir tqwed");
+      close();
+    },
+  });
+
+  if (banMutation.isPending) {
+    reflector({ type: "loading", isLoading: true, payload: null });
+  } else {
+    reflector({ type: "loading", isLoading: false, payload: null });
+  }
 
   return (
     <div className="w-2/3 flex justify-center p-2 h-full">
@@ -133,7 +162,12 @@ export default function ConversationUi({
             </div>
           </Link>
           <MenuItem iconBtn={<IoMdMore size={24} color="gray" />}>
-            <button className="hover:bg-[#B2F35F] rounded-md px-2">
+            <button
+              className="hover:bg-[#B2F35F] rounded-md px-2"
+              onClick={() =>
+                banMutation.mutate(query.data?.data?.data?.participants[0].uid)
+              }
+            >
               Block
             </button>
             <button className="hover:bg-[#B2F35F] rounded-md px-2">

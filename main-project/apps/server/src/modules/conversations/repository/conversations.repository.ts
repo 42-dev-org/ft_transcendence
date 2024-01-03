@@ -362,7 +362,7 @@ export class ConversationsRepository {
         },
       });
     } else if (type === "Single") {
-      return this.prisma.conversation.findUnique({
+      const conversation = await this.prisma.conversation.findUnique({
         where: {
           uid,
           type: "Single",
@@ -386,6 +386,22 @@ export class ConversationsRepository {
           },
         },
       });
+
+      if (
+        conversation &&
+        (await this.prisma.friend.findFirst({
+          where: {
+            OR: [
+              { user1uid: user, user2uid: conversation.participants[0].uid },
+              { user2uid: user, user1uid: conversation.participants[0].uid },
+            ],
+            status: "Banned",
+          },
+        }))
+      ) {
+        throw new ForbiddenException();
+      }
+      return conversation;
     }
   }
 

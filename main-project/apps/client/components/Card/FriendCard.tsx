@@ -24,6 +24,13 @@ function FriendCard({
       refetch();
     },
   });
+  const banMutation = useMutation({
+    mutationKey: ["ban-friend"],
+    mutationFn: api.api().users.ban,
+    onSuccess: () => {
+      refetch();
+    },
+  });
   return (
     <div className="w-full flex rounded-lg border  border-[#B2F35F] overflow-hidden h-72 flex-col ">
       <Image
@@ -42,6 +49,11 @@ function FriendCard({
           title="Remove Friend"
           className="py-1 w-full px-0"
           onClick={() => sendMutation.mutate((uid.length && uid) || "uid")}
+        />
+        <Button
+          title="Ban Friend"
+          className="py-1 w-full px-0"
+          onClick={() => banMutation.mutate((uid.length && uid) || "uid")}
         />
         <Link
           className="py-1 w-full text-center bg-[#ffffff1a] rounded-lg text-sm font-medium hover:opacity-70 px-3  text-white"

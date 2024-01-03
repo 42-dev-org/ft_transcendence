@@ -6,8 +6,12 @@ import AchevementCard from "../../../../components/Card/AchevementCard";
 import HistoryCard from "../../../../components/Card/historyCard";
 import withAuth from "../../../../hoc/auth";
 import { useParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../../../../api";
+import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/store/store";
+import { toast } from "react-toastify";
+import useReflection from "../../../../hooks/useReflection";
 
 const data = {
   name: "zakaria",
@@ -54,34 +58,54 @@ const dataAchevment = [
   },
 ];
 interface usersIDtype {
-  lastName: string,
-  firstName: string,
-  login: string,
-  profileImage: string
+  lastName: string;
+  firstName: string;
+  login: string;
+  profileImage: string;
 }
 
 function UserProfile() {
-  const {id} = useParams();
-  console.log(id)
-  
+  const { id } = useParams();
+  const router = useRouter();
+  const ref = useReflection();
+
   // <usersIDtype, Error>
-  
+  const banMutation = useMutation({
+    mutationKey: ["ban-friend"],
+    mutationFn: api.api().users.ban,
+    onMutate: () => {
+      ref.reflector({ type: "loading", isLoading: true, payload: null });
+    },
+    onSuccess: () => {
+      ref.reflector({ type: "loading", isLoading: false, payload: null });
+      router.push("/users");
+    },
+    onError: (error) => {
+      ref.reflector({ type: "loading", isLoading: false, payload: null });
+
+      toast.error("sir tqwed");
+    },
+  });
+
   const query = useQuery({
     queryKey: ["get-friend", id],
     queryFn: (meta) => api.api().users.getFriend(meta.queryKey[1] as string),
-
-    // queryFn: async () => {
-    //   let response;
-    //    response =  await api.api().users.getFriend(response.queryKey[1] as string);
-    //   const data: usersIDtype = response.data;
-    //   return data;
-    // },
-
   });
-  
-  if (query.isFetched) console.log('my: ' ,query.data?.data.lastName); else console.log('error: ', query.error);
-  const  displayName = `${query.data?.data.lastName}   ${query.data?.data.firstName}, ${query.data?.data.login}`
 
+  if (query.isError) {
+    toast.error("Error");
+    router.push("/users");
+  }
+
+  if (query.isLoading) {
+    ref.reflector({ type: "loading", isLoading: true, payload: null });
+  } else {
+    ref.reflector({ type: "loading", isLoading: false, payload: null });
+  }
+
+  if (query.isSuccess) console.log("my: ", query.data?.data.lastName);
+  else console.log("error: ", query.error);
+  const displayName = `${query.data?.data.lastName}   ${query.data?.data.firstName}, ${query.data?.data.login}`;
 
   return (
     <div className=" lg:overflow-hidden md:overflow-auto flex flex-col p-4 w-full h-full gap-y-5">
@@ -102,18 +126,21 @@ function UserProfile() {
             height={140}
             className="rounded-full absolute border-4 border-[#ffffff1a] -top-24 lg:left-0  md:left-[40%] left-[30%]"
             alt="zakaria"
-            src={(query.data?.data.profileImage) || 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg'}
+            src={
+              query.data?.data.profileImage ||
+              "https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg"
+            }
           />
         </div>
-        <div className="flex  md:flex-row flex-col w-full gap-4 justify-between pt-3" >
+        <div className="flex  md:flex-row flex-col w-full gap-4 justify-between pt-3">
           <span className="text-white text-xl font-medium whitespace-nowrap">
-            <strong className="text-white">
-
-            {displayName} 
-            </strong>
+            <strong className="text-white">{displayName}</strong>
           </span>
           <div className="flex gap-2 md:flex-row flex-col">
-            <Button onClick={() => null} title="Block" />
+            <Button
+              onClick={() => banMutation.mutate(id as string)}
+              title="Block"
+            />
             <Button
               onClick={() => null}
               title="Invite to play"
@@ -134,20 +161,19 @@ function UserProfile() {
           {/* <> */}
           <h2>Achievements</h2>
           {/* <div className="grid  h-full rounded-lg  grid-cols-2 gap-5  w-full"> */}
-            {dataAchevment.map((dataAchevment, idx) => (
-              <AchevementCard
+          {dataAchevment.map((dataAchevment, idx) => (
+            <AchevementCard
               name={dataAchevment.name}
               url={dataAchevment.url}
               key={idx}
-              />
-              ))}
+            />
+          ))}
           {/* </div> */}
-              {/* </> */}
+          {/* </> */}
         </div>
       </div>
     </div>
   );
 }
-
 
 export default withAuth(UserProfile);

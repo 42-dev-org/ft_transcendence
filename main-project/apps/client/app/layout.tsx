@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "tailwind-config/styles";
 import StoreProvider from "../providers/store-provider";
 import "./globals.css";
+import Wrapper from "./wrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <StoreProvider>{children}</StoreProvider>
+        <StoreProvider>
+          <Wrapper></Wrapper>
+          {children}
+        </StoreProvider>
       </body>
     </html>
   );

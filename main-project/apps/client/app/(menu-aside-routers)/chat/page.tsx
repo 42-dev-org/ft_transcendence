@@ -25,6 +25,7 @@ import { api } from "../../../api";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import Search from "../../../components/shared-layouts/header-search/header-search";
+import useReflection from "@/hooks/useReflection";
 
 export interface cnvType {
   uid: string;
@@ -121,6 +122,12 @@ const Chat = () => {
       return api.api().users.allExceptBanned();
     },
   });
+  const {reflector} = useReflection()
+  if (usersQuery.isLoading) {
+    reflector({type: 'loading', isLoading: true, payload: null})
+  } else {
+    reflector({type: 'loading', isLoading: false, payload: null})
+  }
   console.log("userQuery: ", usersQuery.data, typeof usersQuery.data);
 
   const creationMutation = useMutation({
@@ -143,6 +150,11 @@ const Chat = () => {
       participants: string[];
     }) => api.api().chat.create(conf),
   });
+  if (creationMutation.isPending) {
+    reflector({type: 'loading', isLoading: true, payload: null})
+  } else {
+    reflector({type: 'loading', isLoading: false, payload: null})
+  }
 
   const conversationQuery = useQuery({
     queryKey: ["get-conversations", component],
@@ -152,8 +164,16 @@ const Chat = () => {
         .chat.getConversations(queryKey[1] == "users" ? "single" : "group"),
   });
 
+  if (conversationQuery.isLoading) {
+    reflector({type: 'loading', isLoading: true, payload: null})
+  } else {
+    reflector({type: 'loading', isLoading: false, payload: null})
+  }
+
+  
+
   useEffect(() => {
-    if (conversationQuery.isFetched) {
+    if (conversationQuery.isSuccess) {
       setCnv(conversationQuery.data?.data);
     }
   }, [conversationQuery]);
@@ -173,7 +193,7 @@ const Chat = () => {
       case "channels":
         return (
           <>
-            {conversationQuery.isFetched &&
+            {conversationQuery.isSuccess &&
               cnv.map((ch, idx) => (
                 <ChannelsChat
                   uid={(ch?.uid.length && ch.uid) || ""}
@@ -191,7 +211,7 @@ const Chat = () => {
         return (
           <>
             {console.log(conversationQuery)}
-            {conversationQuery.isFetched &&
+            {conversationQuery.isSuccess &&
               cnv.map((userChat, idx) => (
                 <Userschat
                   uid={(userChat.uid.length && userChat.uid) || ""}
@@ -227,7 +247,7 @@ const Chat = () => {
     console.log(search);
 
     // setCnv(
-    //   conversationQuery.isFetched
+    //   conversationQuery.isSuccess
     //     ? (conversationQuery.data.data as any[]).filter((cnv) =>
     //         (cnv.name as string).includes(search)
     //       )
@@ -235,7 +255,7 @@ const Chat = () => {
     // );
   }, [search]);
 
-  if (conversationQuery.isFetched) {
+  if (conversationQuery.isSuccess) {
     console.log(cnv);
   }
 
@@ -271,7 +291,7 @@ const Chat = () => {
             ></Button>
           </div>
           <div className=" overflow-y-auto">
-            {usersQuery.isFetched &&
+            {usersQuery.isSuccess &&
               (usersQuery?.data?.data as User[]).map((user, idx) => (
                 <ListUsersChat
                   onClick={addSingleChat}
@@ -413,6 +433,10 @@ const Chat = () => {
         </div>
         {conversationType === "users" ? (
           <ConversationUi
+          close={() => {
+            console.log("cloooooose");
+            setConversationType("");
+          }}
             uid={cnvUid!}
             fullName="mustapha ouarsas"
             image="https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg"
@@ -420,6 +444,10 @@ const Chat = () => {
           />
         ) : conversationType === "channels" ? (
           <ConversationUiChannel
+            close={() => {
+              console.log("cloooooose");
+              setConversationType("");
+            }}
             uid={cnvUid!}
             refetch={conversationQuery.refetch}
           />
