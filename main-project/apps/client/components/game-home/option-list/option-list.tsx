@@ -24,7 +24,7 @@ const OptionList = ({ data, setLevelOrType}: PropsType) => {
   };
 
   return (
-    <div className="flex w-full flex-col md:flex-row justify-center items-center px-8 gap-4 py-3">
+    <div className="flex w-full flex-col md:flex-row justify-center items-center px-8 gap-2 py-7">
       <SectionTitle label={data.label} />
 
       {data.items.map((item) => (
