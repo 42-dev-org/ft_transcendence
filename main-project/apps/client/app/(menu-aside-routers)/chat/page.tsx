@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, use, useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import ChannelsChat from "../../../components/Chat/ChannelsChat";
 import Userschat from "../../../components/Chat/Userschat";
@@ -122,13 +122,7 @@ const Chat = () => {
       return api.api().users.allExceptBanned();
     },
   });
-  const {reflector} = useReflection()
-  if (usersQuery.isLoading) {
-    reflector({type: 'loading', isLoading: true, payload: null})
-  } else {
-    reflector({type: 'loading', isLoading: false, payload: null})
-  }
-  console.log("userQuery: ", usersQuery.data, typeof usersQuery.data);
+  const { reflector } = useReflection();
 
   const creationMutation = useMutation({
     mutationKey: ["create-chat"],
@@ -150,11 +144,14 @@ const Chat = () => {
       participants: string[];
     }) => api.api().chat.create(conf),
   });
-  if (creationMutation.isPending) {
-    reflector({type: 'loading', isLoading: true, payload: null})
-  } else {
-    reflector({type: 'loading', isLoading: false, payload: null})
-  }
+
+  useEffect(() => {
+    if (creationMutation.isPending) {
+      reflector({ type: "loading", isLoading: true, payload: null });
+    } else {
+      reflector({ type: "loading", isLoading: false, payload: null });
+    }
+  }, [creationMutation.isPending]);
 
   const conversationQuery = useQuery({
     queryKey: ["get-conversations", component],
@@ -164,19 +161,38 @@ const Chat = () => {
         .chat.getConversations(queryKey[1] == "users" ? "single" : "group"),
   });
 
-  if (conversationQuery.isLoading) {
-    reflector({type: 'loading', isLoading: true, payload: null})
-  } else {
-    reflector({type: 'loading', isLoading: false, payload: null})
-  }
+  useEffect(() => {
+    if (usersQuery.isLoading) {
+      reflector({ type: "loading", isLoading: true, payload: null });
+    } else {
+      reflector({ type: "loading", isLoading: false, payload: null });
+    }
+  }, [usersQuery.isLoading]);
 
-  
+  useEffect(() => {
+    if (conversationQuery.isLoading) {
+      reflector({ type: "loading", isLoading: true, payload: null });
+    } else {
+      reflector({ type: "loading", isLoading: false, payload: null });
+    }
+  }, [conversationQuery.isLoading]);
 
   useEffect(() => {
     if (conversationQuery.isSuccess) {
-      setCnv(conversationQuery.data?.data);
+      if (component === "channels") {
+        setCnv([
+          ...(conversationQuery.data?.data.my as any[]).map((cnv) => ({
+            ...cnv,
+            exist: true,
+          })),
+          ...(conversationQuery.data?.data.public as any[]).map((cnv) => ({
+            ...cnv,
+            exist: false,
+          })),
+        ]);
+      } else setCnv(conversationQuery.data?.data);
     }
-  }, [conversationQuery]);
+  }, [conversationQuery.isSuccess, setCnv, component, conversationQuery.data]);
 
   const onSingleConversationClicked = (uid: string) => {
     setConversationType("users");
@@ -433,10 +449,9 @@ const Chat = () => {
         </div>
         {conversationType === "users" ? (
           <ConversationUi
-          close={() => {
-            console.log("cloooooose");
-            setConversationType("");
-          }}
+            close={() => {
+              setConversationType("");
+            }}
             uid={cnvUid!}
             fullName="mustapha ouarsas"
             image="https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg"
@@ -445,7 +460,6 @@ const Chat = () => {
         ) : conversationType === "channels" ? (
           <ConversationUiChannel
             close={() => {
-              console.log("cloooooose");
               setConversationType("");
             }}
             uid={cnvUid!}
