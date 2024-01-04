@@ -136,11 +136,26 @@ export default function ConversationUiChannel({
     queryFn: api.api().users.allExceptBanned,
   });
 
+  const leaveMutation = useMutation({
+    mutationKey: ["leave-group"],
+    mutationFn: api.api().chat.leaveGroup,
+    onSuccess: () => {
+      query.refetch()
+      toast("nadi");
+      close();
+    },
+    onError: () => {
+      toast("ghayrha");
+    },
+  });
+
+  console.log(usersQuery?.data?.data);
+
   useEffect(() => {
     if (query.isLoading || query.isRefetching) {
       reflector({ type: "loading", isLoading: true, payload: null });
     }
-    
+
     if (query.isError) {
       toast.error("error");
       close();
@@ -180,15 +195,18 @@ export default function ConversationUiChannel({
       setMessages(data.data.messages);
     }
   }, [
-    query.isError,
-    query.isRefetching,
-    query.isFetching,
-    query.isSuccess,
+    reflector,
     myUid,
+    close,
     query.isSuccess,
     query.data,
-    close,
+    query.isError,
+    query.isLoading,
+    query.isRefetching,
+    query.status,
   ]);
+  console.log(query.isFetching);
+  console.log(query.isRefetching);
 
   const [showOpstions, setshowOpstions] = useState(false);
   const [msg, setMsg] = useState("");
@@ -258,6 +276,7 @@ export default function ConversationUiChannel({
                       conversation: uid,
                       user,
                     });
+                    query.refetch();
                   }}
                 />
               ))}
@@ -292,6 +311,9 @@ export default function ConversationUiChannel({
               <button
                 className=" hover:bg-[#B2F35F] rounded-md"
                 title="leaveChannel"
+                onClick={() => {
+                  leaveMutation.mutate(uid);
+                }}
               >
                 Leave channel
               </button>
