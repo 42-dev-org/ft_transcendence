@@ -3,20 +3,18 @@ import {
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
-  OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
   WsException,
 } from "@nestjs/websockets";
-import { AnyNaptrRecord } from "dns";
 import { Server, Socket } from "socket.io";
 import { parse as cookieParser } from "cookie";
 import { JwtService } from "@nestjs/jwt";
 import { JwtStrategy } from "src/global/auth/strategy/auth.jwt.startegy";
 import { PrismaService } from "src/global/prisma/prisma.service";
 import { ConversationsService } from "../conversations/conversations.service";
-import { UseGuards } from "@nestjs/common";
+import { ForbiddenException, HttpException, UseGuards } from "@nestjs/common";
 import { ChatAuthGuard } from "./guards/chat.guard";
 import { User } from "db";
 
@@ -34,6 +32,8 @@ export class SendRoomMessageDto {
 export class JoinChannel {
   conversation: string;
 }
+
+type MySocket = Socket & { user: User };
 
 @WebSocketGateway({
   namespace: "chat",
@@ -56,23 +56,15 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {}
 
   @UseGuards(ChatAuthGuard)
-  async handleDisconnect(client: Socket) {
-    let user: User = (client as any).user;
-    console.log("Client Disconnected!");
-    // for (let [key, value] of this.users.entries()) {
-    //   if (key === user.uid) {
-    //     this.users.delete(key);
-    //     break;
-    //   }
-    // }
+  async handleDisconnect(client: MySocket) {
+    this.users.delete(client?.user?.uid);
   }
 
   async handleConnection(client: Socket) {
     try {
-      console.log("Client Connected!");
       const cookies = cookieParser(client.handshake.headers["cookie"] ?? "");
       const authToken = cookies["token"];
-      if (!authToken) throw new WsException("missing auth-token.");
+      if (!authToken) throw new ForbiddenException("missing auth-token.");
 
       const payload: { email: string } = await this.jwtService.verifyAsync(
         authToken,
@@ -82,14 +74,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const user = await this.prismaService.user.findUnique({
         where: { email: payload.email },
       });
-      if (!user) throw new WsException("User does not exist.");
-      console.log(user);
+      if (!user) throw new ForbiddenException("User does not exist.");
+      (client as MySocket).user = user;
+
       this.users.set(user.uid, client);
-    } catch (err) {
-      console.log(err);
-      let msg = "Something went wrong.";
-      if (err instanceof WsException) msg = err.message;
-      client.emit("error", msg);
+    } catch (error) {
+      if (error instanceof HttpException) client.emit("error", error.message);
+      else client.emit("error", "Error Occured.");
       client.disconnect();
     }
   }
@@ -97,57 +88,114 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage("sendPrivateMessage")
   @UseGuards(ChatAuthGuard)
   async sendMessageToUser(
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: MySocket,
     @MessageBody() data: any
   ) {
-    const to = data.to as string;
+    try {
+      const to = data.to as string;
 
-    const to_client = this.users.get(to);
-    let user: User = (client as any).user;
+      const to_client = this.users.get(to);
 
-    const message = await this.conversationsService.sendMessage(
-      {
-        content: data.message,
-        conversation: data.conversation,
-      },
-      user.uid
-    );
+      let user: User = (client as any).user;
 
-    if (to_client) {
-      to_client.emit("newmessage", message);
+      const message = await this.conversationsService.sendMessage(
+        {
+          content: data.message,
+          conversation: data.conversation,
+        },
+        user.uid
+      );
+
+      if (to_client) {
+        to_client.emit("newmessage", message);
+      }
+
+      client.emit("newmessage", message);
+    } catch (error) {
+      if (error instanceof HttpException) client.emit("error", error.message);
+      else client.emit("error", "Error Occured.");
     }
-    client.emit("newmessage", message);
   }
 
   @SubscribeMessage("joinRoom")
   @UseGuards(ChatAuthGuard)
   async joinRoom(
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: MySocket,
     @MessageBody() data: JoinChannel
   ) {
-    console.log(data);
-    const room = data.conversation as string;
-    client.join(room);
+    try {
+      if (
+        !(await this.conversationsService.userHealthy(
+          data.conversation,
+          client.user.uid
+        ))
+      ) {
+        throw new ForbiddenException("User is not healthy");
+      }
+      const room = data.conversation as string;
+      client.join(room);
+    } catch (error) {
+      if (error instanceof HttpException) client.emit("error", error.message);
+      else client.emit("error", "Error Occured.");
+    }
   }
 
   @SubscribeMessage("sendMessageInRoom")
   @UseGuards(ChatAuthGuard)
   async sendMessageInRoom(
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: MySocket,
     @MessageBody() data: SendRoomMessageDto
   ) {
-    console.log(data);
-    const room = data.conversation as string;
-    let user: User = (client as any).user;
-    const message = await this.conversationsService.sendMessage(
-      {
-        content: data.message,
-        conversation: data.conversation,
-      },
-      user.uid
-    );
-    client.emit("newmessageingroup", message);
-    client.to(room).emit("newmessageingroup", message);
+    try {
+      const room = data.conversation as string;
+      let user: User = (client as any).user;
+      if (
+        !(await this.conversationsService.userHealthy(
+          data.conversation,
+          client.user.uid
+        ))
+      ) {
+        throw new ForbiddenException("User is not healthy");
+      }
+
+      const message = await this.conversationsService.sendMessage(
+        {
+          content: data.message,
+          conversation: data.conversation,
+        },
+        user.uid
+      );
+      client.emit("newmessageingroup", message);
+      client.to(room).emit("newmessageingroup", message);
+    } catch (error) {
+      if (error instanceof HttpException) client.emit("error", error.message);
+      else client.emit("error", "Error Occured.");
+    }
+  }
+
+  @SubscribeMessage("removeUserFromRoom")
+  @UseGuards(ChatAuthGuard)
+  async removeUserFromRoom(
+    @ConnectedSocket() client: MySocket,
+    @MessageBody("uid") uid: string,
+    @MessageBody("conversation") conversation: string
+  ) {
+    try {
+      const room = conversation;
+      if (
+        !(await this.conversationsService.isAdmin(
+          conversation,
+          client.user.uid
+        ))
+      ) {
+        throw new WsException("Your not admin");
+      }
+      const tmp = this.users.get(uid);
+      if (tmp) tmp.leave(room);
+    } catch (error) {
+      if (error instanceof HttpException) client.emit("error", error.message);
+      else client.emit("error", "Error Occured.");
+    }
   }
 
   @SubscribeMessage("leaveRoom")
@@ -155,7 +203,12 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
     @MessageBody() data: JoinChannel
   ) {
-    const room = data.conversation as string;
-    client.leave(room);
+    try {
+      const room = data.conversation as string;
+      client.leave(room);
+    } catch (error) {
+      if (error instanceof HttpException) client.emit("error", error.message);
+      else client.emit("error", "Error Occured.");
+    }
   }
 }
