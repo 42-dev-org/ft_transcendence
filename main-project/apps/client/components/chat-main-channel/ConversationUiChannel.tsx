@@ -401,10 +401,13 @@ export default function ConversationUiChannel({
                 />
                 <div className="w-full flex flex-col gap-5 h-full">
                   <div className="">
-                    <ChangePasswordPrivetOrDesabled />
+                    {role === "owner" &&
+                      <ChangePasswordPrivetOrDesabled />
+                    }
                   </div>
                   <div>
-                    <ChangeChannelName
+                    {role != "participant" &&
+                      <ChangeChannelName
                       channelName={(infos?.name && infos.name) || "channel"}
                       onSetName={(name: string) =>
                         infosMutation.mutate({
@@ -412,7 +415,8 @@ export default function ConversationUiChannel({
                           name,
                         })
                       }
-                    />
+                      />
+                    }
                   </div>
                   <div className=" h-full">
                     <OptionsListChannel

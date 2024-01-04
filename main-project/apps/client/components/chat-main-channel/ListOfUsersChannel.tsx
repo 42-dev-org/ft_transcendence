@@ -31,23 +31,23 @@ function ListOfUsersChannal(props: Props): JSX.Element {
     mutationFn: api.api().chat.banParticipant,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["get-group-cnv"] });
-      toast("nadi khona ban");
+      toast("Banned successfully");
       props.refetch()
     },
     onError: () => {
-      toast("ghalat azabi");
+      toast("Sorry you don't have the permitions !");
     },
   });
   const adminMutation = useMutation({
-    mutationKey: ["ban-user"],
+    mutationKey: ["add-admin"],
     mutationFn: api.api().chat.addAdmin,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["get-group-cnv"] });
-      toast("nadi khona ban");
+      toast("Set as admin successfully");
       props.refetch()
     },
     onError: () => {
-      toast("ghalat azabi");
+      toast("Sorry you don't have the permitions !");
     },
   });
 

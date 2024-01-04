@@ -76,8 +76,8 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
               key={i}
               setMenuList={
                 props.role === "owner"
-                  ? ["Remove Role Admin", "invite for game"]
-                  : ["invite for game"]
+                  ? ["Remove Role Admin", "Invite Game"]
+                  : ["Invite Game"]
               }
               uid={_.uid}
               conversation={props.conversation}
@@ -100,8 +100,8 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
               conversation={props.conversation}
               setMenuList={
                 props.role === "admin" || props.role === "owner"
-                  ? ["Unmuted", "invite for a game"]
-                  : ["invite for a game"]
+                  ? ["Unmuted", "Invite Game"]
+                  : ["Invite Game"]
               }
             />
           ))}
@@ -123,7 +123,7 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
               setMenuList={
                 props.role === "admin" || props.role === "owner"
                   ? ["Unbaned"]
-                  : []
+                  : ["Invite Game"]
               }
               conversation={props.conversation}
             />
