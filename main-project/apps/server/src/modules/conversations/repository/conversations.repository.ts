@@ -114,17 +114,18 @@ export class ConversationsRepository {
 
   public async findMeAll(uid: string, type: $Enums.ConversationTypes) {
     if (type === "Group") {
-      return this.prisma.conversation.findMany({
+      const joined = await this.prisma.conversation.findMany({
         where: {
           OR: [
             {
-              visibility: {
-                not: "Private",
+              participants: {
+                some: {
+                  uid,
+                },
               },
             },
             {
-              visibility: { equals: "Private" },
-              participants: {
+              ban: {
                 some: {
                   uid,
                 },
@@ -155,6 +156,55 @@ export class ConversationsRepository {
           },
         },
       });
+      const open = await this.prisma.conversation.findMany({
+        where: {
+          AND: [
+            {
+              participants: {
+                none: {
+                  uid,
+                },
+              },
+            },
+            {
+              ban: {
+                none: {
+                  uid,
+                },
+              },
+            },
+            {
+              visibility: {
+                not: "Private",
+              },
+            },
+          ],
+        },
+        select: {
+          name: true,
+          profileImage: true,
+          uid: true,
+          messages: {
+            orderBy: {
+              createdAt: "asc",
+            },
+            take: 1,
+            select: {
+              sender: {
+                select: {
+                  uid: true,
+                  login: true,
+                  profileImage: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      return {
+        public: open,
+        my: joined,
+      };
     } else if (type === "Single") {
       return this.prisma.conversation.findMany({
         where: {
@@ -362,7 +412,7 @@ export class ConversationsRepository {
         },
       });
     } else if (type === "Single") {
-      return this.prisma.conversation.findUnique({
+      const conversation = await this.prisma.conversation.findUnique({
         where: {
           uid,
           type: "Single",
@@ -386,7 +436,52 @@ export class ConversationsRepository {
           },
         },
       });
+
+      if (
+        conversation &&
+        (await this.prisma.friend.findFirst({
+          where: {
+            OR: [
+              { user1uid: user, user2uid: conversation.participants[0].uid },
+              { user2uid: user, user1uid: conversation.participants[0].uid },
+            ],
+            status: "Banned",
+          },
+        }))
+      ) {
+        throw new ForbiddenException();
+      }
+      return conversation;
     }
+  }
+
+  public async getOne(uid: string, user: string) {
+    return this.prisma.conversation.findUnique({
+      where: {
+        uid,
+        participants: {
+          some: {
+            uid: user,
+          },
+        },
+      },
+      include: {
+        participants: true,
+      },
+    });
+  }
+
+  public async isSingleChatHealthy(uid: string, user: string) {
+    const friend = await this.prisma.friend.findFirst({
+      where: {
+        OR: [
+          { user1uid: user, user2uid: uid },
+          { user2uid: user, user1uid: uid },
+        ],
+        status: "Banned",
+      },
+    });
+    return !friend;
   }
 
   public async protect(cnv: string, password: string) {

@@ -36,7 +36,7 @@ export default function GenerateTimeMuted({
       queryClient.invalidateQueries({queryKey: ['get-group-cnv']})
       toast('nadi a zabi')
       setIsAddOpenChannelModal(false)
-      refetch
+      refetch()
     },
     onError: () => {
       toast('ghalat azabi')

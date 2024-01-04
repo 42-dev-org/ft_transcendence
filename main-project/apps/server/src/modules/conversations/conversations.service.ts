@@ -1,4 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from "@nestjs/common";
 import { CreateConversationDto } from "./dto/create-conversation.dto";
 import {
   ProtectChannel,
@@ -20,6 +24,17 @@ export class ConversationsService {
   ) {}
 
   async sendMessage(dto: CreateMessageDto, uid: string) {
+    const cnv = await this.repository.getOne(dto.conversation, uid);
+    if (cnv.type === "Single") {
+      const user1 = cnv.participants[0].uid;
+      const user2 = cnv.participants[2].uid;
+      const ban = await this.isSingleChatHealthy(user1, user2);
+      if (ban) throw new ForbiddenException();
+    } else {
+      if (!(await this.userHealthy(dto.conversation, uid))) {
+        throw new ForbiddenException();
+      }
+    }
     return this.messages.create(dto, uid);
   }
 
@@ -41,6 +56,10 @@ export class ConversationsService {
 
   async conversationType(uid: string) {
     return this.repository.conversationType(uid);
+  }
+
+  async isSingleChatHealthy(uid: string, user: string) {
+    return this.repository.isSingleChatHealthy(uid, user);
   }
 
   async userHealthy(uid: string, user: string) {

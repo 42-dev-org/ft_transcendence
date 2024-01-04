@@ -1,4 +1,4 @@
-import * as Joi from 'joi';
+import * as Joi from "joi";
 
 /***
  * @description set the required env vars for server to dire properly
@@ -11,10 +11,14 @@ export const validationSchema = Joi.object({
   // DATABASE_NAME: Joi.string().required(),
   // DATABASE_SCHEMA: Joi.string().required(),
   // SERVER VARS
+  S3ACCESSKEY: Joi.string(),
+  S3REGION: Joi.string(),
+  S3BUCKET: Joi.string(),
+  S3SECRETKEY: Joi.string(),
   PORT: Joi.number().required(),
-  NODE_ENV: Joi.string().valid('development', 'production'),
+  NODE_ENV: Joi.string().valid("development", "production"),
   // LOGGER MODE
-  LOG_MODE: Joi.string().valid('dev', 'combined', 'long', 'short'),
+  LOG_MODE: Joi.string().valid("dev", "combined", "long", "short"),
   // JWT VARS
   JWT_SECRET_TOKEN: Joi.string().required().min(10).max(2048),
   JWT_TOKEN_EXPIRES_DATE: Joi.string().required(),

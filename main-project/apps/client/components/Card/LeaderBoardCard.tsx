@@ -13,16 +13,16 @@ import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 type usersLeaderBoardProrps = {
   name: string;
   url: string;
-  kay: number
+  points: number
 }
 
 
-function LeaderBoardCard({ name, url, kay }: usersLeaderBoardProrps) {
+function LeaderBoardCard({ name, url, points }: usersLeaderBoardProrps) {
 
   const [tag, setTag] = useState<string | StaticImport | number>(First);
 
   const getAssets = () => {
-    switch (kay) {
+    switch (points) {
       case 0: {
         return First
       }
@@ -45,7 +45,7 @@ function LeaderBoardCard({ name, url, kay }: usersLeaderBoardProrps) {
         {name}
       </Link>
       {
-        kay < 3 &&
+        points < 3 &&
         <div className='flex justify-end items-start mr-2'>
           <Image width={40} height={30} className='flex justify-end' src={getAssets()} alt='icon' ></Image>
         </div>

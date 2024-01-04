@@ -39,6 +39,7 @@ export class UsersController {
       case "Accepted":
         return { data: await this.usersService.getFriends(uid) };
       case "Banned":
+        return {data: await this.usersService.getBanned(uid)}
         break;
       case "Pending":
         return { data: await this.usersService.getAllInvitations(uid) };
@@ -56,7 +57,6 @@ export class UsersController {
   @Get("all")
   @UseGuards(AuthGuard())
   async giveMeAllUsers(@GetUser() { uid }: User) {
-    console.log(uid)
     return this.usersService.findMeAll(uid);
   }
 
@@ -69,7 +69,7 @@ export class UsersController {
   @Get("me")
   @UseGuards(AuthGuard())
   findMe(@GetUser() { uid }: User, @Req() req: Request) {
-    return this.usersService.findOne(uid);
+    return this.usersService.findOne(uid, uid);
   }
 
   @Post(":uid/add")
@@ -109,8 +109,8 @@ export class UsersController {
 
   @Get(":uid")
   @UseGuards(AuthGuard())
-  findOne(@Param("uid") uid: string) {
-    return this.usersService.findOne(uid);
+  findOne(@Param("uid") uid: string, @GetUser() {uid: user}: User) {
+    return this.usersService.findOne(uid, user);
   }
 
   @Patch(":uid")
@@ -131,9 +131,9 @@ export class UsersController {
     return this.usersService.remove(uid);
   }
 
-  @Patch("me")
+  @Post("me")
   @UseGuards(AuthGuard())
-  updateMe(@GetUser() { uid }: User, dto: UpdateUserDto) {
+  updateMe(@GetUser() { uid }: User, @Body() dto: UpdateUserDto) {
     return this.usersService.update(uid, { ...dto });
   }
 

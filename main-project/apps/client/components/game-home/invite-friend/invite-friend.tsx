@@ -31,12 +31,15 @@ const InviteFriend = () => {
       setFriendsData(d.data.data);
     },
   });
-  // searchMutation.mutate('');
 
-  useEffect(() => {
-    // Call searchMutation.mutate() when the component mounts
-    searchMutation.mutate(search);
-  }, [searchMutation, search]);
+
+  const handleOnClick = () => {
+    if (search !== "") {
+      searchMutation.mutate(search);
+    }
+    // searchMutation.mutate(currentSearch);
+  };
+  
 
   //   const handleMore = () => {
   //     setFriendsData(friends.slice(0, end + 10));
@@ -51,6 +54,7 @@ const InviteFriend = () => {
             setFriendsData={setFriendsData}
             setSearch={setSearch}
             Search={search}
+            handleOnClick={handleOnClick}
           />
           <ul className="w-full flex flex-col justify-start items-center pt-5 gap-4 overflow-y-auto h-[300px] p-4">
             {friendsData

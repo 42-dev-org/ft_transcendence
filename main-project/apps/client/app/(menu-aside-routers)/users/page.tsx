@@ -9,6 +9,7 @@ import InvitationsCard from "../../../components/Card/InvitationsCard";
 import withAuth from "../../../hoc/auth";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../../../api";
+import useReflection from "@/hooks/useReflection";
 
 type ComponeetType = "search" | "friends" | "invitations" | "blocked";
 type paramsdata = "Accepted" | "Pending" | "Banned";
@@ -31,7 +32,7 @@ function Users(): JSX.Element {
       : componenet === "invitations"
         ? "Pending"
         : componenet === "blocked"
-          ? "banned"
+          ? "Banned"
           : undefined;
 
   const usersQuery = useQuery({
@@ -43,17 +44,23 @@ function Users(): JSX.Element {
     staleTime: 0,
   });
 
+  const {reflector} = useReflection()
+
+  if (usersQuery.isLoading) {
+    reflector({type: 'loading', isLoading: true, payload: null})
+  } else {
+    reflector({type: 'loading', isLoading: false, payload: null})
+  }
+
   useEffect(() => {
-    if (usersQuery.isFetched && usersQuery.data && usersQuery.data.data) {
-      console.log("------------------------------------------------");
-      console.log("------------------------------------------------");
-      console.log(usersQuery.data.data.data.data);
-      console.log("------------------------------------------------");
-      console.log("------------------------------------------------");
-      console.log("------------------------------------------------");
-      setData(usersQuery.data?.data?.data);
+    if (usersQuery.isSuccess && usersQuery.data && usersQuery.data.data) {
+      setData(
+        componenet === "blocked"
+          ? usersQuery.data?.data?.data.map((user: any) => user.user2)
+          : usersQuery.data?.data?.data
+      );
     }
-  }, [usersQuery.data, usersQuery.isFetched]);
+  }, [usersQuery.data, usersQuery.isSuccess]);
 
   const searchMutation = useMutation({
     mutationKey: ["search-mutation"],
@@ -63,12 +70,16 @@ function Users(): JSX.Element {
     },
   });
 
+  if (searchMutation.isPending) {
+    reflector({type: 'loading', isLoading: true, payload: null})
+  } else {
+    reflector({type: 'loading', isLoading: false, payload: null})
+  }
+
   useEffect(() => {
     if (componenet === "search") searchMutation.mutate(searchString);
     else usersQuery.refetch();
-  }, [componenet, searchMutation, searchString, usersQuery]);
-
-  console.log(searchMutation.data?.data);
+  }, [componenet, searchString, searchMutation.mutate, usersQuery.refetch]);
 
   const render = () => {
     if (componenet === "blocked") {
@@ -79,7 +90,7 @@ function Users(): JSX.Element {
               <BannedCArd
                 {...user}
                 key={idx}
-                // refetch={usersQuery.refetch} TODO: fix banned logic
+                refetch={usersQuery.refetch} // TODO: fix banned logic
               />
             ))}
         </div>

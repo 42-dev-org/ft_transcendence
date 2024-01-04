@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   ConflictException,
   ForbiddenException,
   Injectable,
@@ -9,10 +8,6 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 import { UsersRepository } from "./repository/users.repository";
 import { MediaService } from "src/global/media/providers/media.service";
 import { MediaFile } from "src/shared/types/media";
-import { $Enums, Prisma } from "db";
-import { getPaginationQuery } from "src/helpers/funcs/pagination.helper";
-import { PaginationDto } from "src/helpers/dto/pagination.dto";
-import { getPaginationResponse } from "../../helpers/funcs/pagination.helper";
 
 @Injectable()
 export class UsersService {
@@ -20,6 +15,10 @@ export class UsersService {
     private readonly repository: UsersRepository,
     private readonly media: MediaService
   ) {}
+
+  async getBanned(uid: string) {
+    return this.repository.getBanned(uid);
+  }
 
   async friendsLeaderboard(user: string) {
     const friends = await this.repository.friendsLeaderborad(user);
@@ -32,15 +31,16 @@ export class UsersService {
   }
 
   findMeAll(uid: string) {
-    return this.repository.findMeAll(uid)
+    return this.repository.findMeAll(uid);
   }
 
-  findOne(id: string) {
-    return this.repository.findOne(id);
+  findOne(id: string, user?: string) {
+    return this.repository.findOne(id, user);
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
     const { lastName, firstName, login } = updateUserDto;
+    console.log(updateUserDto)
     return this.repository.updateOne({ lastName, firstName, login }, id);
   }
 
@@ -64,19 +64,21 @@ export class UsersService {
   async addFriend(uid: string, user: string) {
     const friendship = await this.repository.getFriendship(uid, user);
     if (friendship) throw new ConflictException();
+
     return this.repository.addFriend(uid, user);
   }
 
   async ban(uid: string, user: string) {
     const friendship = await this.repository.getFriendship(uid, user);
-
-    if (!friendship) throw new NotFoundException();
-
-    if (friendship.status === "Banned") {
+    if (friendship && friendship.status === "Banned") {
       throw new ConflictException();
     }
 
-    this.repository.ban(friendship.uid, user);
+    if (friendship) {
+      await this.repository.removeFriend(uid, user)
+    }
+    
+    return this.repository.createbanned(uid, user);
   }
 
   async unban(uid: string, user: string) {
@@ -87,10 +89,9 @@ export class UsersService {
     if (friendship.status !== "Banned") {
       throw new ConflictException();
     }
-
     if (friendship.bannedBy !== user) throw new ForbiddenException();
 
-    this.repository.unban(friendship.uid);
+    return this.repository.unban(friendship.uid);
   }
 
   async searchForUser(search: string, user: string) {
@@ -113,7 +114,7 @@ export class UsersService {
   }
 
   async changeProfilePicture(file: MediaFile, uid: string) {
-    const added_file = await this.media.uploadFile(file, uid);
+    const added_file = await this.media.uploadFile(file, uid, true);
     const data = await this.repository.updateOne(
       {
         profileImage: added_file.url,

@@ -43,7 +43,7 @@ function ListOfBannedChannal(props: usersInChannal): JSX.Element {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["get-group-cnv"] });
       toast("nadi tle9o sra7k");
-      props.refetch;
+      props.refetch();
     },
     onError: () => {
       toast("ghalat azabi");
