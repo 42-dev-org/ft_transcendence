@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import type { StaticImageData } from "next/image";
 import Image from "next/image";
 import MenuItem from "../Menu-chat";
@@ -29,8 +29,6 @@ interface MESSAGE {
 }
 export default function ConversationUi({
   uid,
-  fullName,
-  image,
   status,
   close,
 }: PropsType): JSX.Element {
@@ -42,24 +40,35 @@ export default function ConversationUi({
   });
   const { reflector } = useReflection();
 
-  if (query.isLoading || query.isFetching || query.isPending) {
-    reflector({ type: "loading", isLoading: true, payload: null });
-  }
   const [msg, setMsg] = useState("");
   const msgRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<MESSAGE[]>([]);
+  useEffect(() => {
+    if (query.isLoading) {
+      reflector({ type: "loading", isLoading: true, payload: null });
+    } else {
+      reflector({ type: "loading", isLoading: false, payload: null });
+    }
+  }, [query.isLoading]);
+
   useEffect(() => {
     if (query.isError) {
       toast.error("error");
       close();
       return;
-      reflector({ type: "loading", isLoading: false, payload: null });
     }
     if (query.isSuccess) {
-      reflector({ type: "loading", isLoading: false, payload: null });
       setMessages(query.data?.data.data.messages);
     }
-  }, [query.isSuccess, query.data, query.isError, close]);
+  }, [
+    query.isSuccess,
+    query.data,
+    query.isError,
+    close,
+    query.isLoading,
+    query.isFetching,
+    query.isPending,
+  ]);
 
   const onSetMessage = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -98,18 +107,20 @@ export default function ConversationUi({
     onSuccess: () => {
       close();
       toast.done("done");
+      reflector({ type: "loading", isLoading: false, payload: null });
     },
     onError: () => {
+      reflector({ type: "loading", isLoading: false, payload: null });
       toast.error("sir tqwed");
       close();
     },
   });
 
-  if (banMutation.isPending) {
-    reflector({ type: "loading", isLoading: true, payload: null });
-  } else {
-    reflector({ type: "loading", isLoading: false, payload: null });
-  }
+  useEffect(() => {
+    if (banMutation.isPending) {
+      reflector({ type: "loading", isLoading: true, payload: null });
+    }
+  }, [banMutation.isPending, reflector]);
 
   return (
     <div className="w-2/3 flex justify-center p-2 h-full">

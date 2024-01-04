@@ -40,7 +40,7 @@ function ListOfMutedChannal(props: usersInChannal): JSX.Element {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["get-group-cnv"] });
       toast("safi hder azabi");
-      props.refetch;
+      props.refetch();
     },
     onError: () => {
       toast("ghalat azabi");

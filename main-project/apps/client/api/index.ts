@@ -64,6 +64,7 @@ class Api {
       logout: () => this.httpClient.get("/auth/logout"),
     },
     chat: {
+      leaveGroup: (uid: string) => this.httpClient.post("/conversations/left", { conversation: uid }),
       create: (conf: {
         type?: keyof typeof ConversationTypes;
         password?: string;

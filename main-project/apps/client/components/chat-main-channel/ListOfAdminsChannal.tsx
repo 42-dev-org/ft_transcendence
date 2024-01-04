@@ -40,7 +40,7 @@ function ListOfAdminsChannal(props: usersInChannal): JSX.Element {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["get-group-cnv"] });
       toast("nadi a zabi");
-      props.refetch;
+      props.refetch();
     },
     onError: () => {
       toast("ghalat azabi");

@@ -1,9 +1,19 @@
 "use client";
+import { api } from "@/api";
 import { useAppSelector } from "@/store/store";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
+import { toast } from "react-toastify";
 
 export default function Wrapper() {
   const relection = useAppSelector((s) => s.reflection.LoadingPage);
+  useEffect(() => {
+    api.io().on("error", (msg: string) => {
+      toast.error(msg);
+    });
+    return () => {
+      api.io().off("error");
+    };
+  }, []);
   return (
     <div>
       {relection.isLoading ? (
