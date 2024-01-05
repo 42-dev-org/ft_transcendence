@@ -22,6 +22,11 @@ export class UnMutUserDto {
   conversation: string;
 }
 
+export class JoinChat {
+  conversation: string;
+  password?: string;
+}
+
 export class ProtectChannel {
   password: string;
   conversation: string;

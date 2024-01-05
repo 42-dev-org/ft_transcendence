@@ -4,6 +4,7 @@ import ListOfBannedChannal from "./ListOfBannedChannal";
 import ListOfMutedChannal from "./ListOfMutedChannal";
 import ListOfAdminsChannal from "./ListOfAdminsChannal";
 import { Mut, User, UsersWithRole, ViewerRole } from "./ConversationUiChannel";
+import ListOfOwnersChannal from "./ListOfOwnersChannel";
 
 type SelecterType = "participants"  | "admins" | "muted" | "banned" | 'owner';
 
@@ -49,7 +50,7 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
       return (
         <div className="flex flex-col justify-center items-center w-full ">
           {props.owners.map((_, i) => (
-            <ListOfUsersChannal
+            <ListOfOwnersChannal
               refetch={props.refetch}
               setshowOpstions={props.setshowOpstions}
               name={_.firstName + " " + _.lastName}
@@ -75,8 +76,8 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
               key={i}
               setMenuList={
                 props.role === "owner"
-                  ? ["Remove Role Admin", "invite for game"]
-                  : ["invite for game"]
+                  ? ["Remove Role Admin", "Invite Game"]
+                  : ["Invite Game"]
               }
               uid={_.uid}
               conversation={props.conversation}
@@ -99,8 +100,8 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
               conversation={props.conversation}
               setMenuList={
                 props.role === "admin" || props.role === "owner"
-                  ? ["Unmuted", "invite for a game"]
-                  : ["invite for a game"]
+                  ? ["Unmuted", "Invite Game"]
+                  : ["Invite Game"]
               }
             />
           ))}
@@ -122,7 +123,7 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
               setMenuList={
                 props.role === "admin" || props.role === "owner"
                   ? ["Unbaned"]
-                  : []
+                  : ["Invite Game"]
               }
               conversation={props.conversation}
             />

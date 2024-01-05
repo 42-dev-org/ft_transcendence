@@ -4,7 +4,7 @@ import { Manager, type Socket } from "socket.io-client";
 import axios from "axios";
 import { constants } from "../constants/contsnts";
 import { exampleLib } from "../lib/api/example/index";
-import { log } from 'console';
+import { log } from "console";
 
 const ConversationTypes = {
   Group: "Group",
@@ -64,7 +64,8 @@ class Api {
       logout: () => this.httpClient.get("/auth/logout"),
     },
     chat: {
-      leaveGroup: (uid: string) => this.httpClient.post("/conversations/left", { conversation: uid }),
+      leaveGroup: (uid: string) =>
+        this.httpClient.post("/conversations/left", { conversation: uid }),
       create: (conf: {
         type?: keyof typeof ConversationTypes;
         password?: string;
@@ -115,6 +116,11 @@ class Api {
         this.httpClient.patch("/conversations/" + cnf.conversation, {
           name: cnf.name,
         }),
+      joinChannel: (conversation: string, password?: string) =>
+        this.httpClient.patch("/conversations/join", {
+          conversation,
+          password,
+        }),
     },
     users: {
       ban: (uid: string) => this.httpClient.post(`/users/${uid}/ban`),
@@ -147,7 +153,7 @@ class Api {
         return this.httpClient.post("/users/me", {
           ...form,
         });
-      }
+      },
     },
     otp: {
       getImage: () => this.httpClient.get("/auth/otp"),

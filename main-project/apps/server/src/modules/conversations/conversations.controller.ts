@@ -17,6 +17,7 @@ import {
 import { ConversationsService } from "./conversations.service";
 import { CreateConversationDto } from "./dto/create-conversation.dto";
 import {
+  JoinChat,
   MutUserDto,
   ProtectChannel,
   UnMutUserDto,
@@ -191,6 +192,16 @@ export class ConversationsController {
       type
     );
     return cnv;
+  }
+
+  @Patch('join')
+  @UseGuards(AuthGuard())
+  joinMe(
+    @GetUser() {uid}: User,
+    @Body() joinDto: JoinChat
+  ) {
+    console.log(joinDto)
+    return this.conversationsService.joinMe(uid, joinDto);
   }
 
   @Patch(":id")
