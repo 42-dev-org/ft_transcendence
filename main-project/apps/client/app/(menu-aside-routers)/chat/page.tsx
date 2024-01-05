@@ -98,6 +98,8 @@ export interface Conversation {
   owner: User;
   uid: string;
   messages: Message[];
+  exist: boolean;
+  visibility: "Public" | "Private" | "Protected";
 }
 
 const Chat = () => {
@@ -113,6 +115,11 @@ const Chat = () => {
   const [conversationType, setConversationType] = useState("");
   const [componenetChannelModal, setcomponenetChannelModal] =
     useState("public");
+  const [joinIsOpen, setjoinIsOpen] = useState<{
+    isOpen: boolean;
+    type: "protected" | "public" | null;
+    uid: string | null;
+  }>({ isOpen: false, type: null, uid: null });
 
   const usersQuery = useQuery({
     queryKey: ["all-users"],
@@ -212,6 +219,9 @@ const Chat = () => {
             {conversationQuery.isSuccess &&
               cnv.map((ch, idx) => (
                 <ChannelsChat
+                  join={setjoinIsOpen}
+                  visibility={ch.visibility}
+                  exists={ch.exist}
                   uid={(ch?.uid.length && ch.uid) || ""}
                   onClick={onGroupConversationClicked}
                   time={dataChannels.time}
@@ -271,6 +281,19 @@ const Chat = () => {
     // );
   }, [search]);
 
+  const joinChannel = useMutation({
+    mutationKey: ["join-channel"],
+    mutationFn: api.api().chat.joinChannel,
+    onSuccess: () => {
+      toast("naaadi a zabi");
+      setjoinIsOpen({ isOpen: false, uid: null, type: null });
+      conversationQuery.refetch();
+    },
+    onError: () => {
+      toast.error("ghayrha awlad qahba");
+    },
+  });
+
   if (conversationQuery.isSuccess) {
     console.log(cnv);
   }
@@ -286,6 +309,21 @@ const Chat = () => {
   const onCloseAddChannelModal = () => setIsAddOpenChannelModal(false);
   return (
     <Fragment>
+      <ModalUI
+        open={joinIsOpen.isOpen}
+        onClose={() => setjoinIsOpen({ type: null, isOpen: false, uid: null })}
+        title="join"
+      >
+        {joinIsOpen.type === "protected" ? (
+          <input className="text-lg text-white" />
+        ) : null}
+        <button
+          className="text-white text-lg"
+          onClick={() => joinChannel.mutate(joinIsOpen.uid!)}
+        >
+          join
+        </button>
+      </ModalUI>
       <ModalUI
         open={isAddOpen}
         onClose={onCloseAddModal}

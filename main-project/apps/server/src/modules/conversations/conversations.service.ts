@@ -1,10 +1,13 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
 } from "@nestjs/common";
 import { CreateConversationDto } from "./dto/create-conversation.dto";
 import {
+  JoinChat,
   ProtectChannel,
   UnProtectChannel,
   UpdateConversationDto,
@@ -22,6 +25,23 @@ export class ConversationsService {
     private readonly repository: ConversationsRepository,
     private readonly messages: MessagesService
   ) {}
+
+  async joinMe(uid: string, dto: JoinChat) {
+    const cnv = await this.repository.getConversation(dto.conversation)
+
+    if (!cnv) {
+      throw new NotFoundException()
+    }
+
+    if (cnv.visibility === 'Protected' && !dto.password) {
+      throw new BadRequestException()
+    }
+
+    if (cnv.visibility === 'Private') {
+      throw new ConflictException()
+    }
+    return this.repository.joinMe(uid, dto)
+  }
 
   async sendMessage(dto: CreateMessageDto, uid: string) {
     const cnv = await this.repository.getOne(dto.conversation, uid);
