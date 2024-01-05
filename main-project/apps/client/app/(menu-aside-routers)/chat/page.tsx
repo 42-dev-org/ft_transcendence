@@ -312,17 +312,21 @@ const Chat = () => {
       <ModalUI
         open={joinIsOpen.isOpen}
         onClose={() => setjoinIsOpen({ type: null, isOpen: false, uid: null })}
-        title="join"
+        title="Join channels"
       >
+        <div className=" flex flex-col  justify-center items-center">
+
         {joinIsOpen.type === "protected" ? (
-          <input className="text-lg text-white" />
-        ) : null}
-        <button
-          className="text-white text-lg"
+          <input type="password" placeholder=" set password" className="text-lg text-black mb-1" />
+          ) : null}
+        <Button
+          title="Join"
+          className="text-black text-lg"
           onClick={() => joinChannel.mutate(joinIsOpen.uid!)}
-        >
-          join
-        </button>
+          >
+
+        </Button>
+          </div>
       </ModalUI>
       <ModalUI
         open={isAddOpen}

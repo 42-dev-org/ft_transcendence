@@ -22,6 +22,7 @@ export default function RootLayout({
       <body>
         <StoreProvider>
           <Wrapper></Wrapper>
+          
           {children}
         </StoreProvider>
       </body>

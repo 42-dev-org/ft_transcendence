@@ -1,5 +1,6 @@
 import React from "react";
 import { MdGroups2 } from "react-icons/md";
+import Button from "../Button";
 
 type usersChat = {
   nameChannels: string;
@@ -59,7 +60,7 @@ function ChannelsChat({
       </div>
       {!exists ? (
         visibility === "Protected" ? (
-          <button
+          <Button title="join"   className=" text-black"
             onClick={() =>
               join({
                 isOpen: true,
@@ -68,12 +69,11 @@ function ChannelsChat({
               })
             }
           >
-            join protected
-          </button>
+          </Button>
         ) : (
-          <button onClick={() => join({ isOpen: true, type: "public", uid })}>
-            join public
-          </button>
+          <Button title="join"  className=" text-black" onClick={() => join({ isOpen: true, type: "public", uid })}>
+
+          </Button>
         )
       ) : null}
     </>
