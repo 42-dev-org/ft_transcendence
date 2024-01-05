@@ -151,6 +151,7 @@ const Chat = () => {
         .api()
         .chat.getConversations(queryKey[1] == "users" ? "single" : "group"),
   });
+  console.log("my data: ", conversationQuery)
 
   useEffect(() => {
     if (conversationQuery.isFetched) {
@@ -290,7 +291,7 @@ const Chat = () => {
       <ModalUI
         open={isAddOpenChannelModal}
         onClose={onCloseAddChannelModal}
-        title="add Conversation"
+        title="add Channels"
       >
         <div className="flex justify-center items-center p-3 flex-col  max-h-72 gap-2">
           <div className="flex flex-row">
