@@ -51,6 +51,7 @@ export default function ConversationUi({
       reflector({ type: "loading", isLoading: false, payload: null });
     }
   }, [query.isLoading]);
+  console.log({messages})
 
   useEffect(() => {
     if (query.isError) {
@@ -93,7 +94,6 @@ export default function ConversationUi({
       });
     }
     api.io().on("newmessage", (data: any) => {
-      console.log("ee");
       setMessages((prev) => [...prev, data.data]);
     });
     return () => {
@@ -203,7 +203,7 @@ export default function ConversationUi({
           >
             {messages?.map(({ content, senderUid }, index) => (
               <div
-                className={`w-max max-w-[50%] p-2 flex  rounded-xl break-words${
+                className={`w-max max-w-[50%] p-2 flex  rounded-xl break-words ${
                   senderUid === userUid
                     ? "bg-[#b9ef72] self-end"
                     : "bg-slate-300"
