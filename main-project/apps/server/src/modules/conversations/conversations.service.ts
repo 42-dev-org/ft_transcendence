@@ -27,11 +27,12 @@ export class ConversationsService {
     const cnv = await this.repository.getOne(dto.conversation, uid);
     if (cnv.type === "Single") {
       const user1 = cnv.participants[0].uid;
-      const user2 = cnv.participants[2].uid;
-      const ban = await this.isSingleChatHealthy(user1, user2);
+      const user2 = cnv.participants[1].uid;
+      const ban = !await this.isSingleChatHealthy(user1, user2);
       if (ban) throw new ForbiddenException();
     } else {
       if (!(await this.userHealthy(dto.conversation, uid))) {
+        console.log((await this.userHealthy(dto.conversation, uid)))
         throw new ForbiddenException();
       }
     }

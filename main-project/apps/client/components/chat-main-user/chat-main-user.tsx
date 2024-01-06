@@ -5,7 +5,7 @@ import Image from "next/image";
 import MenuItem from "../Menu-chat";
 import { IoMdMore } from "react-icons/io";
 import Link from "next/link";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "../../api";
 import { useAppSelector } from "../../store/store";
 import { toast } from "react-toastify";
@@ -38,6 +38,7 @@ export default function ConversationUi({
     queryFn: ({ queryKey }) =>
       api.api().chat.getConversation(queryKey[1], "Single"),
   });
+  const queryClient = useQueryClient();
   const { reflector } = useReflection();
 
   const [msg, setMsg] = useState("");
@@ -108,6 +109,7 @@ export default function ConversationUi({
       close();
       toast.done("done");
       reflector({ type: "loading", isLoading: false, payload: null });
+      queryClient.invalidateQueries({ queryKey: ["get-single-cnv-" + uid] });
     },
     onError: () => {
       reflector({ type: "loading", isLoading: false, payload: null });
