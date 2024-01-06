@@ -136,17 +136,20 @@ function UserProfile() {
           <span className="text-white text-xl font-medium whitespace-nowrap">
             <strong className="text-white">{displayName}</strong>
           </span>
+            { query.data?.data.uid !== 
           <div className="flex gap-2 md:flex-row flex-col">
-            <Button
+
+              <Button
               onClick={() => banMutation.mutate(id as string)}
               title="Block"
-            />
+              />
             <Button
-              onClick={() => null}
-              title="Invite to play"
-              className="bg-[#ffffff1a] text-white"
+            onClick={() => null}
+            title="Invite to play"
+            className="bg-[#ffffff1a] text-white"
             />
           </div>
+          }
         </div>
       </div>
       <div className="grid lg:grid-cols-2 mt-4  gap-5 h-full ">

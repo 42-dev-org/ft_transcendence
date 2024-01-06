@@ -466,26 +466,26 @@ const Chat = () => {
             </Button>
           </div>
           <div className="flex   w-full h-12  justify-center gap-2 bg-black items-center ">
-            <div
-              className={`flex w-1/3  h-10 hover:bg-[#1B1B1B] rounded-md  text-white justify-center items-center  ${
+            <Button
+              title="Users"
+              className={`flex w-1/3  h-10  focus:bg-[#1B1B1B] rounded-md  text-black focus:text-white justify-center items-center  ${
                 component === "users"
                   ? " bg-[#1B1B1B] border border-spacing-2 border-[#B2F35F]"
                   : ""
               } `}
               onClick={setComponent.bind(null, "users")}
             >
-              Users
-            </div>
-            <div
-              className={`flex w-1/3  h-10 hover:bg-[#1B1B1B] rounded-md focus:border focus:border-spacing-1 text-white justify-center items-center ${
+            </Button>
+            <Button
+              title="Channels"
+              className={`flex w-1/3  h-10  rounded-md focus:border focus:bg-[#1B1B1B] focus:border-spacing-1 text-black focus:text-white justify-center items-center ${
                 component === "channels"
                   ? " bg-[#1B1B1B] border border-spacing-2 border-[#B2F35F]"
                   : ""
               }`}
               onClick={setComponent.bind(null, "channels")}
             >
-              Channels
-            </div>
+            </Button>
           </div>
           <div className=" overflow-y-auto">{render()}</div>
         </div>

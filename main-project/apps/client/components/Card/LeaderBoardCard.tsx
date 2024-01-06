@@ -13,11 +13,12 @@ import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 type usersLeaderBoardProrps = {
   name: string;
   url: string;
-  points: number
+  points: number;
+  uid: string;
 }
 
 
-function LeaderBoardCard({ name, url, points }: usersLeaderBoardProrps) {
+function LeaderBoardCard({ name, url, points, uid }: usersLeaderBoardProrps) {
 
   const [tag, setTag] = useState<string | StaticImport | number>(First);
 
@@ -41,7 +42,7 @@ function LeaderBoardCard({ name, url, points }: usersLeaderBoardProrps) {
 
         <Image width={35} height={35} className='rounded-full flex items-center w-11 h-11' src={url} alt={name} />
       </div>
-      <Link href='/profile' className='flex whitespace-nowrap items-center hover:underline'>
+      <Link href={`users/${(uid.length && uid) || "uid"}`} className='flex whitespace-nowrap items-center hover:underline'>
         {name}
       </Link>
       {
