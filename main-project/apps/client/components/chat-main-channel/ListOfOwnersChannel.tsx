@@ -22,7 +22,7 @@ type Props = {
   refetch: () => void;
 };
 
-function ListOfUsersChannal(props: Props): JSX.Element {
+function ListOfOwnersChannal(props: Props): JSX.Element {
   const [isAddOpenChannelModal, setIsAddOpenChannelModal] = useState(false);
 
   const queryClient = useQueryClient();
@@ -35,7 +35,7 @@ function ListOfUsersChannal(props: Props): JSX.Element {
       props.refetch()
     },
     onError: () => {
-      toast("Sorry you don't have the permitions !");
+      toast("Sorry you don't have the permitions to ban!");
     },
   });
   const adminMutation = useMutation({
@@ -75,7 +75,7 @@ function ListOfUsersChannal(props: Props): JSX.Element {
         <div className="flex flex-row w-full justify-between items-center">
           <Link
             className="flex flex-row items-center"
-            href={"/users/"+uid}
+            href={"/users/"+uid} /////////////////////////////
             onClick={() => setshowOpstions(false)}
           >
             <div className="px-2">
@@ -99,7 +99,7 @@ function ListOfUsersChannal(props: Props): JSX.Element {
                 <button className=" hover:bg-[#B2F35F] rounded-md flex items-center justify-center">
                   Invite Game
                 </button>
-                {role === "owner" && (
+                {/* {role === "owner" && (
                   <button
                     className=" hover:bg-[#B2F35F] rounded-md flex items-center justify-center"
                     onClick={onActionClicked.bind(
@@ -109,8 +109,8 @@ function ListOfUsersChannal(props: Props): JSX.Element {
                   >
                     Set as Admin
                   </button>
-                )}
-                {(role === "admin" || role === "owner") && (
+                )} */}
+                {/* {(role === "admin" || role === "owner") && (
                   <>
                     <button
                       className=" hover:bg-[#B2F35F] rounded-md flex items-center justify-center"
@@ -131,7 +131,7 @@ function ListOfUsersChannal(props: Props): JSX.Element {
                       Ban
                     </button>
                   </>
-                )}
+                )} */}
               </MenuItem>
             </div>
           </div>
@@ -149,4 +149,4 @@ function ListOfUsersChannal(props: Props): JSX.Element {
   );
 }
 
-export default ListOfUsersChannal;
+export default ListOfOwnersChannal;

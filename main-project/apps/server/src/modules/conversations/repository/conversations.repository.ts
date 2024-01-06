@@ -5,6 +5,7 @@ import {
 } from "@nestjs/common";
 import { Prisma, $Enums } from "db";
 import { PrismaService } from "src/global/prisma/prisma.service";
+import { JoinChat } from "../dto/update-conversation.dto";
 
 @Injectable()
 export class ConversationsRepository {
@@ -139,6 +140,7 @@ export class ConversationsRepository {
           name: true,
           profileImage: true,
           uid: true,
+          visibility: true,
           messages: {
             orderBy: {
               createdAt: "asc",
@@ -183,6 +185,7 @@ export class ConversationsRepository {
         select: {
           name: true,
           profileImage: true,
+          visibility: true,
           uid: true,
           messages: {
             orderBy: {
@@ -453,6 +456,29 @@ export class ConversationsRepository {
       }
       return conversation;
     }
+  }
+
+  async getConversation(uid: string) {
+    return this.prisma.conversation.findUnique({
+      where: {
+        uid,
+      },
+    });
+  }
+
+  public async joinMe(user: string, dto: JoinChat) {
+    return this.prisma.conversation.update({
+      where: {
+        uid: dto.conversation,
+      },
+      data: {
+        participants: {
+          connect: {
+            uid: user,
+          },
+        },
+      },
+    });
   }
 
   public async getOne(uid: string, user: string) {

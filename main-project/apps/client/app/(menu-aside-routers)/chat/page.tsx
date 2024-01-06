@@ -98,6 +98,8 @@ export interface Conversation {
   owner: User;
   uid: string;
   messages: Message[];
+  exist: boolean;
+  visibility: "Public" | "Private" | "Protected";
 }
 
 const Chat = () => {
@@ -113,6 +115,11 @@ const Chat = () => {
   const [conversationType, setConversationType] = useState("");
   const [componenetChannelModal, setcomponenetChannelModal] =
     useState("public");
+  const [joinIsOpen, setjoinIsOpen] = useState<{
+    isOpen: boolean;
+    type: "protected" | "public" | null;
+    uid: string | null;
+  }>({ isOpen: false, type: null, uid: null });
 
   const usersQuery = useQuery({
     queryKey: ["all-users"],
@@ -212,6 +219,9 @@ const Chat = () => {
             {conversationQuery.isSuccess &&
               cnv.map((ch, idx) => (
                 <ChannelsChat
+                  join={setjoinIsOpen}
+                  visibility={ch.visibility}
+                  exists={ch.exist}
                   uid={(ch?.uid.length && ch.uid) || ""}
                   onClick={onGroupConversationClicked}
                   time={dataChannels.time}
@@ -271,6 +281,19 @@ const Chat = () => {
     // );
   }, [search]);
 
+  const joinChannel = useMutation({
+    mutationKey: ["join-channel"],
+    mutationFn: api.api().chat.joinChannel,
+    onSuccess: () => {
+      toast("naaadi a zabi");
+      setjoinIsOpen({ isOpen: false, uid: null, type: null });
+      conversationQuery.refetch();
+    },
+    onError: () => {
+      toast.error("ghayrha awlad qahba");
+    },
+  });
+
   if (conversationQuery.isSuccess) {
     console.log(cnv);
   }
@@ -286,6 +309,25 @@ const Chat = () => {
   const onCloseAddChannelModal = () => setIsAddOpenChannelModal(false);
   return (
     <Fragment>
+      <ModalUI
+        open={joinIsOpen.isOpen}
+        onClose={() => setjoinIsOpen({ type: null, isOpen: false, uid: null })}
+        title="Join channels"
+      >
+        <div className=" flex flex-col  justify-center items-center">
+
+        {joinIsOpen.type === "protected" ? (
+          <input type="password" placeholder=" set password" className="text-lg text-black mb-1" />
+          ) : null}
+        <Button
+          title="Join"
+          className="text-black text-lg"
+          onClick={() => joinChannel.mutate(joinIsOpen.uid!)}
+          >
+
+        </Button>
+          </div>
+      </ModalUI>
       <ModalUI
         open={isAddOpen}
         onClose={onCloseAddModal}
@@ -424,26 +466,26 @@ const Chat = () => {
             </Button>
           </div>
           <div className="flex   w-full h-12  justify-center gap-2 bg-black items-center ">
-            <div
-              className={`flex w-1/3  h-10 hover:bg-[#1B1B1B] rounded-md  text-white justify-center items-center  ${
+            <Button
+              title="Users"
+              className={`flex w-1/3  h-10  focus:bg-[#1B1B1B] rounded-md  text-black focus:text-white justify-center items-center  ${
                 component === "users"
                   ? " bg-[#1B1B1B] border border-spacing-2 border-[#B2F35F]"
                   : ""
               } `}
               onClick={setComponent.bind(null, "users")}
             >
-              Users
-            </div>
-            <div
-              className={`flex w-1/3  h-10 hover:bg-[#1B1B1B] rounded-md focus:border focus:border-spacing-1 text-white justify-center items-center ${
+            </Button>
+            <Button
+              title="Channels"
+              className={`flex w-1/3  h-10  rounded-md focus:border focus:bg-[#1B1B1B] focus:border-spacing-1 text-black focus:text-white justify-center items-center ${
                 component === "channels"
                   ? " bg-[#1B1B1B] border border-spacing-2 border-[#B2F35F]"
                   : ""
               }`}
               onClick={setComponent.bind(null, "channels")}
             >
-              Channels
-            </div>
+            </Button>
           </div>
           <div className=" overflow-y-auto">{render()}</div>
         </div>
@@ -455,7 +497,7 @@ const Chat = () => {
             uid={cnvUid!}
             fullName="mustapha ouarsas"
             image="https://api-prod-minimal-v510.vercel.app/assets/images/avatar/avatar_17.jpg"
-            status="in a game"
+            status="online"
           />
         ) : conversationType === "channels" ? (
           <ConversationUiChannel

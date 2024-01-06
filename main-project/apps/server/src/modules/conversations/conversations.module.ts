@@ -1,8 +1,9 @@
-import { Module } from "@nestjs/common";
+import { MiddlewareConsumer, Module } from "@nestjs/common";
 import { ConversationsService } from "./conversations.service";
 import { ConversationsController } from "./conversations.controller";
 import { ConversationsRepository } from "./repository/conversations.repository";
 import { MessagesModule } from "../messages/messages.module";
+import { UnmutMiddleware } from "./middlewares/unmute.middleware";
 
 @Module({
   imports: [MessagesModule],
@@ -10,4 +11,8 @@ import { MessagesModule } from "../messages/messages.module";
   providers: [ConversationsService, ConversationsRepository],
   exports: [ConversationsService],
 })
-export class ConversationsModule {}
+export class ConversationsModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(UnmutMiddleware).forRoutes("*"); // Apply the middleware to all routes in the module
+  }
+}

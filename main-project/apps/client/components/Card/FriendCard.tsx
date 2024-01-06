@@ -32,7 +32,7 @@ function FriendCard({
     },
   });
   return (
-    <div className="w-full flex rounded-lg border  border-[#B2F35F] overflow-hidden h-72 flex-col ">
+    <div className="w-full flex rounded-lg border  border-[#B2F35F] overflow-hidden  h-72 flex-col ">
       <Image
         // TODO: fix image
         width={480}
@@ -47,16 +47,16 @@ function FriendCard({
         </span>
         <Button
           title="Remove Friend"
-          className="py-1 w-full px-0"
+          className="py-0 w-full px-0"
           onClick={() => sendMutation.mutate((uid.length && uid) || "uid")}
         />
         <Button
-          title="Ban Friend"
-          className="py-1 w-full px-0"
+          title="Block Friend"
+          className="py-0 w-full px-0"
           onClick={() => banMutation.mutate((uid.length && uid) || "uid")}
         />
         <Link
-          className="py-1 w-full text-center bg-[#ffffff1a] rounded-lg text-sm font-medium hover:opacity-70 px-3  text-white"
+          className="py-0 w-full text-center bg-[#ffffff1a] rounded-lg text-sm font-medium hover:opacity-70 px-3  text-white"
           href={`users/${(uid.length && uid) || "uid"}`}
         >
           View Profil

@@ -32,6 +32,7 @@ function Page() {
               name={_.login}
               url={_.profileImage}
               key={idx}
+              uid={_.uid}
               points={idx}
             />
           ))}

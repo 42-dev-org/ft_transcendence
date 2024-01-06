@@ -153,8 +153,6 @@ export default function ConversationUiChannel({
     },
   });
 
-  console.log(usersQuery?.data?.data);
-
   useEffect(() => {
     if (query.isLoading || query.isRefetching) {
       reflector({ type: "loading", isLoading: true, payload: null });
@@ -354,6 +352,7 @@ export default function ConversationUiChannel({
                         msg={content}
                         senderName={sender.firstName + " " + sender.lastName}
                         imageUrl={sender.profileImage}
+                        participant={participants}
                       />
                     )}
                   </Fragment>
@@ -406,10 +405,13 @@ export default function ConversationUiChannel({
                 />
                 <div className="w-full flex flex-col gap-5 h-full">
                   <div className="">
-                    <ChangePasswordPrivetOrDesabled />
+                    {role === "owner" &&
+                      <ChangePasswordPrivetOrDesabled />
+                    }
                   </div>
                   <div>
-                    <ChangeChannelName
+                    {role != "participant" &&
+                      <ChangeChannelName
                       channelName={(infos?.name && infos.name) || "channel"}
                       onSetName={(name: string) =>
                         infosMutation.mutate({
@@ -417,7 +419,8 @@ export default function ConversationUiChannel({
                           name,
                         })
                       }
-                    />
+                      />
+                    }
                   </div>
                   <div className=" h-full">
                     <OptionsListChannel
@@ -479,4 +482,9 @@ mandatory:
 feat:
   - the user can access to other users profile from the mini profile in the chat(navbar) done
 
+
+
+
+
+  fix all the tosts()
 */

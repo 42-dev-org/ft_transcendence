@@ -17,6 +17,7 @@ import {
 import { ConversationsService } from "./conversations.service";
 import { CreateConversationDto } from "./dto/create-conversation.dto";
 import {
+  JoinChat,
   MutUserDto,
   ProtectChannel,
   UnMutUserDto,
@@ -34,6 +35,7 @@ import { IsGuardAdmin } from "./guards/is-admin.guard";
 import { IsOwnerGuard } from "./guards/is-owner.guard";
 import { UserIsHealthyGuard } from "./guards/user-in-conversation.guard";
 import { CreateMessageDto } from "../messages/dto/create-message.dto";
+import { UnmutMiddleware } from "./middlewares/unmute.middleware";
 
 @Controller("conversations")
 export class ConversationsController {
@@ -191,6 +193,16 @@ export class ConversationsController {
       type
     );
     return cnv;
+  }
+
+  @Patch('join')
+  @UseGuards(AuthGuard())
+  joinMe(
+    @GetUser() {uid}: User,
+    @Body() joinDto: JoinChat
+  ) {
+    console.log(joinDto)
+    return this.conversationsService.joinMe(uid, joinDto);
   }
 
   @Patch(":id")
