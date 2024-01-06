@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdGroups2 } from "react-icons/md";
 import Button from "../Button";
 
@@ -31,10 +31,11 @@ function ChannelsChat({
     visibility,
     exists,
   });
+
   return (
     <>
       <div
-        className="flex  relative h-16 w-full bg-black hover:bg-[#1B1B1B]"
+        className="flex items-center  relative h-16 w-full bg-black hover:bg-[#333131]"
         onClick={onClick.bind(null, uid)}
       >
         <div className=" h-14 w-14 rounded-full  bg-[#1B1B1B] px-2 mx-2 flex justify-center items-center text-white">
@@ -46,19 +47,37 @@ function ChannelsChat({
             <span className=" text-[#f8f4f4] text-md font-mono">
               {nameChannels}
             </span>
-            <span className="  text-sm flex justify-star items-center  font-medium text-[#707991]">
+            {/* <span className="  text-sm flex justify-star items-center  font-medium text-[#707991]">
               You:
               {msg}
-            </span>
+            </span> */}
           </div>
           <div className="flex  items-start mt-1">
-            <span className=" text-[#707991]  mt-2 justify-end text-xs">
+          {!exists ? (
+        visibility === "Protected" ? (
+          <Button title="Join"   className=" text-black mr-2"
+            onClick={() =>
+              join({
+                isOpen: true,
+                type: "protected",
+                uid
+              })
+            }
+          >
+          </Button>
+        ) : (
+          <Button title="Join"  className=" text-black mr-2" onClick={() => join({ isOpen: true, type: "public", uid })}>
+
+          </Button>
+        )
+      ) : null}
+            {/* <span className=" text-[#707991]  mt-2 justify-end text-xs">
               {time}
-            </span>
+            </span> */}
           </div>
         </div>
       </div>
-      {!exists ? (
+      {/* {!exists ? (
         visibility === "Protected" ? (
           <Button title="join"   className=" text-black"
             onClick={() =>
@@ -75,7 +94,7 @@ function ChannelsChat({
 
           </Button>
         )
-      ) : null}
+      ) : null} */}
     </>
   );
 }

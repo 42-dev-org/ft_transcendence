@@ -136,7 +136,7 @@ function UserProfile() {
           <span className="text-white text-xl font-medium whitespace-nowrap">
             <strong className="text-white">{displayName}</strong>
           </span>
-            { query.data?.data.uid !== 
+            { query.data?.data.uid !==
           <div className="flex gap-2 md:flex-row flex-col">
 
               <Button
