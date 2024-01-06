@@ -39,22 +39,22 @@ export default function Card({
         alt="profile"
         src={(profileImage.length && profileImage) || "image profile"}
       />
-      <div className="bg-[#1c1e21] w-full h-full space-y-2 flex py-2 px-5 flex-col items-center overflow-y-auto ">
+      <div className="bg-[#1c1e21] w-full h-full space-y-1 flex py-2 px-5 flex-col items-center  ">
         <span className="text-[#e4e6eb] capitalize">
           {(login.length && login) || "login"}
         </span>
         <Button
           title="Add Friend"
-          className="py-1 w-full"
+          className="py-0 w-full"
           onClick={() => sendMutation.mutate((uid.length && uid) || "uid")}
         />
         <Button
-          title="ban Friend"
-          className="py-1 w-full"
+          title="Block User"
+          className="py-0 w-full"
           onClick={() => banMutation.mutate((uid.length && uid) || "uid")}
         />
         <Link
-          className="py-1 w-full text-center bg-[#ffffff1a] rounded-lg text-sm font-medium hover:opacity-70 px-3  text-white"
+          className="py-0 w-full text-center bg-[#ffffff1a] rounded-lg text-sm font-medium hover:opacity-70 px-3  text-white"
           href={`users/${(uid.length && uid) || "uid"}`}
         >
           View Profil
