@@ -75,7 +75,7 @@ function ListOfOwnersChannal(props: Props): JSX.Element {
         <div className="flex flex-row w-full justify-between items-center">
           <Link
             className="flex flex-row items-center"
-            href={"/users/1"} /////////////////////////////
+            href={"/users/"+uid} /////////////////////////////
             onClick={() => setshowOpstions(false)}
           >
             <div className="px-2">

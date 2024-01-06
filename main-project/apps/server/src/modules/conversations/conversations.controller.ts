@@ -35,6 +35,7 @@ import { IsGuardAdmin } from "./guards/is-admin.guard";
 import { IsOwnerGuard } from "./guards/is-owner.guard";
 import { UserIsHealthyGuard } from "./guards/user-in-conversation.guard";
 import { CreateMessageDto } from "../messages/dto/create-message.dto";
+import { UnmutMiddleware } from "./middlewares/unmute.middleware";
 
 @Controller("conversations")
 export class ConversationsController {

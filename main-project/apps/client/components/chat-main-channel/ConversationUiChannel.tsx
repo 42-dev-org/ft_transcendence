@@ -128,8 +128,6 @@ export default function ConversationUiChannel({
     };
   }, [myUid, uid]);
 
-  // href={"/users/" + query.data?.data.data.participants[0].uid}
-
   const usersQuery = useQuery({
     queryKey: ["all-users"],
     enabled: false,
@@ -148,8 +146,6 @@ export default function ConversationUiChannel({
       toast("ghayrha");
     },
   });
-
-  console.log(usersQuery?.data?.data);
 
   useEffect(() => {
     if (query.isLoading || query.isRefetching) {
@@ -349,6 +345,7 @@ export default function ConversationUiChannel({
                         msg={content}
                         senderName={sender.firstName + " " + sender.lastName}
                         imageUrl={sender.profileImage}
+                        participant={participants}
                       />
                     )}
                   </Fragment>
@@ -478,4 +475,9 @@ mandatory:
 feat:
   - the user can access to other users profile from the mini profile in the chat(navbar) done
 
+
+
+
+
+  fix all the tosts()
 */
