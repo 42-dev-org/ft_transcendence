@@ -12,7 +12,7 @@ import { IoIosCloseCircleOutline, IoMdMore } from "react-icons/io";
 import { ChangeChannelName } from "./ChangeChannelName";
 import OptionsListChannel from "./OptionsListChannel";
 import ChangePasswordPrivetOrDesabled from "./ChangePasswordPrivetOrDesabled";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "../../api";
 import { useAppSelector } from "../../store/store";
 import { toast } from "react-toastify";
@@ -128,6 +128,9 @@ export default function ConversationUiChannel({
     };
   }, [myUid, uid]);
 
+  // href={"/users/" + query.data?.data.data.participants[0].uid}
+  const queryClient = useQueryClient();
+
   const usersQuery = useQuery({
     queryKey: ["all-users"],
     enabled: false,
@@ -138,9 +141,12 @@ export default function ConversationUiChannel({
     mutationKey: ["leave-group"],
     mutationFn: api.api().chat.leaveGroup,
     onSuccess: () => {
-      query.refetch()
+      query.refetch();
       toast("nadi");
       close();
+      queryClient.invalidateQueries({
+        queryKey: ["get-group-cnv-" + uid, uid],
+      });
     },
     onError: () => {
       toast("ghayrha");
@@ -221,6 +227,7 @@ export default function ConversationUiChannel({
       toast("ghayrha");
     },
   });
+
   const addparticipantMutations = useMutation({
     mutationKey: ["change-infos"],
     mutationFn: api.api().chat.addParticipant,
