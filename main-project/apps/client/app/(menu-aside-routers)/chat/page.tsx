@@ -158,7 +158,7 @@ const Chat = () => {
     } else {
       reflector({ type: "loading", isLoading: false, payload: null });
     }
-  }, [creationMutation.isPending]);
+  }, [creationMutation.isPending, reflector]);
 
   const conversationQuery = useQuery({
     queryKey: ["get-conversations", component],
@@ -174,7 +174,7 @@ const Chat = () => {
     } else {
       reflector({ type: "loading", isLoading: false, payload: null });
     }
-  }, [usersQuery.isLoading]);
+  }, [usersQuery.isLoading, reflector]);
 
   useEffect(() => {
     if (conversationQuery.isLoading) {
@@ -182,7 +182,7 @@ const Chat = () => {
     } else {
       reflector({ type: "loading", isLoading: false, payload: null });
     }
-  }, [conversationQuery.isLoading]);
+  }, [conversationQuery.isLoading, reflector]);
 
   useEffect(() => {
     if (conversationQuery.isSuccess) {

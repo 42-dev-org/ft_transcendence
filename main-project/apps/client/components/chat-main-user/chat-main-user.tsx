@@ -50,7 +50,7 @@ export default function ConversationUi({
     } else {
       reflector({ type: "loading", isLoading: false, payload: null });
     }
-  }, [query.isLoading]);
+  }, [query.isLoading, reflector]);
   console.log({messages})
 
   useEffect(() => {
