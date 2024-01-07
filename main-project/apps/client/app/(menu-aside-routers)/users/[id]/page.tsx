@@ -124,7 +124,7 @@ function UserProfile() {
           <Image
             width={140}
             height={140}
-            className="rounded-full absolute border-4 border-[#ffffff1a] -top-24 lg:left-0  md:left-[40%] left-[30%]"
+            className="rounded-full absolute inset-0 object-cover  h-36 w-36 border-4 border-[#ffffff1a] -top-24 lg:left-0  md:left-[40%] left-[30%]"
             alt="zakaria"
             src={
               query.data?.data.profileImage ||

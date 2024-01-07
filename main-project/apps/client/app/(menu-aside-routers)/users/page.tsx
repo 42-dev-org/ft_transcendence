@@ -122,7 +122,7 @@ function Users(): JSX.Element {
     }
     if (componenet === "search") {
       return (
-        <div className="grid lg:grid-cols-5 2xl:grid-cols-7  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
+        <div className="grid lg:grid-cols-5 2xl:grid-cols-8  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
           {searchMutation.isSuccess &&
             data.map((user, idx) => (
               <Card
