@@ -103,6 +103,7 @@ export interface Conversation {
 }
 
 const Chat = () => {
+  const [joinPassword, setJoinPassword] = useState("");
   const [cnv, setCnv] = useState<Conversation[]>([]);
   const [cnvUid, setCnvUid] = useState<null | string>(null);
   const [search, setSearch] = useState("");
@@ -124,6 +125,7 @@ const Chat = () => {
   const usersQuery = useQuery({
     queryKey: ["all-users"],
     enabled: false,
+    throwOnError: false,
     // queryFn: api.api().users.allExceptBanned,
     queryFn: async () => {
       return api.api().users.allExceptBanned();
@@ -132,6 +134,7 @@ const Chat = () => {
   const { reflector } = useReflection();
 
   const creationMutation = useMutation({
+    throwOnError: false,
     mutationKey: ["create-chat"],
     onSuccess: () => {
       setIsAddOpenChannelModal(false);
@@ -158,10 +161,11 @@ const Chat = () => {
     } else {
       reflector({ type: "loading", isLoading: false, payload: null });
     }
-  }, [creationMutation.isPending]);
+  }, [creationMutation.isPending, reflector]);
 
   const conversationQuery = useQuery({
     queryKey: ["get-conversations", component],
+    throwOnError: false,
     queryFn: ({ queryKey }) =>
       api
         .api()
@@ -174,7 +178,7 @@ const Chat = () => {
     } else {
       reflector({ type: "loading", isLoading: false, payload: null });
     }
-  }, [usersQuery.isLoading]);
+  }, [usersQuery.isLoading, reflector]);
 
   useEffect(() => {
     if (conversationQuery.isLoading) {
@@ -182,7 +186,7 @@ const Chat = () => {
     } else {
       reflector({ type: "loading", isLoading: false, payload: null });
     }
-  }, [conversationQuery.isLoading]);
+  }, [conversationQuery.isLoading, reflector]);
 
   useEffect(() => {
     if (conversationQuery.isSuccess) {
@@ -236,7 +240,6 @@ const Chat = () => {
       case "users":
         return (
           <>
-            {console.log(conversationQuery)}
             {conversationQuery.isSuccess &&
               cnv.map((userChat, idx) => (
                 <Userschat
@@ -270,7 +273,6 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    console.log(search);
 
     // setCnv(
     //   conversationQuery.isSuccess
@@ -282,6 +284,7 @@ const Chat = () => {
   }, [search]);
 
   const joinChannel = useMutation({
+    throwOnError: false,
     mutationKey: ["join-channel"],
     mutationFn: api.api().chat.joinChannel,
     onSuccess: () => {
@@ -293,10 +296,6 @@ const Chat = () => {
       toast.error("ghayrha awlad qahba");
     },
   });
-
-  if (conversationQuery.isSuccess) {
-    console.log(cnv);
-  }
 
   const mappedData = Array.isArray(usersQuery.data)
     ? usersQuery.data.map((item) => {
@@ -315,18 +314,29 @@ const Chat = () => {
         title="Join channels"
       >
         <div className=" flex flex-col  justify-center items-center">
-
-        {joinIsOpen.type === "protected" ? (
-          <input type="password" placeholder=" set password" className="text-lg text-black mb-1" />
+          {joinIsOpen.type === "protected" ? (
+            <input
+              type="password"
+              placeholder=" set password"
+              className="text-lg text-black mb-1"
+              value={joinPassword}
+              onChange={(e) => setJoinPassword(e.target.value)}
+            />
           ) : null}
-        <Button
-          title="Join"
-          className="text-black text-lg"
-          onClick={() => joinChannel.mutate(joinIsOpen.uid!)}
-          >
-
-        </Button>
-          </div>
+          <Button
+            title="Join"
+            className="text-black text-lg"
+            onClick={() => {
+              joinChannel.mutate(
+                joinIsOpen.uid!,
+                (joinIsOpen.type === "protected"
+                  ? joinPassword
+                  : undefined) as any
+              );
+              setJoinPassword("");
+            }}
+          ></Button>
+        </div>
       </ModalUI>
       <ModalUI
         open={isAddOpen}
@@ -474,8 +484,7 @@ const Chat = () => {
                   : ""
               } `}
               onClick={setComponent.bind(null, "users")}
-            >
-            </Button>
+            ></Button>
             <Button
               title="Channels"
               className={`flex w-1/3  h-10  rounded-md focus:border focus:bg-[#1B1B1B] focus:border-spacing-1 text-black focus:text-white justify-center items-center ${
@@ -484,8 +493,7 @@ const Chat = () => {
                   : ""
               }`}
               onClick={setComponent.bind(null, "channels")}
-            >
-            </Button>
+            ></Button>
           </div>
           <div className=" overflow-y-auto">{render()}</div>
         </div>

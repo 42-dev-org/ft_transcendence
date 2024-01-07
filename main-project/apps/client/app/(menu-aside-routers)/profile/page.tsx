@@ -56,16 +56,15 @@ const dataAchevment = [
 ];
 function MyProfile() {
   const {id} = useParams();
-  console.log(id)
   
   
   
   const query = useQuery({
+    throwOnError: false,
     queryKey: ["get-friend", id],
     queryFn: (meta) => api.api().users.getFriend(meta.queryKey[1] as string),
   });
   
-  if (query.isSuccess) console.log(query.data?.data);
   const  displayName = `${query.data?.data.lastName}   ${query.data?.data.firstName}, ${query.data?.data.login}`
 
   const user = useAppSelector(s => s.user.user)

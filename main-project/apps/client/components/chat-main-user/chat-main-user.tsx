@@ -34,6 +34,7 @@ export default function ConversationUi({
 }: PropsType): JSX.Element {
   const userUid = useAppSelector((s) => s.user.user?.uid);
   const query = useQuery({
+    throwOnError: false,
     queryKey: ["get-single-cnv-" + uid, uid],
     queryFn: ({ queryKey }) =>
       api.api().chat.getConversation(queryKey[1], "Single"),
@@ -50,7 +51,7 @@ export default function ConversationUi({
     } else {
       reflector({ type: "loading", isLoading: false, payload: null });
     }
-  }, [query.isLoading]);
+  }, [query.isLoading, reflector]);
 
   useEffect(() => {
     if (query.isError) {
@@ -93,7 +94,6 @@ export default function ConversationUi({
       });
     }
     api.io().on("newmessage", (data: any) => {
-      console.log("ee");
       setMessages((prev) => [...prev, data.data]);
     });
     return () => {
@@ -103,6 +103,7 @@ export default function ConversationUi({
   }, []);
 
   const banMutation = useMutation({
+    throwOnError: false,
     mutationKey: ["ban-friend"],
     mutationFn: api.api().users.ban,
     onSuccess: () => {
@@ -203,7 +204,7 @@ export default function ConversationUi({
           >
             {messages?.map(({ content, senderUid }, index) => (
               <div
-                className={`w-max max-w-[50%] p-2 flex  rounded-xl break-words${
+                className={`w-max max-w-[50%] p-2 flex  rounded-xl break-words ${
                   senderUid === userUid
                     ? "bg-[#b9ef72] self-end"
                     : "bg-slate-300"

@@ -40,7 +40,6 @@ export class UsersService {
 
   update(id: string, updateUserDto: UpdateUserDto) {
     const { lastName, firstName, login } = updateUserDto;
-    console.log(updateUserDto)
     return this.repository.updateOne({ lastName, firstName, login }, id);
   }
 

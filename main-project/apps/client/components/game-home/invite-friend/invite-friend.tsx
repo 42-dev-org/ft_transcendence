@@ -16,6 +16,7 @@ const InviteFriend = () => {
 
   // roben m problem of useeffect
   const usersQuery = useQuery({
+    throwOnError: false,
     queryFn: (d) => {
       return api.api().users.findAll(d.queryKey[1] as any);
     },
@@ -25,6 +26,7 @@ const InviteFriend = () => {
   });
 
   const searchMutation = useMutation({
+    throwOnError: false,
     mutationKey: ["search-mutation"],
     mutationFn: api.api().users.search,
     onSuccess: (d) => {

@@ -14,17 +14,10 @@ export class MediaService {
     await this.s3.uploadFile(buffer, key);
   }
   public async uploadFile(file: MediaFile, uid: string, deploy = true) {
-    // console.log(key)
-    console.log(file)
     const key = `${file.filetype}-${uid}-${Date.now()}.${file.ext}`;
     if (deploy) {
-      console.log('start deploy')
       const ret = await this.s3.uploadFile(file.buffer, key);
-      console.log(ret)
-      console.log('end deploy')
-
     }
-    console.log(file)
     const data = await this.repository.create({
       mimtype: file.mimetype,
       name: file.originalname,

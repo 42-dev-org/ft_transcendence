@@ -20,6 +20,7 @@ function Settings(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const updateImage = useMutation({
+    throwOnError: false,
     mutationKey: ["update-image"],
     mutationFn: api.api().users.updateProfileImage,
     onSuccess: (data) => {
@@ -32,6 +33,7 @@ function Settings(): JSX.Element {
   });
 
   const changeInfos = useMutation({
+    throwOnError: false,
     mutationKey: ["update-infos"],
     mutationFn: api.api().users.updateInfos,
     onSuccess: (data) => {

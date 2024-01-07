@@ -9,6 +9,7 @@ import useReflection from "@/hooks/useReflection";
 
 function Page() {
   const query = useQuery({
+    throwOnError: false,
     queryFn: api.api().users.leaderBorad,
     queryKey: ["get-with-type", "Accepted"],
   });

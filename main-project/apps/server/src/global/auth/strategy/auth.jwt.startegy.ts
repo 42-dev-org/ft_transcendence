@@ -14,7 +14,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: conf.get<string>('JWT_SECRET_TOKEN'),
       jwtFromRequest:  ExtractJwt.fromExtractors([
         req => {
-          console.log(req.cookies)
           let token = null;
           if (req && req.cookies) {
             token = req.cookies['token'];

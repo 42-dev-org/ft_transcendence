@@ -18,6 +18,7 @@ import { MediaFile } from "src/shared/types/media";
 import { $Enums } from "db";
 import { CreateMessageDto } from "../messages/dto/create-message.dto";
 import { MessagesService } from "../messages/messages.service";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class ConversationsService {
@@ -28,6 +29,7 @@ export class ConversationsService {
 
   async joinMe(uid: string, dto: JoinChat) {
     const cnv = await this.repository.getConversation(dto.conversation)
+
 
     if (!cnv) {
       throw new NotFoundException()
@@ -40,6 +42,14 @@ export class ConversationsService {
     if (cnv.visibility === 'Private') {
       throw new ConflictException()
     }
+
+    if (cnv.visibility === 'Protected') {
+      const match = await bcrypt.compare(dto.password, cnv.password)
+      if (!match) {
+        throw new ForbiddenException()
+      }
+    }
+
     return this.repository.joinMe(uid, dto)
   }
 
@@ -52,7 +62,6 @@ export class ConversationsService {
       if (ban) throw new ForbiddenException();
     } else {
       if (!(await this.userHealthy(dto.conversation, uid))) {
-        console.log((await this.userHealthy(dto.conversation, uid)))
         throw new ForbiddenException();
       }
     }
@@ -152,7 +161,7 @@ export class ConversationsService {
           visibility,
           ...(visibility === "Protected"
             ? {
-                password,
+                password: await bcrypt.hash(password, 10)
               }
             : {}),
         },
