@@ -176,7 +176,7 @@ export default function ConversationUiChannel({
         data.data.participants.filter((p) => {
           return !(
             data.data.admins.find((a) => a.uid === p.uid) ||
-            data.data.owner.uid === p.uid ||
+            data.data.owner?.uid === p.uid ||
             data.data.mut.find((m) => m.user.uid === p.uid) ||
             data.data.ban.find((b) => b.uid === p.uid) ||
             p.uid === myUid
@@ -185,7 +185,7 @@ export default function ConversationUiChannel({
       );
       setMutted(data.data.mut);
       setRole(
-        data.data.owner.uid === myUid
+        data.data.owner?.uid === myUid
           ? "owner"
           : data.data.admins.find((el) => el.uid === myUid)
             ? "admin"
