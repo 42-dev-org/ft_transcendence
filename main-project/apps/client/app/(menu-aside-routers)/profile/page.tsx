@@ -71,7 +71,7 @@ function MyProfile() {
   const user = useAppSelector(s => s.user.user)
 
   return (
-    <div className="  flex flex-col p-4 w-full h-full gap-y-5">
+    <div className="  flex flex-col overflow-y-auto p-4 w-full h-full gap-y-5">
       <div
         className="w-full min-h-[300px] bg-[#ffffff1a] relative rounded-lg"
         style={{
@@ -103,16 +103,16 @@ function MyProfile() {
         </div>
       </div>
       <div className="grid lg:grid-cols-2 mt-4  gap-5  h-full">
-        <div className=" overflow-y-auto h-full flex  flex-col">
-          <h2>History</h2>
+        <div className=" overflow-y-auto overflow-x-hidden h-full flex  flex-col">
+          <h2 className=" ml-2">History</h2>
 
           {[...Array(120)].map((_, idx) => (
             <HistoryCard user1={data} user2={data2} key={idx} />
           ))}
         </div>
-        <div className="overflow-y-auto">
+        <div className="overflow-y-auto overflow-x-hidden">
           <h2>Achivements</h2>
-          <div className="flex overflow-y-auto overscroll-contain  h-full rounded-lg  flex-col  w-full  " style={{ maxHeight: "100%" }}>
+
             {dataAchevment.map((dataAchevment, idx) => (
               <AchevementCard
                 name={dataAchevment.name}
@@ -123,7 +123,6 @@ function MyProfile() {
           </div>
         </div>
       </div>
-    </div>
   );
 }
 

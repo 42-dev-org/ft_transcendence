@@ -108,7 +108,7 @@ function UserProfile() {
   const displayName = `${query.data?.data.lastName}   ${query.data?.data.firstName}, ${query.data?.data.login}`;
 
   return (
-    <div className=" lg:overflow-hidden md:overflow-auto flex flex-col p-4 w-full h-full gap-y-5">
+    <div className="  overflow-y-auto flex flex-col p-4 w-full h-full gap-y-5">
       <div
         className="w-full min-h-[300px] bg-[#ffffff1a] relative rounded-lg"
         style={{
@@ -153,17 +153,15 @@ function UserProfile() {
         </div>
       </div>
       <div className="grid lg:grid-cols-2 mt-4  gap-5 h-full ">
-        <div className="overflow-y-auto max-h-full  flex  gap-4 flex-col">
-          <h2>History</h2>
+        <div className="overflow-y-auto overflow-x-hidden max-h-full  w-full flex  gap-4 flex-col">
+          <h2 className="ml-2">History</h2>
 
           {[...Array(100)].map((_, idx) => (
             <HistoryCard user1={data} user2={data2} key={idx} />
           ))}
         </div>
-        <div className="overflow-y-auto max-h-full gap-3 flex flex-col">
-          {/* <> */}
+        <div className="overflow-y-auto overflow-x-hidden max-h-full gap-3 flex flex-col">
           <h2>Achievements</h2>
-          {/* <div className="grid  h-full rounded-lg  grid-cols-2 gap-5  w-full"> */}
           {dataAchevment.map((dataAchevment, idx) => (
             <AchevementCard
               name={dataAchevment.name}
@@ -171,8 +169,6 @@ function UserProfile() {
               key={idx}
             />
           ))}
-          {/* </div> */}
-          {/* </> */}
         </div>
       </div>
     </div>
