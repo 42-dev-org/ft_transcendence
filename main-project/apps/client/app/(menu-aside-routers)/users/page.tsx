@@ -36,6 +36,7 @@ function Users(): JSX.Element {
           : undefined;
 
   const {refetch, ...usersQuery} = useQuery({
+    throwOnError: false,
     queryFn: (d) => {
       return api.api().users.findAll(d.queryKey[1] as paramsdata);
     },
@@ -63,6 +64,7 @@ function Users(): JSX.Element {
   }, [usersQuery.data, usersQuery.isSuccess, componenet]);
 
   const {mutate, ...searchMutation} = useMutation({
+    throwOnError: false,
     mutationKey: ["search-mutation"],
     mutationFn: api.api().users.search,
     onSuccess: (d) => {

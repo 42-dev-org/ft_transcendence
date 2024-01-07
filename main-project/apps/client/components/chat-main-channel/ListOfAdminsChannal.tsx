@@ -35,6 +35,7 @@ function ListOfAdminsChannal(props: usersInChannal): JSX.Element {
 
   const queryClient = useQueryClient();
   const adminMutation = useMutation({
+    throwOnError: false,
     mutationKey: ["ban-user"],
     mutationFn: api.api().chat.removeAdmin,
     onSuccess: () => {

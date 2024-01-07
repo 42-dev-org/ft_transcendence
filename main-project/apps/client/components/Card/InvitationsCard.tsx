@@ -21,6 +21,7 @@ function InvitationsCard({
   refetch: () => void;
 }) {
   const sendMutation = useMutation({
+    throwOnError: false,
     mutationKey: ["send-invite"],
     mutationFn: api.api().users.acceptFriend,
     onSuccess: refetch,

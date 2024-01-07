@@ -16,13 +16,14 @@ export default function Card({
   uid: string;
   refetch: () => void;
 }) {
-  const queryClinet = useQueryClient();
   const sendMutation = useMutation({
+    throwOnError: false,
     mutationKey: ["send-invite"],
     mutationFn: api.api().users.addFriend,
     onSuccess: refetch,
   });
   const banMutation = useMutation({
+    throwOnError: false,
     mutationKey: ["ban-friend"],
     mutationFn: api.api().users.ban,
     onSuccess: () => {

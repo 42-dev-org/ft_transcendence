@@ -34,6 +34,7 @@ export default function ConversationUi({
 }: PropsType): JSX.Element {
   const userUid = useAppSelector((s) => s.user.user?.uid);
   const query = useQuery({
+    throwOnError: false,
     queryKey: ["get-single-cnv-" + uid, uid],
     queryFn: ({ queryKey }) =>
       api.api().chat.getConversation(queryKey[1], "Single"),
@@ -51,7 +52,6 @@ export default function ConversationUi({
       reflector({ type: "loading", isLoading: false, payload: null });
     }
   }, [query.isLoading, reflector]);
-  console.log({messages})
 
   useEffect(() => {
     if (query.isError) {
@@ -103,6 +103,7 @@ export default function ConversationUi({
   }, []);
 
   const banMutation = useMutation({
+    throwOnError: false,
     mutationKey: ["ban-friend"],
     mutationFn: api.api().users.ban,
     onSuccess: () => {

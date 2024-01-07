@@ -71,6 +71,7 @@ function UserProfile() {
 
   // <usersIDtype, Error>
   const banMutation = useMutation({
+    throwOnError: false,
     mutationKey: ["ban-friend"],
     mutationFn: api.api().users.ban,
     onMutate: () => {
@@ -88,6 +89,7 @@ function UserProfile() {
   });
 
   const query = useQuery({
+    throwOnError: false,
     queryKey: ["get-friend", id],
     queryFn: (meta) => api.api().users.getFriend(meta.queryKey[1] as string),
   });
@@ -102,9 +104,6 @@ function UserProfile() {
   } else {
     ref.reflector({ type: "loading", isLoading: false, payload: null });
   }
-
-  if (query.isSuccess) console.log("my: ", query.data?.data.lastName);
-  else console.log("error: ", query.error);
   const displayName = `${query.data?.data.lastName}   ${query.data?.data.firstName}, ${query.data?.data.login}`;
 
   return (

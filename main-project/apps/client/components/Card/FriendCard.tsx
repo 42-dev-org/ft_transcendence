@@ -17,14 +17,15 @@ function FriendCard({
   refetch: () => void;
 }) {
   const sendMutation = useMutation({
+    throwOnError: false,
     mutationKey: ["remove-friend"],
     mutationFn: api.api().users.removeFriend,
     onSuccess: () => {
-      console.log("test");
       refetch();
     },
   });
   const banMutation = useMutation({
+    throwOnError: false,
     mutationKey: ["ban-friend"],
     mutationFn: api.api().users.ban,
     onSuccess: () => {

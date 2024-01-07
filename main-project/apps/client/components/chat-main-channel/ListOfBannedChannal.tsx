@@ -38,6 +38,7 @@ function ListOfBannedChannal(props: usersInChannal): JSX.Element {
 
   const queryClient = useQueryClient();
   const unbanMutation = useMutation({
+    throwOnError: false,
     mutationKey: ["unban-user"],
     mutationFn: api.api().chat.unbanParticipant,
     onSuccess: () => {

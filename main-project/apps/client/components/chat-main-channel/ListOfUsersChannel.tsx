@@ -27,6 +27,7 @@ function ListOfUsersChannal(props: Props): JSX.Element {
 
   const queryClient = useQueryClient();
   const banMutation = useMutation({
+    throwOnError: false,
     mutationKey: ["ban-user"],
     mutationFn: api.api().chat.banParticipant,
     onSuccess: () => {
@@ -39,6 +40,7 @@ function ListOfUsersChannal(props: Props): JSX.Element {
     },
   });
   const adminMutation = useMutation({
+    throwOnError: false,
     mutationKey: ["add-admin"],
     mutationFn: api.api().chat.addAdmin,
     onSuccess: () => {
