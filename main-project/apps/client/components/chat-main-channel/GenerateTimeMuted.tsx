@@ -25,7 +25,7 @@ export default function GenerateTimeMuted({
 }: Props): JSX.Element {
 
 
-  const [time, setTime] = useState("8h");
+  const [time, setTime] = useState("3minute");
 
   const onCloseAddChannelModal = () => setIsAddOpenChannelModal(false);
   const queryClient = useQueryClient()
@@ -39,7 +39,7 @@ export default function GenerateTimeMuted({
       refetch()
     },
     onError: () => {
-      toast('ghalat azabi')
+      toast("Sorry you don't have the permitions !")
       setIsAddOpenChannelModal(false)
     }
   });

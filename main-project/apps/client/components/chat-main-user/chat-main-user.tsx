@@ -54,7 +54,7 @@ export default function ConversationUi({
 
   useEffect(() => {
     if (query.isError) {
-      toast.error("error");
+      toast.error("Sorry you don't have the permitions !");
       close();
       return;
     }
@@ -113,7 +113,7 @@ export default function ConversationUi({
     },
     onError: () => {
       reflector({ type: "loading", isLoading: false, payload: null });
-      toast.error("sir tqwed");
+      toast.error("Sorry you don't have the permitions !");
       close();
     },
   });
@@ -203,7 +203,7 @@ export default function ConversationUi({
           >
             {messages?.map(({ content, senderUid }, index) => (
               <div
-                className={`w-max max-w-[50%] p-2 flex  rounded-xl break-words${
+                className={`w-max max-w-[50%] p-2 flex  rounded-xl break-words ${
                   senderUid === userUid
                     ? "bg-[#b9ef72] self-end"
                     : "bg-slate-300"

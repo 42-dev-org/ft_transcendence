@@ -154,7 +154,7 @@ export default function ConversationUiChannel({
   });
 
 
-  
+
   useEffect(() => {
     if (query.isLoading || query.isRefetching) {
       reflector({ type: "loading", isLoading: true, payload: null });
@@ -239,7 +239,7 @@ export default function ConversationUiChannel({
       refetch();
     },
     onError: () => {
-      toast("ghayrha");
+      toast("Sorry you don't have the permitions !");
     },
   });
   const deleteparticipantMutations = useMutation({
@@ -251,7 +251,7 @@ export default function ConversationUiChannel({
       refetch();
     },
     onError: () => {
-      toast("ghayrha");
+      toast("Sorry you don't have the permitions !");
     },
   });
 

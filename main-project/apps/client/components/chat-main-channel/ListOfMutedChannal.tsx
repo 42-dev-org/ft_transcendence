@@ -43,7 +43,7 @@ function ListOfMutedChannal(props: usersInChannal): JSX.Element {
       props.refetch();
     },
     onError: () => {
-      toast("ghalat azabi");
+      toast("Sorry you don't have the permitions !");
     },
   });
   const onActionClicked = (action: string) => {
