@@ -7,6 +7,7 @@ import { Prisma, $Enums } from "db";
 import { PrismaService } from "src/global/prisma/prisma.service";
 import { JoinChat } from "../dto/update-conversation.dto";
 
+
 @Injectable()
 export class ConversationsRepository {
   constructor(private readonly prisma: PrismaService) {}

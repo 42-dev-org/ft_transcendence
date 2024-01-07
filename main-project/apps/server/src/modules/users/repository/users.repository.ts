@@ -102,7 +102,6 @@ export class UsersRepository {
         ],
       },
     });
-    console.log(search);
     return getUsers;
   }
 
@@ -271,7 +270,6 @@ export class UsersRepository {
         bannedBy: user
       },
     });
-    console.log(a)
   }
   // work
   async unban(uid: string) {
@@ -282,9 +280,7 @@ export class UsersRepository {
 
   // work
   async getInvitation(uid: string, user: string) {
-    console.log(uid);
-    console.log(user);
-    console.log(await this.prisma.friend.findMany());
+
     return this.prisma.friend.findFirst({
       where: {
         user2uid: user,

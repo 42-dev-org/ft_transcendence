@@ -106,6 +106,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         user.uid
       );
 
+
       if (to_client) {
         to_client.emit("newmessage", message);
       }

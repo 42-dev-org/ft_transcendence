@@ -8,7 +8,6 @@ export class FileValidatorPipe implements PipeTransform {
     if (!value || !value.buffer) return value;
 
     const files = this.conf.get<MediaConfig>('MediaConfig').FILES;
-    // console.log(files);
     const mimetypes = [...files.keys()];
 
     if (!mimetypes.includes(value.mimetype)) {
