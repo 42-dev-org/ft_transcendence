@@ -25,7 +25,7 @@ export default function GenerateTimeMuted({
 }: Props): JSX.Element {
 
 
-  const [time, setTime] = useState("3minute");
+  const [time, setTime] = useState("8h");
 
   const onCloseAddChannelModal = () => setIsAddOpenChannelModal(false);
   const queryClient = useQueryClient()
@@ -59,7 +59,7 @@ export default function GenerateTimeMuted({
             value={time}
             onChange={(e) => setTime(e.target.value)}
           >
-            <option value="3minute">3 Minute</option>
+            <option value="8h">8 h</option>
             <option value="1w">1 Week</option>
             <option value="1m">1 M</option>
           </select>
@@ -70,7 +70,7 @@ export default function GenerateTimeMuted({
               user,
               conversation,
               until: new Date(
-                Date.now() + time === "3minute"
+                Date.now() + time === "8h"
                   ? 8 * 60 * 60 * 1000
                   : time === "1w"
                     ? 7 * 24 * 60 * 60 * 1000
