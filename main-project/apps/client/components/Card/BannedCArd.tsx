@@ -17,6 +17,7 @@ function BannedCArd({
   uid: string;
 }) {
   const mutation = useMutation({
+    throwOnError: false,
     mutationKey: ["unblock-user"],
     mutationFn: api.api().users.unban,
     onSuccess: () => {

@@ -12,6 +12,7 @@ const links = [{ name: "options", key: Math.random().toString() }];
 
 function HeaderSettingNotifSearchMobale(): JSX.Element {
   const logout = useQuery({
+    throwOnError: false,
     queryFn: api.api().auth.logout,
     queryKey: ["logout"],
     enabled: false,

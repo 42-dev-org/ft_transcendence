@@ -69,6 +69,7 @@ export interface Message {
   createdAt: string;
   updatedAt: string;
   sender: {
+    uid: string;
     profileImage: string;
     firstName: string;
     lastName: string;
@@ -100,6 +101,7 @@ export default function ConversationUiChannel({
   const { reflector } = useReflection();
 
   const query = useQuery({
+    throwOnError: false,
     queryKey: ["get-group-cnv-" + uid, uid],
     queryFn: ({ queryKey }) =>
       api.api().chat.getConversation(queryKey[1], "Group"),
@@ -132,12 +134,14 @@ export default function ConversationUiChannel({
   const queryClient = useQueryClient();
 
   const usersQuery = useQuery({
+    throwOnError: false,
     queryKey: ["all-users"],
     enabled: false,
     queryFn: api.api().users.allExceptBanned,
   });
 
   const leaveMutation = useMutation({
+    throwOnError: false,
     mutationKey: ["leave-group"],
     mutationFn: api.api().chat.leaveGroup,
     onSuccess: () => {
@@ -171,7 +175,7 @@ export default function ConversationUiChannel({
       const data = query.data?.data as Root;
       setAdmins(data.data.admins);
       setBanned(data.data.ban);
-      setOwner(data.data.owner);
+      setOwner(data.data?.owner);
       setParticipants(
         data.data.participants.filter((p) => {
           return !(
@@ -209,8 +213,6 @@ export default function ConversationUiChannel({
     query.isRefetching,
     query.status,
   ]);
-  console.log(query.isFetching);
-  console.log(query.isRefetching);
 
   const [showOpstions, setshowOpstions] = useState(false);
   const [msg, setMsg] = useState("");
@@ -219,6 +221,7 @@ export default function ConversationUiChannel({
   const onCloseAddModal = () => setIsAddOpen(false);
 
   const infosMutation = useMutation({
+    throwOnError: false,
     mutationKey: ["change-infos"],
     mutationFn: api.api().chat.changeInfos,
     onSuccess: () => {
@@ -231,6 +234,7 @@ export default function ConversationUiChannel({
   });
 
   const addparticipantMutations = useMutation({
+    throwOnError: false,
     mutationKey: ["change-infos"],
     mutationFn: api.api().chat.addParticipant,
     onSuccess: () => {
@@ -243,6 +247,7 @@ export default function ConversationUiChannel({
     },
   });
   const deleteparticipantMutations = useMutation({
+    throwOnError: false,
     mutationKey: ["change-infos"],
     mutationFn: api.api().chat.changeInfos,
     onSuccess: () => {
@@ -354,7 +359,7 @@ export default function ConversationUiChannel({
                         msg={content}
                         senderName={sender.firstName + " " + sender.lastName}
                         imageUrl={sender.profileImage}
-                        participant={participants}
+                        participant={sender}
                       />
                     )}
                   </Fragment>

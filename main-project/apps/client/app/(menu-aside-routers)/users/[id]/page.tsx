@@ -71,6 +71,7 @@ function UserProfile() {
 
   // <usersIDtype, Error>
   const banMutation = useMutation({
+    throwOnError: false,
     mutationKey: ["ban-friend"],
     mutationFn: api.api().users.ban,
     onMutate: () => {
@@ -88,6 +89,7 @@ function UserProfile() {
   });
 
   const query = useQuery({
+    throwOnError: false,
     queryKey: ["get-friend", id],
     queryFn: (meta) => api.api().users.getFriend(meta.queryKey[1] as string),
   });
@@ -102,13 +104,10 @@ function UserProfile() {
   } else {
     ref.reflector({ type: "loading", isLoading: false, payload: null });
   }
-
-  if (query.isSuccess) console.log("my: ", query.data?.data.lastName);
-  else console.log("error: ", query.error);
   const displayName = `${query.data?.data.lastName}   ${query.data?.data.firstName}, ${query.data?.data.login}`;
 
   return (
-    <div className=" lg:overflow-hidden md:overflow-auto flex flex-col p-4 w-full h-full gap-y-5">
+    <div className="  overflow-y-auto flex flex-col p-4 w-full h-full gap-y-5">
       <div
         className="w-full min-h-[300px] bg-[#ffffff1a] relative rounded-lg"
         style={{
@@ -124,7 +123,7 @@ function UserProfile() {
           <Image
             width={140}
             height={140}
-            className="rounded-full absolute border-4 border-[#ffffff1a] -top-24 lg:left-0  md:left-[40%] left-[30%]"
+            className="rounded-full absolute inset-0 object-cover  h-36 w-36 border-4 border-[#ffffff1a] -top-24 lg:left-0  md:left-[40%] left-[30%]"
             alt="zakaria"
             src={
               query.data?.data.profileImage ||
@@ -136,7 +135,7 @@ function UserProfile() {
           <span className="text-white text-xl font-medium whitespace-nowrap">
             <strong className="text-white">{displayName}</strong>
           </span>
-            { query.data?.data.uid !== 
+            { query.data?.data.uid !==
           <div className="flex gap-2 md:flex-row flex-col">
 
               <Button
@@ -153,17 +152,15 @@ function UserProfile() {
         </div>
       </div>
       <div className="grid lg:grid-cols-2 mt-4  gap-5 h-full ">
-        <div className="overflow-y-auto max-h-full  flex  gap-4 flex-col">
-          <h2>History</h2>
+        <div className="overflow-y-auto overflow-x-hidden max-h-full  w-full flex  gap-4 flex-col">
+          <h2 className="ml-2">History</h2>
 
           {[...Array(100)].map((_, idx) => (
             <HistoryCard user1={data} user2={data2} key={idx} />
           ))}
         </div>
-        <div className="overflow-y-auto max-h-full gap-3 flex flex-col">
-          {/* <> */}
+        <div className="overflow-y-auto overflow-x-hidden max-h-full gap-3 flex flex-col">
           <h2>Achievements</h2>
-          {/* <div className="grid  h-full rounded-lg  grid-cols-2 gap-5  w-full"> */}
           {dataAchevment.map((dataAchevment, idx) => (
             <AchevementCard
               name={dataAchevment.name}
@@ -171,8 +168,6 @@ function UserProfile() {
               key={idx}
             />
           ))}
-          {/* </div> */}
-          {/* </> */}
         </div>
       </div>
     </div>

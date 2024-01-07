@@ -8,13 +8,13 @@ interface Props  {
     imageUrl: string
     senderName: string;
     msg: string
-    participant: User[]
+    participant: User
 }
 
 export default function RecieverLayout(props: Props) {
   return (
     <div className="w-max max-w-[50%] flex gap-2">
-      <Link href={'users/'}>
+      <Link href={'users/'+props?.participant?.uid}>
     <Image
       alt="user"
       className="rounded-full max-w-[36px] max-h-[36px]"

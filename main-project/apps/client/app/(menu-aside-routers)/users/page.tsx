@@ -35,7 +35,8 @@ function Users(): JSX.Element {
           ? "Banned"
           : undefined;
 
-  const usersQuery = useQuery({
+  const {refetch, ...usersQuery} = useQuery({
+    throwOnError: false,
     queryFn: (d) => {
       return api.api().users.findAll(d.queryKey[1] as paramsdata);
     },
@@ -60,9 +61,10 @@ function Users(): JSX.Element {
           : usersQuery.data?.data?.data
       );
     }
-  }, [usersQuery.data, usersQuery.isSuccess]);
+  }, [usersQuery.data, usersQuery.isSuccess, componenet]);
 
-  const searchMutation = useMutation({
+  const {mutate, ...searchMutation} = useMutation({
+    throwOnError: false,
     mutationKey: ["search-mutation"],
     mutationFn: api.api().users.search,
     onSuccess: (d) => {
@@ -77,9 +79,9 @@ function Users(): JSX.Element {
   }
 
   useEffect(() => {
-    if (componenet === "search") searchMutation.mutate(searchString);
-    else usersQuery.refetch();
-  }, [componenet, searchString, searchMutation.mutate, usersQuery.refetch]);
+    if (componenet === "search") mutate(searchString);
+    else refetch();
+  }, [componenet, searchString, mutate, refetch]);
 
   const render = () => {
     if (componenet === "blocked") {
@@ -90,7 +92,7 @@ function Users(): JSX.Element {
               <BannedCArd
                 {...user}
                 key={idx}
-                refetch={usersQuery.refetch} // TODO: fix banned logic
+                refetch={refetch} // TODO: fix banned logic
               />
             ))}
         </div>
@@ -105,7 +107,7 @@ function Users(): JSX.Element {
               <InvitationsCard
                 {...inveted}
                 key={idx}
-                refetch={usersQuery.refetch}
+                refetch={refetch}
               />
             ))}
         </div>
@@ -115,20 +117,20 @@ function Users(): JSX.Element {
       return (
         <div className="grid lg:grid-cols-5 2xl:grid-cols-7  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
           {data.map((_, idx) => (
-            <FriendCard {..._} key={idx} refetch={usersQuery.refetch} />
+            <FriendCard {..._} key={idx} refetch={refetch} />
           ))}
         </div>
       );
     }
     if (componenet === "search") {
       return (
-        <div className="grid lg:grid-cols-5 2xl:grid-cols-7  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
+        <div className="grid lg:grid-cols-5 2xl:grid-cols-8  sm:grid-cols-3 grid-cols-2 gap-5  w-full">
           {searchMutation.isSuccess &&
             data.map((user, idx) => (
               <Card
                 {...user}
                 key={idx}
-                refetch={searchMutation.mutate.bind(null, searchString)}
+                refetch={mutate.bind(null, searchString)}
               />
             ))}
         </div>
@@ -147,7 +149,7 @@ function Users(): JSX.Element {
             onChange={(e) => setSearchString(e.target.value)}
           />
           <Button
-            onClick={() => searchMutation.mutate(searchString)}
+            onClick={() => mutate(searchString)}
             title="Search"
             className="w-full"
           />

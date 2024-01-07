@@ -47,7 +47,6 @@ export class AuthController {
 }
 async generateSecret(@Res() res: Response) {
     const secretKey = authenticator.generateSecret();
-    console.log("secret : ", secretKey); // save it in user model in db
     // change 'yachehbo@gmail.com' with user email
     const otpUrl = authenticator.keyuri("yachehbo@gmail.com", 'ft_transcendence', secretKey);
     return this.pipeQrCodeStream(res, otpUrl)

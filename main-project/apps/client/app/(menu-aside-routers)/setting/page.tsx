@@ -20,6 +20,7 @@ function Settings(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const updateImage = useMutation({
+    throwOnError: false,
     mutationKey: ["update-image"],
     mutationFn: api.api().users.updateProfileImage,
     onSuccess: (data) => {
@@ -32,6 +33,7 @@ function Settings(): JSX.Element {
   });
 
   const changeInfos = useMutation({
+    throwOnError: false,
     mutationKey: ["update-infos"],
     mutationFn: api.api().users.updateInfos,
     onSuccess: (data) => {
@@ -128,7 +130,7 @@ function Settings(): JSX.Element {
         />
       </div>
       <div className="flex flex-col gap-3">
-        <Input onChange={handleLoginChange} value={login} className="" />
+        <Input  onChange={handleLoginChange}  value={login} className="" />
       </div>
       <div className="flex flex-col gap-3">
         <Input onChange={handleLastNameChange} value={lastName} className="" />

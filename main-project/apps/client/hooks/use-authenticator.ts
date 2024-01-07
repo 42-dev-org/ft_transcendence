@@ -6,6 +6,7 @@ import { useAppDispatch } from "../store/store";
 export default function useAuthenticator() {
   const dispatch = useAppDispatch();
   const mutation = useMutation({
+    throwOnError: false,
     mutationFn: async () => api.api().auth.me(),
     mutationKey: ["me"],
     onSuccess: (data) => {

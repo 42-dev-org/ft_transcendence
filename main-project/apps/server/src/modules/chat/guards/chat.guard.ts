@@ -12,7 +12,6 @@ export class ChatAuthGuard implements CanActivate {
   ) {}
   async canActivate(context: ExecutionContext) {
     const client = context.switchToWs().getClient();
-    console.log("Client Connected!");
     const cookies = cookieParser(client.handshake.headers["cookie"] ?? "");
     const authToken = cookies["token"];
     if (!authToken) throw new WsException("missing auth-token.");

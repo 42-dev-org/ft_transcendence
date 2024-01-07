@@ -30,6 +30,7 @@ export default function GenerateTimeMuted({
   const onCloseAddChannelModal = () => setIsAddOpenChannelModal(false);
   const queryClient = useQueryClient()
   const mutation = useMutation({
+    throwOnError: false,
     mutationKey: ["mut-user"],
     mutationFn: api.api().chat.mutParticipant,
     onSuccess: () => {

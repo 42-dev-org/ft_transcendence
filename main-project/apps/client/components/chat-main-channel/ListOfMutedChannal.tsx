@@ -35,6 +35,7 @@ function ListOfMutedChannal(props: usersInChannal): JSX.Element {
   } = props;
   const queryClient = useQueryClient();
   const mutation = useMutation({
+    throwOnError: false,
     mutationKey: ["unmut-user"],
     mutationFn: api.api().chat.unmutParticipant,
     onSuccess: () => {

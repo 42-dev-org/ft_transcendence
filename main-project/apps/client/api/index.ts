@@ -35,7 +35,6 @@ class Api {
     this.httpClient = this.initializeHttpClient();
     this.ioClient = this.initializeSocketIO();
     this.ioClient.on("connect", () => {
-      console.log("connected");
     });
   }
 
