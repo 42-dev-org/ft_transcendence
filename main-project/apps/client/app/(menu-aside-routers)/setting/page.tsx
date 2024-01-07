@@ -128,7 +128,7 @@ function Settings(): JSX.Element {
         />
       </div>
       <div className="flex flex-col gap-3">
-        <Input onChange={handleLoginChange} value={login} className="" />
+        <Input  onChange={handleLoginChange}  value={login} className="" />
       </div>
       <div className="flex flex-col gap-3">
         <Input onChange={handleLastNameChange} value={lastName} className="" />
