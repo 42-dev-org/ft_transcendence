@@ -33,13 +33,13 @@ import React from "react";
 import PingPongGame from "../../game-home-main/PingPongGame";
 
 export default function SinglegameMain({
-  isActive,
+  isActive, roomid,
 }: {
-  isActive: boolean;
+  isActive: boolean, roomid: string,
 }): JSX.Element {
   return (
     <div className="w-[70%] p-8" style={{ aspectRatio: 9 / 16 }}>
-      {isActive && <PingPongGame />}
+      {isActive && <PingPongGame roomId={roomid} />}
     </div>
   );
 }

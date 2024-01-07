@@ -33,7 +33,7 @@ export default function SingleGameContainer({
           }}
         />
 
-        <SinglegameMain isActive={gamePlaying}/>
+        <SinglegameMain isActive={gamePlaying} roomid={_gameid}/>
 
         
       </div>
