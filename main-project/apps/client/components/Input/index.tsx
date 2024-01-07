@@ -9,7 +9,7 @@ type Props = {
 
 function Input({value , onChange, className} :Props) {
   return (
-    <input className={`w-full h-11 py-1 px-2 rounded-md ${className}`} onChange={onChange}  value={value}/>
+    <input className={`w-full h-11 py-1 px-2 rounded-md ${className}`} onChange={onChange} maxLength={12}   value={value}/>
   )
 }
 
