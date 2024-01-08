@@ -15,6 +15,7 @@ export default function Wrapper() {
     };
   }, []);
   return (
+    <>
     <div>
       {relection.isLoading ? (
         <div className="absolute inset-0 w-screen h-screen bg-black flex justify-center items-center text-2xl text-white z-50">
@@ -22,5 +23,6 @@ export default function Wrapper() {
         </div>
       ) : null}
     </div>
+      </>
   );
 }
