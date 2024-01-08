@@ -31,7 +31,7 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
     if (selected === "participants") {
       return (
         <div className="flex flex-col justify-center items-center w-full ">
-          {props.participants.map((_, i) => (
+          {props.participants && props.participants.map((_, i) => (
             <ListOfUsersChannal
               refetch={props.refetch}
               setshowOpstions={props.setshowOpstions}
@@ -49,16 +49,16 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
     if (selected === "owner") {
       return (
         <div className="flex flex-col justify-center items-center w-full ">
-          {props.owners.map((_, i) => (
+          {props.owners && props.owners.map((_, i) => (
             <ListOfOwnersChannal
               refetch={props.refetch}
               setshowOpstions={props.setshowOpstions}
-              name={_.firstName + " " + _.lastName}
-              url={_.profileImage}
+              name={_?.firstName + " " + _?.lastName}
+              url={_?.profileImage}
               key={i}
-              uid={_.uid}
-              role={props.role}
-              conversation={props.conversation}
+              uid={_?.uid}
+              role={props?.role}
+              conversation={props?.conversation}
             />
           ))}
         </div>
@@ -67,20 +67,20 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
     if (selected === "admins") {
       return (
         <div className="flex flex-col justify-center items-center w-full">
-          {props.admins.map((_, i) => (
+          {props.admins && props.admins.map((_, i) => (
             <ListOfAdminsChannal
             refetch={props.refetch}
               setshowOpstions={props.setshowOpstions}
-              name={_.firstName + " " + _.lastName}
-              url={_.profileImage}
+              name={_?.firstName + " " + _?.lastName}
+              url={_?.profileImage}
               key={i}
               setMenuList={
                 props.role === "owner"
                   ? ["Remove Role Admin", "Invite Game"]
                   : ["Invite Game"]
               }
-              uid={_.uid}
-              conversation={props.conversation}
+              uid={_?.uid}
+              conversation={props?.conversation}
             />
           ))}
         </div>
@@ -89,14 +89,14 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
     if (selected === "muted") {
       return (
         <div className="flex flex-col justify-center items-center w-full">
-          {props.mut.map((_, i) => (
+          {props.mut && props.mut.map((_, i) => (
             <ListOfMutedChannal
             refetch={props.refetch}
               setshowOpstions={props.setshowOpstions}
-              name={_.user.firstName + " " + _.user.lastName}
+              name={_?.user.firstName + " " + _?.user.lastName}
               url={_.user.profileImage}
               key={i}
-              uid={_.user.uid}
+              uid={_?.user.uid}
               conversation={props.conversation}
               setMenuList={
                 props.role === "admin" || props.role === "owner"
@@ -111,15 +111,15 @@ export function OptionsListChannel(props: PropsTypes): JSX.Element {
     if (selected === "banned") {
       return (
         <div className="flex flex-col justify-center items-center w-full">
-          {props.ban.map((_, i) => (
+          {props.ban && props.ban.map((_, i) => (
             <ListOfBannedChannal
             refetch={props.refetch}
               setshowOpstions={props.setshowOpstions}
-              name={_.firstName + " " + _.lastName}
-              url={_.profileImage}
-              key={_.uid}
+              name={_?.firstName + " " + _?.lastName}
+              url={_?.profileImage}
+              key={_?.uid}
               menuList={menuList}
-              uid={_.uid}
+              uid={_?.uid}
               setMenuList={
                 props.role === "admin" || props.role === "owner"
                   ? ["Unbaned"]

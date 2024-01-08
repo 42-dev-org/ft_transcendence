@@ -201,7 +201,6 @@ export class ConversationsController {
     @GetUser() {uid}: User,
     @Body() joinDto: JoinChat
   ) {
-    console.log(joinDto)
     return this.conversationsService.joinMe(uid, joinDto);
   }
 

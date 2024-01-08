@@ -75,6 +75,10 @@ model User {
   points    Decimal
   roles     Roles[] @default([User])
 
+  // Two Factor
+  twoFactorEnabled Boolean
+  twoFactorSecret  String?
+
   // Media Relation
   media Media[]
 
