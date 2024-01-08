@@ -5,7 +5,11 @@ import Matter, {
     Engine,
     Render,
     Runner,
+    Vector,
   } from "matter-js";
+
+const HEIGHT = 800;
+const WIDTH = 600;
 
   class GameModel {
     public engine: Matter.Engine;
@@ -18,17 +22,18 @@ import Matter, {
     private p1: Matter.Body;
     private p2: Matter.Body;
     private ball: Matter.Body;
-  
-    // private mouse: Matter.Mouse;
-    // private mouseConstraint: Matter.MouseConstraint;
+    private aspectRatio: number
   
     private width: number;
     private height: number;
   
     constructor(element: HTMLDivElement) {
       // engine creation
-      this.width = element.clientWidth;
-      this.height = element.clientHeight;
+      console.log("WIDTH: ", element.clientWidth, " HEIGHT: ", element.clientHeight);
+      this.aspectRatio = WIDTH / HEIGHT;
+      // this.width = element.clientWidth;
+      // this.height = element.clientHeight;
+      [this.width, this.height] = this.calculateSize(element);
       this.engine = Engine.create({ gravity: { x: 0, y: 0 } });
       this.render = Render.create({
         element: element,
@@ -48,22 +53,21 @@ import Matter, {
         this.width / 2,
         this.height,
         this.width,
-        this.map(10, 800, this.height),
+        this.normalise(10, 0, WIDTH, 0, this.width),
         { isStatic: true }
         );
         this.top = Bodies.rectangle(
           this.width / 2,
           0,
           this.width,
-          this.map(10, 800, this.height),
+          this.normalise(10, 0, WIDTH, 0, this.width),
           { isStatic: true }
           );
           this.right = Bodies.rectangle(
             this.width,
             this.height / 2,
-            this.map(10, 600, this.width),
+            this.normalise(10, 0, WIDTH, 0, this.width),
             this.height,
-            // Replace "#FF5733" with your desired color code
             { isStatic: true },
             );
             // Render.setFillStyle(this.render, this.right, "#B2F35F");
@@ -71,7 +75,7 @@ import Matter, {
             this.left = Bodies.rectangle(
               0,
               this.height / 2,
-              this.map(10, 600, this.width),
+              this.normalise(10, 0, WIDTH, 0, this.width),
               this.height,
               { isStatic: true }
               );
@@ -85,9 +89,9 @@ import Matter, {
       // -------------------------- create the ball and the players ----------------------
       this.p1 = Bodies.rectangle(
         this.width / 2,
-        this.height - this.map(30, 800, this.height),
-        this.map(120, 600, this.width),
-        this.map(20, 800, this.height),
+        this.normalise(30, 0, HEIGHT, 0, this.height),
+        this.normalise(120, 0, WIDTH, 0, this.width),
+        this.normalise(20, 0, HEIGHT, 0, this.height),
         { 
           label: "paddle1",
           isStatic: true 
@@ -95,9 +99,9 @@ import Matter, {
       );
       this.p2 = Bodies.rectangle(
         this.width / 2,
-        this.map(30, 800, this.height),
-        this.map(120, 600, this.width),
-        this.map(20, 800, this.height),
+        this.normalise(770, 0, HEIGHT, 0, this.height),
+        this.normalise(120, 0, WIDTH, 0, this.width),
+        this.normalise(20, 0, HEIGHT, 0, this.height),
         { 
           label: "paddle2",
           isStatic: true 
@@ -106,7 +110,7 @@ import Matter, {
       this.ball = Bodies.circle(
         this.width / 2,
         this.height / 2,
-        this.map(10, 800, this.height),
+        10 * this.calculateScale(),
         {
           label: "ball",
           frictionAir: 0,
@@ -148,15 +152,48 @@ import Matter, {
     startGame() {
       Render.run(this.render);
     }
+
+      public calculateSize(element: HTMLDivElement): [number, number]{
+        let width: number, height: number;
+        
+        
+        if (element.clientHeight > element.clientWidth){
+          width = element.clientWidth;
+          height = width / this.aspectRatio;
+          if (height > element.clientHeight){
+            height = element.clientHeight;
+            width = height * this.aspectRatio;
+          }
+        }else{
+          height = element.clientHeight;
+          width = height * this.aspectRatio;
+          if (width > element.clientWidth){
+            width = element.clientWidth
+            height = width / this.aspectRatio;
+          }
+        }
+        return [width, height]
+      }
+
+    private calculateScale(): number {
+      let scale: number = this.width / WIDTH;
+      let scale2: number = this.height / HEIGHT;
+
+      return Math.min(scale, scale2);
+    }
+
+    public normalise(x: number, a: number, b: number, c: number, d: number){
+      return c + (d - c) * ((x - a) / (b - a));
+  }
   
     movePaddle(data: { x: number; y: number }, index: number) {
-      Body.setPosition(index === 1 ? this.p1 : this.p2, data);
-      console.log("Paddle Pos: ", this.p1.position.x);
+      const pos :Vector = {x: this.normalise(data.x, 0, WIDTH, 0, this.width), y: this.normalise(data.y, 0, HEIGHT, 0, this.height)}
+      Body.setPosition(index === 1 ? this.p1 : this.p2, pos);
     }
-  
+    
     moveBall(data: { x: number; y: number }) {
-      Body.setPosition(this.ball, data);
-      
+      const pos :Vector = {x: this.normalise(data.x, 0, WIDTH, 0, this.width), y: this.normalise(data.y, 0, HEIGHT, 0, this.height)}
+      Body.setPosition(this.ball, pos);      
     }
   
     destory() {

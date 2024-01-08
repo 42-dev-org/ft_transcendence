@@ -3,6 +3,7 @@ import GameModel from "./gameModel";
 import socket from "./plugins/socket";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import SingleGameHeader from "../single-game/single-game-header/single-game-header";
 
 let game: GameModel;
 
@@ -19,6 +20,15 @@ function App({roomId}: {roomId: string}) {
   
   useEffect(() => {
     game = new GameModel(gameBoard.current!);
+    
+    console.log('hi')
+    
+    window.addEventListener('resize', (e) => {
+      console.log('hello', e)
+    })
+
+
+
   }, []);
 
   useEffect(() => {
@@ -65,6 +75,10 @@ function App({roomId}: {roomId: string}) {
       socket.off("score");
       socket.off("start-game");
     };
+
+
+
+
   }, [socket]);
 
   return (
@@ -81,10 +95,26 @@ function App({roomId}: {roomId: string}) {
         pauseOnHover
         theme="light"
       />
-      <div className="flex flex-col items-center">
-        <div className="relative flex items-start">
-        <div className="w-[200px] h-[400px] sm:w-[300px] sm:h-[500px] md:w-[400px] md:h-[600px] lg:w-[400px] lg:h-[700px] " ref={gameBoard}></div>
-        </div>
+      {/* <div className="bg-[#1B1B1B] w-full  px-3 py-3 flex justify-between  items-center border border-[#B2F35F] rounded-lg">
+
+      <SingleGameHeader 
+       player1={{
+        fullName: "anas jaidi",
+        username: "ajaidi",
+        image: "",
+        score: gameScore[0].score,
+      }}
+      player2={{
+        fullName: " mustapha",
+        username: "mouarsas",
+        score: gameScore[1].score,
+        image: "",
+      }}
+      />
+      </div> */}
+      <div className="flex w-full h-full flex-col items-center">
+        <div className="flex w-full h-full  justify-center border border-red-600" ref={gameBoard}></div>
+        {/* // sm:w-[300px] sm:h-[500px] md:w-[400px] md:h-[600px] lg:w-[400px] lg:h-[700px] */}
       </div>
     </Fragment>
   );

@@ -66,7 +66,6 @@ export default function HomeGameMain(): JSX.Element {
         {!selected && (
           <>
             <div className="flex flex-col md:flex-col">
-              {/* <OptionList data={levelsData} setLevelOrType={setLevelGame} /> */}
               <OptionList data={gamesData} setLevelOrType={setTypeGame} />
             </div>
             <button

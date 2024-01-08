@@ -155,11 +155,9 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async joinGame(client: Socket, payload: JoinGamePayload) {
     const { gameMaps } = payload;
 
-    console.log(client.user.uid);
     console.log(this.queue);
 
     if (this.queue.includes(client.user.uid)) {
-      console.log("Got Here!");
       client.emit("game-status", { timestamp: new Date(), status: "in_queue" });
       return;
     }
@@ -220,11 +218,8 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
         });
         client.inGame = true;
         client.join(pendingGame.id);
-        console.log("game started !here!");
         this.eventEmitter.emit("game.play", pendingGame.id);
       }
-      console.log("queue members: ", this.queue);
-      // Remove both players from the queue
       this.queue.pop();
       this.queue.pop();
     }
@@ -233,7 +228,6 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
   // Leave Queue
   @SubscribeMessage("leave-queue")
   async leaveQueue(client: Socket) {
-    console.log("gotcha ");
     if (this.queue.length == 1) {
       // if (this.queue.includes(client.user.id)) {
       this.queue.pop();
@@ -401,10 +395,10 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage("reject-invite")
   async rejectInvite(client: Socket) {}
 
-  @SubscribeMessage("move-paddle")
+  @SubscribeMessage('move-paddle')
   async paddlePosition(
     client: Socket,
-    { roomId, direction }: { direction: "right" | "left"; roomId: string }
+    { roomId, direction }: { direction: 'right' | 'left'; roomId: string },
   ) {
     const game = await this.prismaService.game.findUnique({
       where: {
@@ -412,30 +406,29 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
       },
       include: {
         players: {
-          orderBy: { createdAt: "asc" },
+          orderBy: { createdAt: 'asc' },
           select: {
             userId: true,
           },
         },
       },
     });
-    console.log(game?.players, roomId, direction);
     if (!game || game.players.length != 2) return;
 
     const paddleLabel =
-      game.players[0].userId === client.user.uid ? "paddle1" : "paddle2";
+      game.players[0].userId === client.user.uid ? 'paddle1' : 'paddle2';
     const odlGame = this.games.get(roomId);
     if (!odlGame) return;
 
     const { gameModel } = odlGame;
     const paddle = gameModel.engine.world.bodies.find(
-      (body) => body.label === paddleLabel
+      (body) => body.label === paddleLabel,
     );
 
     const paddleWidth = gameModel.map(120, 600, gameModel.width);
 
     const calcDeltaX: Record<
-      "left" | "right",
+      'left' | 'right',
       (gameModel: GameModel) => number
     > = {
       left: (gameModel: GameModel) =>
@@ -451,14 +444,14 @@ export class GamesGateway implements OnGatewayConnection, OnGatewayDisconnect {
       x: paddle.position.x + deltaX,
       y: paddle.position.y,
     });
-
+  
     const paddle1 = gameModel.engine.world.bodies.find(
-      ({ label }) => label === "paddle1"
+      ({ label }) => label === 'paddle1',
     );
     const paddle2 = gameModel.engine.world.bodies.find(
-      ({ label }) => label === "paddle2"
+      ({ label }) => label === 'paddle2',
     );
-    this.server.to(roomId).emit("paddle-position", [
+    this.server.to(roomId).emit('paddle-position', [
       { x: paddle1.position.x, y: paddle1.position.y },
       { x: paddle2.position.x, y: paddle2.position.y },
     ]);

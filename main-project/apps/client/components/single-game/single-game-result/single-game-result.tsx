@@ -4,6 +4,8 @@ interface PropsType {
 }
 
 export default function SingleGameResult({ p1, p2 }: PropsType): JSX.Element {
+
+  
   return (
     <div className=" w-1/3 h-16 flex justify-between">
       <p className=" text-white text-2xl font-bold flex justify-center items-center">

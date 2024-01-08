@@ -15,7 +15,6 @@ export default function PlayRandom(props: { setSelected: any }): JSX.Element {
       console.log("test", payload);
     };
     socket.on("player-data", (payload) => {
-      console.log(payload);
     });
     return () => {
       socket.off("user-status", callback);

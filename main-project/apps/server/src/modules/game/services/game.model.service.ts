@@ -77,7 +77,7 @@ export class GameModel {
         label: 'ball',
         frictionAir: 0,
         friction: 0,
-        force: { x: 1, y: 3 },
+        force: { x: 1, y: 2 },
         inertia: Infinity,
         density: 0.5,
         restitution: 1,
