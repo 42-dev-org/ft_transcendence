@@ -226,6 +226,7 @@ export class ConversationsController {
   @UseGuards(UserIsHealthyGuard)
   @UseGuards(AuthGuard())
   async left(@GetUser() { uid }: User, @Body("conversation") cnv: string) {
+    console.log('left --------------------------------------------------------------- , ', uid, "--------- ", cnv)
     this.conversationsService.left(uid, cnv);
   }
 

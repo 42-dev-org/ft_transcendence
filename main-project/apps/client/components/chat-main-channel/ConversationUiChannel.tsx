@@ -494,4 +494,6 @@ feat:
 
 
   fix all the tosts()
+  when all users leave channel (error: ===> TypeError: Cannot read properties of undefined (reading 'uid')
+server:start:dev:     at ConversationsRepository.left (/Users/mustapha/Desktop/chat-V4/main-project/apps/server/src/modules/conversations/repository/conversations.repository.ts:680:75))
 */

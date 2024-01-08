@@ -32,3 +32,7 @@ interface IntraTokenPayload {
   created_at: number;
   secret_valid_until: number;
 }
+
+export interface TwoFactorDto{
+  otp: string;
+}

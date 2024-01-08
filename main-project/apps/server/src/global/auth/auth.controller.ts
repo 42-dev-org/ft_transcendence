@@ -15,10 +15,10 @@ import { AuthService } from "./auth.service";
 import { Request, Response } from "express";
 import { AuthGuard } from "@nestjs/passport";
 import { GetUser } from "src/shared/decorators/get-user.decorator";
-import { IntraSignInPayload, IntraTokenPayload } from "./types/auth";
+import { IntraSignInPayload, IntraTokenPayload, TwoFactorDto } from "./types/auth";
 import { Auth42Guard } from "./guards/42.guard";
-import { authenticator } from 'otplib';
-import { toFileStream } from 'qrcode';
+
+import { User } from "db";
 
 class otp {
   code: string;
@@ -37,24 +37,45 @@ export class AuthController {
   @UseGuards(Auth42Guard)
   async callback(@Req() req: Request, @Res() res: Response) {
     const payload = await this.authService.sign(req.user as IntraSignInPayload);
-
+    
     res.cookie("token", payload.token);
     res.status(300).redirect("http://localhost:3001/profile");
   }
 
-  pipeQrCodeStream(stream: Response, otpauthUrl: string) {
-    return toFileStream(stream, otpauthUrl);
-}
-async generateSecret(@Res() res: Response) {
-    const secretKey = authenticator.generateSecret();
-    // change 'yachehbo@gmail.com' with user email
-    const otpUrl = authenticator.keyuri("yachehbo@gmail.com", 'ft_transcendence', secretKey);
-    return this.pipeQrCodeStream(res, otpUrl)
-}
-
-  @Get("otp")
+  // check the status of tow factor enabled or not
+  @Get("tfa-status")
   @UseGuards(AuthGuard())
-  async otp(@Res() res: Response){
-    return await this.generateSecret(res);
+  async twoFactorStatus(@GetUser() user: User)
+  {
+    return await this.authService.getTwoFactorStatus(user.uid);
   }
+
+  @Get("generate")
+  @UseGuards(AuthGuard())
+  async generateQrCode(@GetUser() user: User, @Res() res: Response){
+    return await this.authService.generateQrCode(user.uid, user.email, res);
+  }
+
+  @Post("verify")
+  @UseGuards(AuthGuard())
+  async verifyTwoFactor(@GetUser() user: User, @Body() dto: TwoFactorDto)
+  {
+    return await this.authService.verifyTwoFactorToken(user.uid, dto.otp)
+  }
+
+  @Post("validate")
+  @UseGuards(AuthGuard())
+  async validateTwoFactor(@GetUser() user: User, @Body() dto: TwoFactorDto)
+  {
+    return await this.authService.validateTwoFactor(user.uid, dto.otp)
+  }
+
+  @Post("disable")
+  @UseGuards(AuthGuard())
+  async disableTwoFactor(@GetUser() user: User)
+  {
+    return await this.authService.disableTwoFactor(user.uid);
+  }
+
+
 }

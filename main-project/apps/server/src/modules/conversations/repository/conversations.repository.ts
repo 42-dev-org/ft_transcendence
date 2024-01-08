@@ -622,83 +622,75 @@ export class ConversationsRepository {
   }
 
   public async left(uid: string, cnv: string) {
+    // Fetch conversation details
     const conversation = await this.prisma.conversation.findUnique({
       where: { uid: cnv },
       select: {
-        participants: {
-          where: {
-            uid,
-          },
-          select: {
-            uid: true,
-          },
-        },
-        admins: {
-          where: {
-            uid,
-          },
-          select: {
-            uid: true,
-          },
-        },
-        mut: {
-          where: {
-            userUid: uid,
-          },
-          select: {
-            uid: true,
-          },
-        },
-        ban: {
-          where: {
-            uid,
-          },
-          select: {
-            uid: true,
-          },
-        },
-        owner: {
-          select: {
-            uid: true,
-          },
-        },
+        participants: { where: { uid }, select: { uid: true } },
+        admins: { where: { uid }, select: { uid: true } },
+        owner: { where: { uid }, select: { uid: true } },
+        mut: { where: { userUid: uid }, select: { uid: true } },
+        ban: { where: { uid }, select: { uid: true } },
       },
     });
-    const isAdmin = !!conversation.admins.length;
+  
+    const isAdmin = conversation.admins.length > 0;
     const isOwner = !!conversation.owner?.uid;
-    const isBanned = !!conversation.ban.length;
-    const isMut = !!conversation.mut.length;
-    if (isMut || isBanned) {
+    const isBanned = conversation.ban.length > 0;
+    const isMuted = conversation.mut.length > 0;
+  
+    // Check if the user is banned or muted
+    if (isBanned || isMuted) {
       throw new ForbiddenException();
     }
-    return this.prisma.conversation.update({
+  
+    // Update conversation data
+    const updatedConversation = await this.prisma.conversation.update({
       where: { uid: cnv },
       data: {
-        participants: {
-          disconnect: {
-            uid,
-          },
-        },
-        ...(isAdmin
-          ? {
-              admins: {
-                disconnect: {
-                  uid,
-                },
-              },
-            }
-          : {}),
-        ...(isOwner
-          ? {
-              owner: {
-                disconnect: {
-                  uid,
-                },
-              },
-            }
-          : {}),
+        participants: { disconnect: { uid } },
+        ...(isAdmin ? { admins: { disconnect: { uid } } } : {}),
+        ...(isOwner ? { owner: { disconnect: { uid } } } : {}),
       },
     });
+  
+    // Check if the conversation still has participants
+    const conversationChecker = await this.prisma.conversation.findUnique({
+      where: { uid: cnv },
+      select: { owner: true, participants: true, admins: true },
+    });
+  
+    // If the user being removed is the owner, determine a new owner
+    if (!conversationChecker.participants?.length) {
+      await this.prisma.conversation.delete({ where: { uid: cnv } });
+      return null; // or any appropriate value indicating deletion
+    }
+    if (isOwner) {
+      console.log("owner living the channel --------------------- admines: ", conversationChecker.admins)
+      if(conversationChecker.admins?.length > 0)
+      {
+        await this.prisma.conversation.update({
+          where: { uid : cnv},
+          data: {
+            owner: { connect : { uid: conversationChecker.admins[0].uid}}
+          }
+        })
+      }
+      else if(conversation.participants?.length > 0)
+      {
+        await this.prisma.conversation.update({
+          where: { uid : cnv},
+          data: {
+            owner: { connect : { uid: conversationChecker.participants[0]?.uid}}
+          }
+        })
+      }
+    }
+
+  
+    // If there are no participants left, delete the conversation
+  
+    return updatedConversation;
   }
 
   public async deleteAdmin(uid: string, cnvUid: string) {
