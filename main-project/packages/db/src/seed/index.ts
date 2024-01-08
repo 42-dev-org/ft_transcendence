@@ -14,7 +14,8 @@ async function seed() {
     phone: "1234567890",
     kind: "regular",
     status: "offline",
-    points: 0
+    points: 0,
+    twoFactorEnabled : false
   }));
 
   // Check if users already exist based on their emails

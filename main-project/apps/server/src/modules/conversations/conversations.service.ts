@@ -279,6 +279,6 @@ export class ConversationsService {
   }
 
   async left(uid: string, cnv: string) {
-    this.repository.left(uid, cnv);
+   this.repository.left(uid, cnv);
   }
 }

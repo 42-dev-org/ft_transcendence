@@ -18,6 +18,8 @@ import { useAppSelector } from "../../store/store";
 import { toast } from "react-toastify";
 import { Gloock } from "next/font/google";
 import useReflection from "@/hooks/useReflection";
+import chatImage from "assets-workspace/images/bg-chat-conversation-user.png";
+
 
 export interface Root {
   status: string;
@@ -157,6 +159,8 @@ export default function ConversationUiChannel({
     },
   });
 
+
+
   useEffect(() => {
     if (query.isLoading || query.isRefetching) {
       reflector({ type: "loading", isLoading: true, payload: null });
@@ -241,7 +245,7 @@ export default function ConversationUiChannel({
       refetch();
     },
     onError: () => {
-      toast("ghayrha");
+      toast("Sorry you don't have the permitions !");
     },
   });
   const deleteparticipantMutations = useMutation({
@@ -254,7 +258,7 @@ export default function ConversationUiChannel({
       refetch();
     },
     onError: () => {
-      toast("ghayrha");
+      toast("Sorry you don't have the permitions !");
     },
   });
 
@@ -339,9 +343,8 @@ export default function ConversationUiChannel({
                 showOpstions ? "w-2/3" : "w-full"
               }`}
               style={{
-                backgroundImage:
+                backgroundImage: 
                   "url(https://cdn2.f-cdn.com/contestentries/2046262/58571795/61f00c583e000_thumb900.jpg)",
-                // <Image alt="backgroundImage" height={100} src={chatImage}  width={800} />
               }}
             >
               <div
@@ -492,4 +495,5 @@ feat:
 
 
   fix all the tosts()
+
 */
