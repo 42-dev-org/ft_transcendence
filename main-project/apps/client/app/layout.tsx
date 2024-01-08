@@ -19,9 +19,9 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en">
-      <body>
+      <body suppressHydrationWarning={true}>
         <StoreProvider>
-          <Wrapper></Wrapper>
+          {/* <Wrapper></Wrapper> */}
           {children}
           
         </StoreProvider>
