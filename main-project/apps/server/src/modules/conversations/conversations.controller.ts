@@ -201,7 +201,6 @@ export class ConversationsController {
     @GetUser() {uid}: User,
     @Body() joinDto: JoinChat
   ) {
-    console.log(joinDto)
     return this.conversationsService.joinMe(uid, joinDto);
   }
 
@@ -226,7 +225,6 @@ export class ConversationsController {
   @UseGuards(UserIsHealthyGuard)
   @UseGuards(AuthGuard())
   async left(@GetUser() { uid }: User, @Body("conversation") cnv: string) {
-    console.log('left --------------------------------------------------------------- , ', uid, "--------- ", cnv)
     this.conversationsService.left(uid, cnv);
   }
 

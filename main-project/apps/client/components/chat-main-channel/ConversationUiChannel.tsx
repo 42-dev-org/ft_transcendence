@@ -18,6 +18,8 @@ import { useAppSelector } from "../../store/store";
 import { toast } from "react-toastify";
 import { Gloock } from "next/font/google";
 import useReflection from "@/hooks/useReflection";
+import chatImage from "assets-workspace/images/bg-chat-conversation-user.png";
+
 
 export interface Root {
   status: string;
@@ -341,9 +343,8 @@ export default function ConversationUiChannel({
                 showOpstions ? "w-2/3" : "w-full"
               }`}
               style={{
-                backgroundImage:
+                backgroundImage: 
                   "url(https://cdn2.f-cdn.com/contestentries/2046262/58571795/61f00c583e000_thumb900.jpg)",
-                // <Image alt="backgroundImage" height={100} src={chatImage}  width={800} />
               }}
             >
               <div
@@ -494,6 +495,5 @@ feat:
 
 
   fix all the tosts()
-  when all users leave channel (error: ===> TypeError: Cannot read properties of undefined (reading 'uid')
-server:start:dev:     at ConversationsRepository.left (/Users/mustapha/Desktop/chat-V4/main-project/apps/server/src/modules/conversations/repository/conversations.repository.ts:680:75))
+
 */

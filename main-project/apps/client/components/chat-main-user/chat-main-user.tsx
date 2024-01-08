@@ -195,7 +195,6 @@ export default function ConversationUi({
           style={{
             backgroundImage:
               "url(https://cdn2.f-cdn.com/contestentries/2046262/58571795/61f00c583e000_thumb900.jpg)",
-            // <Image alt="backgroundImage" height={100} src={chatImage}  width={800} />
           }}
         >
           <div
